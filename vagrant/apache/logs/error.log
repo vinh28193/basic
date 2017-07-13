@@ -1,0 +1,2 @@
+[Thu Jul 13 22:36:40.598450 2017] [:error] [pid 1824:tid 1676] [client 127.0.0.1:50054] PHP Warning:  require(C:\\workspaces\\seeds\\basic\\web/../vendor/autoload.php): failed to open stream: No such file or directory in C:\\workspaces\\seeds\\basic\\web\\index.php on line 7
+[Thu Jul 13 22:36:40.599450 2017] [:error] [pid 1824:tid 1676] [client 127.0.0.1:50054] PHP Fatal error:  require(): Failed opening required 'C:\\workspaces\\seeds\\basic\\web/../vendor/autoload.php' (include_path='\\workspaces\\xampp\\php\\PEAR') in C:\\workspaces\\seeds\\basic\\web\\index.php on line 7

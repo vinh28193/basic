@@ -2,37 +2,93 @@
 
 namespace app\models;
 
+use Yii;
+use yii\helpers\ArrayHelper;
+use yii\web\IdentityInterface;
+use yii\behaviors\AttributeBehavior;
+use yii\behaviors\TimestampBehavior;
+use yii\filters\RateLimitInterface;
+
+/**
+ * This is the model class for table "{{%user}}".
+ *
+ * @property integer $id
+ * @property string $username
+ * @property string $email
+ * @property string $access_token
+ * @property string $auth_key
+ * @property string $password_hash
+ * @property string $password_reset_token
+ * @property integer $status
+ * @property integer $created_at
+ * @property integer $verified_at
+ *
+ * @property UserProfile $userProfile
+ */
 class User extends \yii\base\Object implements \yii\web\IdentityInterface
 {
-    public $id;
-    public $username;
-    public $password;
-    public $authKey;
-    public $accessToken;
 
-    private static $users = [
-        '100' => [
-            'id' => '100',
-            'username' => 'admin',
-            'password' => 'admin',
-            'authKey' => 'test100key',
-            'accessToken' => '100-token',
-        ],
-        '101' => [
-            'id' => '101',
-            'username' => 'demo',
-            'password' => 'demo',
-            'authKey' => 'test101key',
-            'accessToken' => '101-token',
-        ],
-    ];
+    const ACCESS_GRANTED = 1;
+    const ACCESS_DENIED = 0;
+    const ACCESS_GUESTED = 10;
+
+    const SCENARIO_GUEST = 'guest';
+
+    const TIME_EXPIRE = 3600*24*30;
+    const GUEST_EXPIRE = 3600;
+
+    /**
+     * @inheritdoc
+     */
+    public static function tableName()
+    {
+        return '{{%user}}';
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function rules()
+    {
+        return [
+             [['username','password_hash','email'],'required'],
+            [['username', 'email'], 'unique'],
+            [['type', 'status', 'created_at', 'verified_at'], 'integer'],
+            [['username', 'auth_key'], 'string', 'max' => 32],
+            [['email', 'password_hash'], 'string', 'max' => 255],
+            ['access_token', 'string', 'max' => 40],
+            ['username','filter','filter'=>'\yii\helpers\Html::encode'],
+            ['email','email'],
+        ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function attributeLabels()
+    {
+        return [
+            'id' => Yii::t('app', 'ID'),
+            'username' => Yii::t('app', 'Username'),
+            'email' => Yii::t('app', 'Email'),
+            'access_token' => Yii::t('app', 'Access Token'),
+            'auth_key' => Yii::t('app', 'Auth Key'),
+            'password_hash' => Yii::t('app', 'Password Hash'),
+            'password_reset_token' => Yii::t('app', 'Password Reset Token'),
+            'status' => Yii::t('app', 'Status'),
+            'created_at' => Yii::t('app', 'Created At'),
+            'verified_at' => Yii::t('app', 'Verified At'),
+        ];
+    }
 
     /**
      * @inheritdoc
      */
     public static function findIdentity($id)
     {
-        return isset(self::$users[$id]) ? new static(self::$users[$id]) : null;
+        return static::findOne([
+            'id' => $id, 
+        ]);
     }
 
     /**
@@ -40,29 +96,6 @@ class User extends \yii\base\Object implements \yii\web\IdentityInterface
      */
     public static function findIdentityByAccessToken($token, $type = null)
     {
-        foreach (self::$users as $user) {
-            if ($user['accessToken'] === $token) {
-                return new static($user);
-            }
-        }
-
-        return null;
-    }
-
-    /**
-     * Finds user by username
-     *
-     * @param  string      $username
-     * @return static|null
-     */
-    public static function findByUsername($username)
-    {
-        foreach (self::$users as $user) {
-            if (strcasecmp($user['username'], $username) === 0) {
-                return new static($user);
-            }
-        }
-
         return null;
     }
 
@@ -71,7 +104,7 @@ class User extends \yii\base\Object implements \yii\web\IdentityInterface
      */
     public function getId()
     {
-        return $this->id;
+        return $this->getPrimaryKey();
     }
 
     /**
@@ -79,7 +112,7 @@ class User extends \yii\base\Object implements \yii\web\IdentityInterface
      */
     public function getAuthKey()
     {
-        return $this->authKey;
+        return $this->auth_key;
     }
 
     /**
@@ -87,7 +120,7 @@ class User extends \yii\base\Object implements \yii\web\IdentityInterface
      */
     public function validateAuthKey($authKey)
     {
-        return $this->authKey === $authKey;
+        return $this->authKey === $auth_key;
     }
 
     /**
@@ -96,8 +129,37 @@ class User extends \yii\base\Object implements \yii\web\IdentityInterface
      * @param  string  $password password to validate
      * @return boolean if password provided is valid for current user
      */
-    public function validatePassword($password)
+    public function validatePasswordHash($password)
     {
-        return $this->password === $password;
+         return Yii::$app->security->validatePassword($password, $this->password_hash);
+    }
+
+    /**
+     * Finds user by username or email or access token
+     *
+     * @param string $value
+     * @return static|null
+     */
+    public static function findAdvanced($value)
+    {
+
+        return static::find()->where([
+            'and',
+            [
+                'or',
+                ['username' => $value],
+                ['email' => $value],
+                ['access_token' => $value]
+            ],
+            ['status' => self::ACCESS_GRANTED]
+        ])->one();
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUserProfile()
+    {
+        return $this->hasOne(UserProfile::className(), ['user_id' => 'id']);
     }
 }
