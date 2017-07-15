@@ -1,17 +1,17 @@
 <?php
 
-namespace app\models;
+namespace app\models\forms;
 
 use Yii;
 use yii\base\Model;
-
+use app\models\User;
 /**
  * LoginForm is the model behind the login form.
  */
 class LoginForm extends Model
 {
-    public $username;
-    public $password;
+    public $loginId;
+    public $passwordHash;
     public $rememberMe = true;
 
     private $_user = false;
@@ -23,12 +23,12 @@ class LoginForm extends Model
     public function rules()
     {
         return [
-            // username and password are both required
-            [['username', 'password'], 'required'],
+            // loginId and passwordHash are both required
+            [['loginId', 'passwordHash'], 'required'],
             // rememberMe must be a boolean value
             ['rememberMe', 'boolean'],
-            // password is validated by validatePassword()
-            ['password', 'validatePassword'],
+            // passwordHash is validated by validatePassword()
+            ['passwordHash', 'validatePassword'],
         ];
     }
 
@@ -42,9 +42,8 @@ class LoginForm extends Model
     public function validatePassword($attribute, $params)
     {
         if (!$this->hasErrors()) {
-            $user = $this->getUser();
-
-            if (!$user || !$user->validatePassword($this->password)) {
+            $user = $this->user;
+            if (!$user || !$user->validatePasswordHash($this->passwordHash)) {
                 $this->addError($attribute, 'Incorrect username or password.');
             }
         }
@@ -57,22 +56,19 @@ class LoginForm extends Model
     public function login()
     {
         if ($this->validate()) {
-            return Yii::$app->user->login($this->getUser(), $this->rememberMe ? 3600*24*30 : 0);
+            return Yii::$app->user->login($this->user, $this->rememberMe ? User::TIME_EXPIRE : 0);
         }
         return false;
     }
 
     /**
-     * Finds user by [[username]]
-     *
      * @return User|null
      */
     public function getUser()
     {
         if ($this->_user === false) {
-            $this->_user = User::findByUsername($this->username);
+            $this->_user = User::findAdvanced($this->loginId);
         }
-
         return $this->_user;
     }
 }

@@ -8,18 +8,35 @@ $config = [
     'bootstrap' => ['log'],
     'components' => [
         'request' => [
+            'class' => 'yii\web\Request',
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => '4DRPNeVNJRNcfuxWF2cvZPO1AVCxH3a0',
+        ],
+        'response' => [
+            'class' => 'yii\web\Response',
+        ],
+        'session' => [
+            'class' => 'yii\web\Session',
         ],
         'cache' => [
             'class' => 'yii\caching\FileCache',
         ],
         'user' => [
+            'class' => 'app\common\web\User',
             'identityClass' => 'app\models\User',
+            'loginUrl' => ['manage/secure/login'],
             'enableAutoLogin' => true,
+            'identityCookie' => [
+                'name' => '_identity-user', 
+                'httpOnly' => true
+            ],
         ],
         'errorHandler' => [
-            'errorAction' => 'site/error',
+            'class' => 'yii\web\ErrorHandler',
+            'errorAction' => 'manage/error',
+        ],
+        'formatter' => [
+            'class' => 'yii\i18n\Formatter',
         ],
         'mailer' => [
             'class' => 'yii\swiftmailer\Mailer',
@@ -29,23 +46,73 @@ $config = [
             'useFileTransport' => true,
         ],
         'log' => [
+            'class' => 'yii\log\Dispatcher',
             'traceLevel' => YII_DEBUG ? 3 : 0,
             'targets' => [
                 [
                     'class' => 'yii\log\FileTarget',
                     'levels' => ['error', 'warning'],
+                    'categories' => [
+                        'yii\db\*',
+                        'yii\i18n\*',
+                        'yii\web\HttpException:*',
+                    ],
+                    'except' => [
+                        'yii\web\HttpException:404',
+                    ],
                 ],
             ],
         ],
         'db' => require(__DIR__ . '/db.php'),
-        /*
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
             ],
         ],
-        */
+        'assetManager' => [
+            'class' => 'yii\web\AssetManager',
+            'appendTimestamp' => false,
+            'hashCallback' => function ($path) {
+                //return implode('/',[Yii::$app->id,hash('md4', $path)]);
+                return hash('md4', $path);
+            }
+        ],
+        'i18n' => [
+            'translations' => [
+                'app*' => [
+                    'class' => 'yii\i18n\PhpMessageSource',
+                    'basePath' => '@messages',
+                    'fileMap' => [
+                        'app' => 'app.php',
+                    ],
+                ],
+                'yii' => [
+                    'class' => 'yii\i18n\PhpMessageSource',
+                    'basePath' => '@yii/messages',
+                    'fileMap' => [
+                        'yii' => 'yii.php',
+                    ],
+                ],
+            ],
+        ],
+    ],
+    'defaultRoute' => 'site/index',
+    'modules' => [
+        'manage' => [
+            'class' => 'app\modules\manage\Manage',
+        ],
+        'maintenance' => [
+            'class' => 'app\modules\maintenance\Maintenance',
+        ],
+        'debug' => [
+            'class' => 'yii\debug\Module',
+            'allowedIPs' => ['127.0.0.1', '::1', '192.168.83.*'],
+        ],
+        'gii' => [
+            'class' => 'yii\gii\Module',
+            'allowedIPs' => ['127.0.0.1', '::1', '192.168.83.*'],
+        ]
     ],
     'params' => $params,
 ];

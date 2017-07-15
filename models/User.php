@@ -8,6 +8,7 @@ use yii\web\IdentityInterface;
 use yii\behaviors\AttributeBehavior;
 use yii\behaviors\TimestampBehavior;
 use yii\filters\RateLimitInterface;
+use app\common\db\ActiveRecord;
 
 /**
  * This is the model class for table "{{%user}}".
@@ -25,7 +26,7 @@ use yii\filters\RateLimitInterface;
  *
  * @property UserProfile $userProfile
  */
-class User extends \yii\base\Object implements \yii\web\IdentityInterface
+class User extends ActiveRecord implements IdentityInterface
 {
 
     const ACCESS_GRANTED = 1;
@@ -135,7 +136,7 @@ class User extends \yii\base\Object implements \yii\web\IdentityInterface
     }
 
     /**
-     * Finds user by username or email or access token
+     * Finds user by username or email 
      *
      * @param string $value
      * @return static|null
@@ -149,7 +150,6 @@ class User extends \yii\base\Object implements \yii\web\IdentityInterface
                 'or',
                 ['username' => $value],
                 ['email' => $value],
-                ['access_token' => $value]
             ],
             ['status' => self::ACCESS_GRANTED]
         ])->one();

@@ -37,6 +37,7 @@
         "league/flysystem": "^1.0",
         "cebe/yii2-gravatar": "*",
         "kartik-v/yii2-widgets": "*",
+        "kartik-v/yii2-checkbox-x": "*",
         "2amigos/yii2-tinymce-widget" : "*",
         "2amigos/yii2-highcharts-widget" : "~1.0",
         "2amigos/yii2-editable-widget": "*",
