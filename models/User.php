@@ -49,17 +49,66 @@ class User extends ActiveRecord implements IdentityInterface
     /**
      * @inheritdoc
      */
+    public function behaviors()
+    {
+        return ArrayHelper::merge(parent::behaviors(),[
+            'timestamp' => [
+                'class' => TimestampBehavior::className(),
+                'createdAtAttribute' => 'created_at',
+                'updatedAtAttribute' => false,
+                'value' => time()
+            ],
+            'status' => [
+                'class' => AttributeBehavior::className(),
+                'attributes' => [
+                    self::EVENT_BEFORE_INSERT => 'status',
+                ],
+                'value' => self::ACCESS_GUESTED
+            ],
+            'auth_key' => [
+                'class' => AttributeBehavior::className(),
+                'attributes' => [
+                    ActiveRecord::EVENT_BEFORE_INSERT => 'auth_key'
+                ],
+                'value' => Yii::$app->getSecurity()->generateRandomString(32)
+            ],
+            'access_token' => [
+                'class' => AttributeBehavior::className(),
+                'attributes' => [
+                    ActiveRecord::EVENT_BEFORE_INSERT => 'access_token'
+                ],
+                'value' => function () {
+                    return Yii::$app->getSecurity()->generateRandomString(40);
+                }
+            ]
+        ]);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function scenarios()
+    {
+        return ArrayHelper::merge(parent::scenarios(),[
+            self::SCENARIO_DEFAULT => ['username', 'password_hash','email'],
+            self::SCENARIO_GUEST => 'email',
+        ]);
+    }
+    /**
+     * @inheritdoc
+     */
     public function rules()
     {
         return [
-             [['username','password_hash','email'],'required'],
+            [['username','password_hash','email'],'required', 'on' =>  self::SCENARIO_DEFAULT],
             [['username', 'email'], 'unique'],
-            [['type', 'status', 'created_at', 'verified_at'], 'integer'],
+            [['status', 'created_at', 'verified_at'], 'integer'],
             [['username', 'auth_key'], 'string', 'max' => 32],
             [['email', 'password_hash'], 'string', 'max' => 255],
             ['access_token', 'string', 'max' => 40],
             ['username','filter','filter'=>'\yii\helpers\Html::encode'],
             ['email','email'],
+            ['email','required', 'on' =>  self::SCENARIO_GUEST],
         ];
     }
 
@@ -121,7 +170,7 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public function validateAuthKey($authKey)
     {
-        return $this->authKey === $auth_key;
+        return $this->auth_key === $authKey;
     }
 
     /**
@@ -133,6 +182,16 @@ class User extends ActiveRecord implements IdentityInterface
     public function validatePasswordHash($password)
     {
          return Yii::$app->security->validatePassword($password, $this->password_hash);
+    }
+
+    /**
+     * Generates password hash from password and sets it to the model
+     *
+     * @param string $password
+     */
+    public function setPassword($password)
+    {
+        $this->password_hash = Yii::$app->security->generatePasswordHash($password);
     }
 
     /**

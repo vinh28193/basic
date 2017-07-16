@@ -4,6 +4,11 @@ $params = require(__DIR__ . '/params.php');
 
 $config = [
     'id' => 'basic',
+    'name' => 'Dev App',
+    'version' => '0.1-dev',
+    'charset' => 'UTF-8',
+    'language' => 'en-US',
+    'sourceLanguage' => 'en-US',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'components' => [

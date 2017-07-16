@@ -4,7 +4,7 @@ use yii\db\Migration;
 
 class m170713_164904_boot_data extends Migration
 {
-    const LIMIT_USER = 5;
+    const LIMIT_USER = 10;
 
     public function up()
     {
@@ -30,6 +30,8 @@ class m170713_164904_boot_data extends Migration
                 'user_id' => $index,
                 'first_name' => $firstName,
                 'last_name' => $lastName,
+                'locale' => Yii::$app->language,
+                'gender' => rand(0, 1)
             ]);
         }
     }

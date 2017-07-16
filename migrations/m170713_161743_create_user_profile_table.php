@@ -93,6 +93,6 @@ class m170713_161743_create_user_profile_table extends Migration
             'idx-user_profile-locale',
             '{{%user_profile}}'
         );
-        $this->dropTable('{{$user_profile}}');
+        $this->dropTable('{{%user_profile}}');
     }
 }

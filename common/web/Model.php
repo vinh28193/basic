@@ -23,7 +23,7 @@ class Model extends \yii\base\Model
      * After the Model object is created, if you want to change this property, you should only assign it
      * with a application component ID of the connection object.
      */
-    public $db = 'db';
+    public $connection = 'db';
 
 	/**
      * Initializes the object.
@@ -35,7 +35,9 @@ class Model extends \yii\base\Model
     public function init()
     {
         parent::init();
-        $this->db = Yii::$app->get($this->db);
+        if(Yii::$app->has($this->connection)){
+            $this->connection = Yii::$app->get($this->connection);
+        }
         $this->trigger(self::EVENT_INIT);
     }
 }

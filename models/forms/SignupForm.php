@@ -69,7 +69,7 @@ class SignupForm extends Model
             'lastName' => 'Last Name',
             'username' => 'Username',
             'password' => 'Password',
-            'password_repeat' => 'Password Repeat',
+            'passwordRepeat' => 'Password Repeat',
             'email' => 'Email',
             'birthday' => 'Birthday',
             'gender' => 'Gender',
@@ -82,8 +82,23 @@ class SignupForm extends Model
         if (!$this->validate()) {
             return false;
         }
-        
-        return true;
+        $transaction = $this->connection->beginTransaction();
+        try {
+            $user = new User;
+            $user->username = $this->username;
+            $user->email = $this->email;
+            $user->setPassword($this->password);
+            if($user->validate() && $user->save()){
+                $sql = "INSERT INTO user_profile (user_id,first_name,last_name,birthday,locale,gender) VALUES({$user->id},'{$this->firstName}','{$this->lastName}','{$this->birthday}','en',1)";
+                $this->connection->createCommand($sql)->execute();
+            }
+            $transaction->commit();
+        } catch (\Exception $e) {
+            $transaction->rollBack();
+            throw $e;
+            return false;
+        }
+        return Yii::$app->user->login($user,User::TIME_EXPIRE);
 
     }
 }
