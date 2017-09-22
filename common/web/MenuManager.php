@@ -3,6 +3,9 @@
 namespace app\common\web;
 
 use Yii;
+use ArrayIterator;
+use IteratorAggregate;
+use yii\base\Arrayable;
 use yii\base\Component;
 use yii\caching\Cache;
 use yii\helpers\Json;
@@ -23,15 +26,17 @@ use yii\base\InvalidParamException;
  * ```
  * You can access that instance via `Yii::$app->menuManager`.
  */
-class MenuManager extends Component
+class MenuManager extends Component implements IteratorAggregate
 {
     public $homeLink = true;
-    public $model;
-    public $urlManager = 'urlManager';
     public $cache = 'cache';
 
     protected $cacheKey = __CLASS__;
-    private $_items;
+    private $_collections = [
+        'main' => [
+            'class' => 'app\models\Category'
+        ]
+    ];
 
     /**
      * Initializes MenuManager.
@@ -46,11 +51,11 @@ class MenuManager extends Component
         if (Yii::$app->has($this->cache)) {
             $this->cache = Yii::$app->get($this->cache, false);
         }
-        if ($this->model instanceof \Closure) {
-            $this->model = call_user_func($this->model, $this);
-        } else {
-            $this->model = Yii::createObject($this->model);
-        }
     }
-
+    public function getIterator() {
+        return new ArrayIterator($this->_collections);
+    }
+    public function setCollections(array $collections){
+        $this->_collections = $collections;
+    }
 }
