@@ -3,12 +3,10 @@
 namespace app\common\web;
 
 use Yii;
-use ArrayIterator;
-use IteratorAggregate;
 use yii\base\Arrayable;
 use yii\base\Component;
 use yii\caching\Cache;
-use yii\helpers\Json;
+use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
 use yii\base\InvalidConfigException;
 use yii\base\InvalidParamException;
@@ -21,20 +19,25 @@ use yii\base\InvalidParamException;
  *
  * ```php
  * 'menuManager' => [
- *    // you can override MenuManager configs here
+ *    'menu1' => [
+ *     // you can override MenuManager configs here
+ *     ],
+ * *    'menu2' => [
+ *     // you can override MenuManager configs here
+ *     ],
+ *
  * ]
  * ```
- * You can access that instance via `Yii::$app->menuManager`.
+ * You can access that instance via `Yii::$app->menuManager->menu1` `Yii::$app->menuManager->menu2`.
  */
-class MenuManager extends Component implements IteratorAggregate
+class MenuManager extends Component
 {
     public $homeLink = true;
-    public $cache = 'cache';
-
-    protected $cacheKey = __CLASS__;
     private $_collections = [
         'main' => [
-            'class' => 'app\models\Category'
+            ['label' => 'Home', 'url' => ['/site/index']],
+            ['label' => 'About', 'url' => ['/site/about']],
+            ['label' => 'Contact', 'url' => ['/site/contact']],
         ]
     ];
 
@@ -44,18 +47,64 @@ class MenuManager extends Component implements IteratorAggregate
     public function init()
     {
         parent::init();
+    }
 
-        if (Yii::$app->has($this->urlManager)) {
-            $this->urlManager = Yii::$app->get($this->urlManager, false);
+    /**
+     * @param string $name
+     * @return bool|mixed
+     */
+    public function __get($name){
+        $collection = $this->getCollection($name);
+        if($collection != false){
+            return $collection;
         }
-        if (Yii::$app->has($this->cache)) {
-            $this->cache = Yii::$app->get($this->cache, false);
-        }
+        return parent::__get($name);
     }
-    public function getIterator() {
-        return new ArrayIterator($this->_collections);
-    }
+
+    /**
+     * @param array $collections
+     */
     public function setCollections(array $collections){
         $this->_collections = $collections;
+    }
+
+    /**
+     * @return array
+     */
+    public function getCollections(){
+        $collections = [];
+        foreach (array_keys($this->_collections) as $name){
+            $collections[$name] = $this->getCollection($name);
+        }
+        return $collections;
+    }
+
+    /**
+     * @param string $name
+     * @return bool|mixed
+     */
+    public function getCollection($name){
+        if ($this->hasCollection($name)) {
+            $this->_collections[$name] = $this->createCollection($this->_collections[$name]);
+            return $this->_collections[$name];
+        }
+        return false;
+    }
+
+    /**
+     * @param string $name
+     * @return bool
+     */
+    public function hasCollection($name){
+        return ArrayHelper::keyExists($name, $this->_collections);
+    }
+
+    protected function createCollection($config)
+    {
+        $class = ArrayHelper::remove($config,'class',false);
+        if($class != false){
+            return Yii::createObject($class,$config);
+        }
+        return $config;
     }
 }

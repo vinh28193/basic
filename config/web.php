@@ -10,7 +10,10 @@ $config = [
     'language' => 'en-US',
     'sourceLanguage' => 'en-US',
     'basePath' => dirname(__DIR__),
-    'bootstrap' => ['log'],
+    'bootstrap' => [
+        'log',
+        'menuManager'
+    ],
     'components' => [
         'request' => [
             'class' => 'yii\web\Request',
@@ -101,6 +104,9 @@ $config = [
                 ],
             ],
         ],
+        'menuManager' => [
+            'class' => 'app\common\web\MenuManager'
+        ]
     ],
     'defaultRoute' => 'site/index',
     'modules' => [
