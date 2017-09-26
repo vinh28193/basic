@@ -2,8 +2,7 @@
 use yii\helpers\Html;
 use kartik\widgets\ActiveForm;
 /* @var $this yii\web\View */
-/* @var $form yii\bootstrap\ActiveForm */
-/* @var $model \app\models\forms\ManagerForm */
+/* @var $model \app\models\forms\LoginForm */
 $this->title = 'Pls Login';
 ?>
 <div class="login-box">

@@ -4,7 +4,7 @@ namespace app\models\forms;
 use Yii;
 use app\models\User;
 use app\models\UserProfile;
-use app\common\web\Model;
+use yii\base\Model;
 use yii\db\Exception;
 /**
  * Class SignupForm

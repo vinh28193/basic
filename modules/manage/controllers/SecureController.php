@@ -3,10 +3,9 @@
 namespace app\modules\manage\controllers;
 
 use Yii;
-use app\models\Manager;
 use app\models\forms\LoginForm;
 use app\models\forms\SignupForm;
-
+use app\models\forms\ProfileForm;
 class SecureController extends ManageController
 {
     /**
@@ -43,14 +42,23 @@ class SecureController extends ManageController
         }
         $model = new SignupForm();
         if($model->load(Yii::$app->request->post()) && $model->signup()){
-            return $this->goHome();
+            return $this->redirect('profile');
         }
         return $this->render('signup',[
             'model' => $model
         ]);
     }
 
+    /**
+     * @return string|\yii\web\Response
+     */
     public function actionProfile(){
-
+        $model = new ProfileForm();
+        if($model->load(Yii::$app->request->post()) && $model->complete()){
+            return $this->goHome();
+        }
+        return $this->render('profile',[
+            'model' => $model
+        ]);
     }
 }
