@@ -2,6 +2,8 @@
 
 namespace app\common\web;
 
+use Yii;
+use yii\helpers\ArrayHelper;
 use yii\base\Object;
 
 /**
@@ -51,6 +53,11 @@ class Menu extends Object
     public function getItems()
     {
         $this->_items = $this->getItemsRecursive($this->_items, self::IS_ROOT);
+        $addMore = [
+            ['id' => 7, 'label' => 'Login', 'encode' => 1, 'url' => '/manage/secure/login', 'visible' => Yii::$app->user->isGuest, 'icon' => 'glyphicon glyphicon-lock', 'parent_id' => 0, 'status' => 1, 'created_at' => '1506397470', 'updated_at' => '1506397470'],
+            ['id' => 7, 'label' => 'Logout', 'encode' => 1, 'url' => '/manage/secure/logout', 'visible' => !Yii::$app->user->isGuest, 'icon' => 'glyphicon glyphicon-lock', 'parent_id' => 0, 'status' => 1, 'created_at' => '1506397470', 'updated_at' => '1506397470'],
+        ];
+        $this->_items = ArrayHelper::merge($this->_items,$this->getItemsRecursive($addMore,self::IS_ROOT));
         return $this->_items;
     }
 
@@ -59,11 +66,11 @@ class Menu extends Object
         $items = [];
         foreach ($records as $record) {
             if ($record['parent_id'] == $parent_id) {
-                $item = (array)$record;
+                $item = $record;
 
                 $subItems = $this->getItemsRecursive($records, $record['id']);
                 if ($subItems) {
-                    $item = array_merge($item, ['items' => $subItems]);
+                    $item = ArrayHelper::merge($item, ['items' => $subItems]);
                 }
                 $items[] = $item;
             }
