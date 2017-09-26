@@ -34,6 +34,9 @@ class SecureController extends ManageController
         return $this->goHome();
     }
 
+    /**
+     * @return string|\yii\web\Response
+     */
     public function actionSignup(){
         if (Yii::$app->user->identity) {
             return $this->goHome();
@@ -45,5 +48,9 @@ class SecureController extends ManageController
         return $this->render('signup',[
             'model' => $model
         ]);
+    }
+
+    public function actionProfile(){
+
     }
 }

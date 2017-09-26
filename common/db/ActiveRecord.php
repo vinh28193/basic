@@ -2,9 +2,6 @@
 namespace app\common\db;
 
 use Yii;
-use yii\helpers\ArrayHelper;
-use yii\behaviors\SluggableBehavior;
-use yii\behaviors\TimestampBehavior;
 /**
  *
  */
@@ -17,7 +14,7 @@ class ActiveRecord extends \yii\db\ActiveRecord
      */
     public static function find()
     {
-        return new ActiveQuery(get_called_class());
+        return Yii::createObject(ActiveQuery::className(), [get_called_class()]);
     }
 }
 

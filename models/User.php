@@ -7,7 +7,6 @@ use yii\helpers\ArrayHelper;
 use yii\web\IdentityInterface;
 use yii\behaviors\AttributeBehavior;
 use yii\behaviors\TimestampBehavior;
-use yii\filters\RateLimitInterface;
 use app\common\db\ActiveRecord;
 
 /**
@@ -25,6 +24,10 @@ use app\common\db\ActiveRecord;
  * @property integer $verified_at
  *
  * @property UserProfile $userProfile
+ *
+ * @property string publicIdentity
+ * @property string avatarPath
+ * @property string myRole
  */
 class User extends ActiveRecord implements IdentityInterface
 {
@@ -35,7 +38,7 @@ class User extends ActiveRecord implements IdentityInterface
 
     const SCENARIO_GUEST = 'guest';
 
-    const TIME_EXPIRE = 3600*24*30;
+    const TIME_EXPIRE = 3600 * 24 * 30;
     const GUEST_EXPIRE = 3600;
 
     /**
@@ -51,7 +54,7 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public function behaviors()
     {
-        return ArrayHelper::merge(parent::behaviors(),[
+        return ArrayHelper::merge(parent::behaviors(), [
             'timestamp' => [
                 'class' => TimestampBehavior::className(),
                 'createdAtAttribute' => 'created_at',
@@ -89,26 +92,27 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public function scenarios()
     {
-        return ArrayHelper::merge(parent::scenarios(),[
-            self::SCENARIO_DEFAULT => ['username', 'password_hash','email'],
+        return ArrayHelper::merge(parent::scenarios(), [
+            self::SCENARIO_DEFAULT => ['username', 'password_hash', 'email'],
             self::SCENARIO_GUEST => 'email',
         ]);
     }
+
     /**
      * @inheritdoc
      */
     public function rules()
     {
         return [
-            [['username','password_hash','email'],'required', 'on' =>  self::SCENARIO_DEFAULT],
+            [['username', 'password_hash', 'email'], 'required', 'on' => self::SCENARIO_DEFAULT],
             [['username', 'email'], 'unique'],
             [['status', 'created_at', 'verified_at'], 'integer'],
             [['username', 'auth_key'], 'string', 'max' => 32],
             [['email', 'password_hash'], 'string', 'max' => 255],
             ['access_token', 'string', 'max' => 40],
-            ['username','filter','filter'=>'\yii\helpers\Html::encode'],
-            ['email','email'],
-            ['email','required', 'on' =>  self::SCENARIO_GUEST],
+            ['username', 'filter', 'filter' => '\yii\helpers\Html::encode'],
+            ['email', 'email'],
+            ['email', 'required', 'on' => self::SCENARIO_GUEST],
         ];
     }
 
@@ -137,7 +141,7 @@ class User extends ActiveRecord implements IdentityInterface
     public static function findIdentity($id)
     {
         return static::findOne([
-            'id' => $id, 
+            'id' => $id,
         ]);
     }
 
@@ -176,12 +180,12 @@ class User extends ActiveRecord implements IdentityInterface
     /**
      * Validates password
      *
-     * @param  string  $password password to validate
+     * @param  string $password password to validate
      * @return boolean if password provided is valid for current user
      */
     public function validatePasswordHash($password)
     {
-         return Yii::$app->security->validatePassword($password, $this->password_hash);
+        return Yii::$app->security->validatePassword($password, $this->password_hash);
     }
 
     /**
@@ -195,14 +199,13 @@ class User extends ActiveRecord implements IdentityInterface
     }
 
     /**
-     * Finds user by username or email 
+     * Finds user by username or email
      *
      * @param string $value
      * @return static|null
      */
     public static function findAdvanced($value)
     {
-
         return static::find()->where([
             'and',
             [
@@ -220,5 +223,35 @@ class User extends ActiveRecord implements IdentityInterface
     public function getUserProfile()
     {
         return $this->hasOne(UserProfile::className(), ['user_id' => 'id']);
+    }
+
+    /**
+     * @return string
+     */
+    public function getMyRole(){
+        return 'administrator';
+    }
+
+    /**
+     * @return mixed|string
+     */
+    public function getPublicIdentity(){
+        if ($this->userProfile && $this->userProfile->fullName) {
+            return $this->userProfile->fullName;
+        }
+        if ($this->username) {
+            return $this->username;
+        }
+        return $this->email;
+    }
+
+    /**
+     * @return mixed|string
+     */
+    public function getAvatarPath(){
+        if ($this->userProfile && $this->userProfile->avatarAlias) {
+            return $this->userProfile->avatarAlias;
+        }
+        return '/no-avatar.jpg';
     }
 }

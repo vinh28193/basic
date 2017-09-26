@@ -3,8 +3,9 @@ namespace app\models\forms;
 
 use Yii;
 use app\models\User;
+use app\models\UserProfile;
 use app\common\web\Model;
-
+use yii\db\Exception;
 /**
  * Class SignupForm
  * @package app\models\forms
@@ -77,25 +78,32 @@ class SignupForm extends Model
         ];
     }
 
+    /**
+     * @return bool
+     * @throws \yii\db\Exception
+     */
     public function signup(){
 
         if (!$this->validate()) {
             return false;
         }
-        $transaction = $this->connection->beginTransaction();
+        $transaction = Yii::$app->db->beginTransaction();
         try {
             $user = new User;
             $user->username = $this->username;
             $user->email = $this->email;
             $user->setPassword($this->password);
             if($user->validate() && $user->save()){
-                $sql = "INSERT INTO user_profile (user_id,first_name,last_name,birthday,locale,gender) VALUES({$user->id},'{$this->firstName}','{$this->lastName}','{$this->birthday}','en',1)";
-                $this->connection->createCommand($sql)->execute();
+                $profile = new UserProfile();
+                $profile->setScenario(UserProfile::SCENARIO_INIT);
+                $profile->user_id = $user->id;
+                $profile->first_name = $this->firstName;
+                $profile->last_name = $this->lastName;
+                $user->link('userProfile',$profile);
             }
             $transaction->commit();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $transaction->rollBack();
-            throw $e;
             return false;
         }
         return Yii::$app->user->login($user,User::TIME_EXPIRE);
