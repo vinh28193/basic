@@ -12,7 +12,6 @@ $config = [
     'basePath' => dirname(__DIR__),
     'bootstrap' => [
         'log',
-        'menuManager'
     ],
     'components' => [
         'request' => [

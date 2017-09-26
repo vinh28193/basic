@@ -35,9 +35,7 @@ class MenuManager extends Component
     public $homeLink = true;
     private $_collections = [
         'main' => [
-            ['label' => 'Home', 'url' => ['/site/index']],
-            ['label' => 'About', 'url' => ['/site/about']],
-            ['label' => 'Contact', 'url' => ['/site/contact']],
+            'class' => 'app\common\web\Menu'
         ]
     ];
 
@@ -103,7 +101,7 @@ class MenuManager extends Component
     {
         $class = ArrayHelper::remove($config,'class',false);
         if($class != false){
-            return Yii::createObject($class,$config);
+            return Yii::createObject($class,$config)->items;
         }
         return $config;
     }
