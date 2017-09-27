@@ -252,6 +252,6 @@ class User extends ActiveRecord implements IdentityInterface
         if ($this->userProfile && $this->userProfile->avatarAlias) {
             return $this->userProfile->avatarAlias;
         }
-        return '/no-avatar.jpg';
+        return '/no-image.jpg';
     }
 }
