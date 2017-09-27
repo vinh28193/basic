@@ -1,4 +1,5 @@
 <?php
+use yii\helpers\Html;
 /* @var $this \yii\web\View */
 /* @var $content string */
 /* @var $identity \app\models\User $identity */
@@ -13,18 +14,12 @@ use app\common\widgets\Gravatar;
         <!-- Sidebar user panel -->
         <div class="user-panel">
             <div class="pull-left image">
-            <?= Gravatar::widget([
-                'email'   => Yii::$app->user->identity->email,
-                'options' => [
-                    'id' => 'gravatar-'.Yii::$app->user->identity->id,
-                    'class' => 'img-circle',
-                    'alt'   => Yii::$app->user->identity->username,
-                ],
-                'size'    => 84,
-            ]) ?>
+                <?=Html::img($identity->avatarPath,['class' => 'img-circle','alt' => $identity->publicIdentity])?>
             </div>
             <div class="pull-left info">
-                <h4><?=Yii::$app->user->identity->username?></h4>
+                <p><?=$identity->userProfile->first_name;?></p>
+                <!-- Status -->
+                <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
             </div>
         </div>
 

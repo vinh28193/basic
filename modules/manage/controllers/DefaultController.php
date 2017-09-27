@@ -2,12 +2,10 @@
 
 namespace app\modules\manage\controllers;
 
-use yii\web\Controller;
-
 /**
  * Default controller for the `manage` module
  */
-class DefaultController extends Controller
+class DefaultController extends ManageController
 {
     /**
      * Renders the index view for the module

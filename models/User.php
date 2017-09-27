@@ -249,8 +249,8 @@ class User extends ActiveRecord implements IdentityInterface
      * @return mixed|string
      */
     public function getAvatarPath(){
-        if ($this->userProfile && $this->userProfile->avatarAlias) {
-            return $this->userProfile->avatarAlias;
+        if ($this->userProfile && $this->userProfile->avatar) {
+            return $this->userProfile->avatar;
         }
         return '/no-image.jpg';
     }

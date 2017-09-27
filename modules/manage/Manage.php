@@ -20,6 +20,7 @@ class Manage extends Module
     {
         parent::init();
         // custom initialization code goes here
+        $this->defaultRoute = 'default/index';
         $this->layout = 'manage';
         $this->setAliases(['@manage' => __DIR__]);
         $this->setLayoutPath('@manage/layouts');

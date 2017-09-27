@@ -28,7 +28,7 @@ use app\common\db\ActiveRecord;
  * @property User $user
  *
  * @property null|string $fullName
- * @property null|string $avatarAlias
+ * @property null|string $avatar
  */
 class UserProfile extends ActiveRecord
 {
@@ -37,6 +37,8 @@ class UserProfile extends ActiveRecord
 
     const GENDER_FEMALE = 0;
     const GENDER_MALE = 1;
+
+    public $avatar;
 
     /**
      * @inheritdoc
@@ -97,6 +99,7 @@ class UserProfile extends ActiveRecord
             [['phone'], 'string', 'max' => 20],
             [['locale'], 'string', 'max' => 32],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
+            [['avatar'],'safe']
         ];
     }
 
@@ -144,8 +147,9 @@ class UserProfile extends ActiveRecord
     /**
      * @return null|string
      */
-    public function getAvatarAlias()
+    public function getAvatar()
     {
-        return $this->avatar_path ? Yii::getAlias($this->avatar_base_url . '/' . $this->avatar_path) : null;
+        $this->avatar = $this->avatar_path ? Yii::getAlias($this->avatar_base_url . '/' . $this->avatar_path) : null;
+        return $this->avatar;
     }
 }

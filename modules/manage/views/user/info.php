@@ -1,6 +1,6 @@
 <?php
 use yii\helpers\Html;
-
+use kartik\widgets\ActiveForm;
 /* @var $this yii\web\View */
 /* @var $model app\models\User */
 
@@ -17,6 +17,7 @@ CSS;
         <div class="box box-primary">
             <div class="box-body">
                 <?= Html::a(Html::img($model->avatarPath,['class' => 'img-responsive', 'alt' => $model->publicIdentity,]),'#',[
+                    'id' => 'userAvatarThumb',
                     'class' => 'box-profile',
                     'data-toggle'=>'modal',
                     'data-target'=>'#userAvatarUploadModal'
@@ -26,19 +27,25 @@ CSS;
                 <div class="modal fade" id="userAvatarUploadModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
+                            <?php
+                                $uploadForm = ActiveForm::begin([
+                                    'id' => 'login-form',
+                                    'method' => 'post',
+                                    'action' => ['avatar-upload'],
+                                ]);
+                            ?>
                             <div class="modal-body">
-                                ...
+                                <?php
+                                    echo $uploadForm->field($model->userProfile,'avatar')->fileInput();
+                                ?>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                <button type="button" class="btn btn-primary">Save changes</button>
+                                <?php
+                                    echo Html::button('Close',['class' => 'btn btn-secondary' , 'data-dismiss' => 'modal']);
+                                    echo Html::button('Save changes', ['class' => 'btn btn-primary ', 'id' => 'uploadButton']);
+                                ?>
                             </div>
+                            <?php ActiveForm::end(); ?>
                         </div>
                     </div>
                 </div>
@@ -50,42 +57,42 @@ CSS;
         <!-- About Me Box -->
         <div class="box box-primary">
             <div class="box-header with-border">
-                <h3 class="box-title">About Me</h3>
+                <?=Html::tag('h3',"<b>{$model->userProfile->first_name}</b>'s Information",['class' => 'box-title'])?>
                 <div class="box-tools pull-right">
                     <button type="button" class="btn btn-sm btn-box-tool"><i class="fa fa-fw fa-edit"></i></button>
                 </div>
             </div>
             <!-- /.box-header -->
             <div class="box-body">
-                <strong><i class="fa fa-book margin-r-5"></i> Education</strong>
+                <strong><i class="fa fa-book margin-r-5"></i>Name</strong>
 
                 <p class="text-muted">
-                    B.S. in Computer Science from the University of Tennessee at Knoxville
+                    <?=$model->userProfile->fullName;?>
                 </p>
 
                 <hr>
 
-                <strong><i class="fa fa-map-marker margin-r-5"></i> Location</strong>
+                <strong><i class="fa fa-file-text-o margin-r-5"></i> Birthday</strong>
 
-                <p class="text-muted">Malibu, California</p>
-
-                <hr>
-
-                <strong><i class="fa fa-pencil margin-r-5"></i> Skills</strong>
-
-                <p>
-                    <span class="label label-danger">UI Design</span>
-                    <span class="label label-success">Coding</span>
-                    <span class="label label-info">Javascript</span>
-                    <span class="label label-warning">PHP</span>
-                    <span class="label label-primary">Node.js</span>
-                </p>
+                <p class="text-muted"><?=$model->userProfile->birthday;?></p>
 
                 <hr>
 
-                <strong><i class="fa fa-file-text-o margin-r-5"></i> Notes</strong>
+                <strong><i class="fa fa-map-marker margin-r-5"></i> Address</strong>
 
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam fermentum enim neque.</p>
+                <p class="text-muted"><?=$model->userProfile->address;?></p>
+
+                <hr>
+
+                <strong><i class="fa fa-pencil margin-r-5"></i> Phone</strong>
+
+                <p class="text-muted"><?=$model->userProfile->phone;?></p>
+
+                <hr>
+                <strong><i class="fa fa-pencil margin-r-5"></i> Bio</strong>
+
+                <p class="text-muted"><?=$model->userProfile->bio;?></p>
+
             </div>
             <!-- /.box-body -->
         </div>
