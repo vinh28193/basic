@@ -101,7 +101,12 @@ class MenuManager extends Component
     {
         $class = ArrayHelper::remove($config,'class',false);
         if($class != false){
-            return Yii::createObject($class,$config)->items;
+            $menu = Yii::createObject($class,$config);
+            if($menu instanceof MenuInterface){
+                /* @var $menu MenuInterface*/
+                return $menu->collect();
+            }
+            return $menu->items;
         }
         return $config;
     }
