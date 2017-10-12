@@ -14,20 +14,20 @@ echo Html::hiddenInput('_UserID',$model->getId());
 <div class="row">
     <div class="col-md-3">
         <!-- Profile Image -->
-        <?=$this->render('info/_profile_img',[
+        <?=$this->render('_info/profile_img',[
             'imgSrc' => $model->avatarPath,
             'publicIdentity' => $model->publicIdentity,
             'model' => $model->userProfile
         ]);?>
         <!-- About Me Box -->
-        <?=$this->render('info/_profile',[
+        <?=$this->render('_info/profile',[
             'model' => $model->userProfile
         ]);?>
 
     </div>
     <!-- /.col -->
     <div class="col-md-9">
-        <?=$this->render('info/_multi_tabs',[
+        <?=$this->render('_info/multi_tabs',[
 
         ])?>
     </div>
