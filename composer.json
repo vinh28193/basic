@@ -35,6 +35,7 @@
         "google/auth": "^1.0",
         "google/apiclient": "^2.0",
         "google/apiclient-services": "~0.13",
+        "lcobucci/jwt": "~3.2",
         "facebook/graph-sdk": "*",
         "facebook/php-ads-sdk": "2.8.*",
         "league/flysystem": "^1.0",
