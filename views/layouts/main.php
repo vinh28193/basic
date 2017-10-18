@@ -8,8 +8,8 @@ use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 use app\assets\AppAsset;
-
 AppAsset::register($this);
+var_dump(Yii::$app->menuManager->articleCategory);
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -35,7 +35,7 @@ AppAsset::register($this);
     ]);
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right'],
-        'items' => Yii::$app->menuManager->main
+        'items' => Yii::$app->menuManager->frontMenu
     ]);
     NavBar::end();
     ?>

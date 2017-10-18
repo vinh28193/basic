@@ -1,6 +1,6 @@
 <?php
 
-use yii\db\Migration;
+use app\common\db\Migration;
 
 class m170713_164904_boot_data extends Migration
 {

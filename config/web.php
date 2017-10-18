@@ -104,7 +104,15 @@ $config = [
             ],
         ],
         'menuManager' => [
-            'class' => 'app\common\web\MenuManager'
+            'class' => 'app\common\web\MenuManager',
+            'collections' => [
+                'frontMenu' => [
+                    'class' => 'app\common\web\Menu'
+                ],
+                'articleCategory' => [
+                    'class' => 'app\models\ArticleCategory'
+                ]
+            ]
         ]
     ],
     'defaultRoute' => 'site/index',

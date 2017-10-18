@@ -1,30 +1,15 @@
 <?php
 
-use yii\db\Migration;
+use app\common\db\Migration;
 
 /**
  * Handles the creation of table `{{$user_profile}}`.
+ * Has foreign keys to the tables:
+ *
+ * - `{{%user}}`
  */
 class m170713_161743_create_user_profile_table extends Migration
 {
-    /**
-    * @var string
-    */
-    public $tableOptions = null;
-
-    /**
-     * Initializes the migration.
-     * @inheritdoc
-     */
-    public function init()
-    {
-        parent::init();
-        if ($this->db->driverName === 'mysql' &&  $this->tableOptions === null) {
-            // http://stackoverflow.com/questions/766809/whats-the-difference-between-utf8-general-ci-and-utf8-unicode-ci
-            $this->tableOptions = 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB';
-        }
-    }
-
     /**
      * @inheritdoc
      */

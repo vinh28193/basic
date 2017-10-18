@@ -19,25 +19,21 @@ use yii\base\InvalidParamException;
  *
  * ```php
  * 'menuManager' => [
- *    'menu1' => [
- *     // you can override MenuManager configs here
- *     ],
- * *    'menu2' => [
- *     // you can override MenuManager configs here
- *     ],
- *
+ *      'class' => 'app\common\web\MenuManager',
+ *      'collections' => [
+ *           'menu1' => [
+ *                'class' => 'app\common\web\Menu1'
+ *           ],
+ *           'menu2' => [
+ *                'class' => 'app\common\web\Menu2'
+ *            ],
+ *      ]
  * ]
  * ```
  * You can access that instance via `Yii::$app->menuManager->menu1` `Yii::$app->menuManager->menu2`.
  */
 class MenuManager extends Component
 {
-    public $homeLink = true;
-    private $_collections = [
-        'main' => [
-            'class' => 'app\common\web\Menu'
-        ]
-    ];
 
     /**
      * Initializes MenuManager.
@@ -52,12 +48,16 @@ class MenuManager extends Component
      * @return bool|mixed
      */
     public function __get($name){
-        $collection = $this->getCollection($name);
-        if($collection != false){
-            return $collection;
+        if($this->hasCollection($name)){
+            return $this->getCollection($name);
         }
         return parent::__get($name);
     }
+
+    /**
+     * array|object|MenuInterface
+     */
+    private $_collections;
 
     /**
      * @param array $collections
@@ -97,6 +97,11 @@ class MenuManager extends Component
         return ArrayHelper::keyExists($name, $this->_collections);
     }
 
+    /**
+     * Creates collection instance from its array configuration.
+     * @param array $config collection instance configuration.
+     * @return array|object the array or collection object instance.
+     */
     protected function createCollection($config)
     {
         $class = ArrayHelper::remove($config,'class',false);
@@ -106,7 +111,7 @@ class MenuManager extends Component
                 /* @var $menu MenuInterface*/
                 return $menu->collect();
             }
-            return $menu->items;
+            return $menu;
         }
         return $config;
     }
