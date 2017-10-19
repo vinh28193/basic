@@ -9,7 +9,7 @@ use yii\behaviors\SluggableBehavior;
 use yii\behaviors\TimestampBehavior;
 use app\common\db\ActiveRecord;
 use app\common\web\MenuInterface;
-use app\models\queris\ArticleCategoryQuery;
+use app\models\queries\ArticleCategoryQuery;
 /**
  * This is the model class for table "{{%article_category}}".
  *
@@ -88,7 +88,7 @@ class ArticleCategory extends ActiveRecord implements MenuInterface
 
     /**
      * @inheritdoc
-     * @return \app\models\queris\ArticleCategoryQuery the active query used by this AR class.
+     * @return \app\models\queries\ArticleCategoryQuery the active query used by this AR class.
      */
     public static function find()
     {

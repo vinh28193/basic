@@ -1,8 +1,9 @@
 <?php
 
-namespace app\models\queris;
+namespace app\models\queries;
 
 use app\common\db\ActiveQuery
+
 /**
  * This is the ActiveQuery class for [[\app\models\ArticleCategory]].
  *

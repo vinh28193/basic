@@ -12,6 +12,7 @@ $config = [
     'basePath' => dirname(__DIR__),
     'bootstrap' => [
         'log',
+        'menuManager'
     ],
     'components' => [
         'request' => [
@@ -107,7 +108,7 @@ $config = [
             'class' => 'app\common\web\MenuManager',
             'collections' => [
                 'frontMenu' => [
-                    'class' => 'app\common\web\Menu'
+                    'class' => 'app\common\web\MainMenu'
                 ],
                 'articleCategory' => [
                     'class' => 'app\models\ArticleCategory'
