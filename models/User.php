@@ -15,6 +15,9 @@ use app\common\db\ActiveRecord;
  * @property integer $id
  * @property string $username
  * @property string $email
+ * @property string $phone
+ * @property string $oauth_id
+ * @property string $oauth_secret
  * @property string $access_token
  * @property string $auth_key
  * @property string $password_hash
@@ -24,7 +27,9 @@ use app\common\db\ActiveRecord;
  * @property integer $verified_at
  *
  * @property UserProfile $userProfile
- *
+ * @property UserAuth[] $userAuths
+ * @property UserLog[] $userLogs
+
  * @property string publicIdentity
  * @property string avatarPath
  * @property string myRole
@@ -37,6 +42,9 @@ class User extends ActiveRecord implements IdentityInterface
     const ACCESS_GUESTED = 10;
 
     const SCENARIO_GUEST = 'guest';
+    const SCENARIO_OAUTH_1 = 'oauth1';
+    const SCENARIO_OAUTH_2 = 'oauth2';
+    const SCENARIO_REGISTER = 'register';
 
     const TIME_EXPIRE = 3600 * 24 * 30;
     const GUEST_EXPIRE = 3600;
@@ -93,7 +101,7 @@ class User extends ActiveRecord implements IdentityInterface
     public function scenarios()
     {
         return ArrayHelper::merge(parent::scenarios(), [
-            self::SCENARIO_DEFAULT => ['username', 'password_hash', 'email'],
+            self::SCENARIO_REGISTER => ['username', 'password_hash', 'email','phone'],
             self::SCENARIO_GUEST => 'email',
         ]);
     }
@@ -104,11 +112,12 @@ class User extends ActiveRecord implements IdentityInterface
     public function rules()
     {
         return [
-            [['username', 'password_hash', 'email'], 'required', 'on' => self::SCENARIO_DEFAULT],
+            [['username', 'password_hash', 'email'], 'required', 'on' => self::SCENARIO_REGISTER],
             [['username', 'email'], 'unique'],
             [['status', 'created_at', 'verified_at'], 'integer'],
             [['username', 'auth_key'], 'string', 'max' => 32],
             [['email', 'password_hash'], 'string', 'max' => 255],
+            [['phone'], 'string', 'max' => 15],
             ['access_token', 'string', 'max' => 40],
             ['username', 'filter', 'filter' => '\yii\helpers\Html::encode'],
             ['email', 'email'],
@@ -125,6 +134,7 @@ class User extends ActiveRecord implements IdentityInterface
             'id' => Yii::t('app', 'ID'),
             'username' => Yii::t('app', 'Username'),
             'email' => Yii::t('app', 'Email'),
+            'phone' => Yii::t('app', 'Phone'),
             'access_token' => Yii::t('app', 'Access Token'),
             'auth_key' => Yii::t('app', 'Auth Key'),
             'password_hash' => Yii::t('app', 'Password Hash'),
@@ -212,6 +222,7 @@ class User extends ActiveRecord implements IdentityInterface
                 'or',
                 ['username' => $value],
                 ['email' => $value],
+                ['phone' => $value],
             ],
             ['status' => self::ACCESS_GRANTED]
         ])->one();
@@ -223,6 +234,22 @@ class User extends ActiveRecord implements IdentityInterface
     public function getUserProfile()
     {
         return $this->hasOne(UserProfile::className(), ['user_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUserAuths()
+    {
+        //return $this->hasMany(UserAuth::className(), ['user_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUserLogs()
+    {
+        //return $this->hasMany(UserLog::className(), ['user_id' => 'id']);
     }
 
     /**

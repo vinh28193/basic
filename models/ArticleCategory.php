@@ -100,7 +100,7 @@ class ArticleCategory extends ActiveRecord implements MenuInterface
      */
     public function getArticles()
     {
-        return $this->hasMany(Article::className(), ['category_id' => 'id']);
+        //return $this->hasMany(Article::className(), ['category_id' => 'id']);
     }
 
     /**
@@ -123,7 +123,7 @@ class ArticleCategory extends ActiveRecord implements MenuInterface
      * @return bool
      */
     public function isParent(){
-        return isset($this->parent) && $this->parent_id == null;
+        return isset($this->articleCategories) && $this->parent_id == null;
     }
 
     private $_url;
@@ -142,7 +142,7 @@ class ArticleCategory extends ActiveRecord implements MenuInterface
     public function getUrl()
     {
         if (!$this->_url) {
-            $this->_url = $this->isParent() ? '#' : Url::to("categories/{$this->slug}", false);
+            $this->_url = $this->isParent() ? '#' : Url::to("/categories/{$this->slug}", false);
         }
         return $this->_url;
     }

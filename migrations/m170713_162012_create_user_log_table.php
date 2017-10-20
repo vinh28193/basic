@@ -1,0 +1,60 @@
+<?php
+
+use yii\db\Migration;
+
+/**
+ * Handles the creation of table `{{%user_log}}`.
+ * Has foreign keys to the tables:
+ *
+ * - `{{%user}}`
+ */
+class m170713_162012_create_user_log_table extends Migration
+{
+    /**
+     * @inheritdoc
+     */
+    public function up()
+    {
+        $this->createTable('{{%user_log}}', [
+            'id' => $this->primaryKey(),
+            'user_id' => $this->integer()->notNull(),
+        ]);
+
+        // creates index for column `user_id`
+        $this->createIndex(
+            'idx-user_log-user_id',
+            '{{%user_log}}',
+            'user_id'
+        );
+
+        // add foreign key for table `user`
+        $this->addForeignKey(
+            'fk-user_log-user_id',
+            '{{%user_log}}',
+            'user_id',
+            'user',
+            'id',
+            'CASCADE'
+        );
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function down()
+    {
+        // drops foreign key for table `user`
+        $this->dropForeignKey(
+            'fk-user_log-user_id',
+            '{{%user_log}}'
+        );
+
+        // drops index for column `user_id`
+        $this->dropIndex(
+            'idx-user_log-user_id',
+            '{{%user_log}}'
+        );
+
+        $this->dropTable('{{%user_log}}');
+    }
+}

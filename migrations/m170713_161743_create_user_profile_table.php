@@ -23,7 +23,6 @@ class m170713_161743_create_user_profile_table extends Migration
             'avatar_base_url' => $this->string(),
             'identity_code' => $this->string(15),
             'birthday' => $this->string(12),
-            'phone' => $this->string(20),
             'address' => $this->string(100),
             'bio'=> $this->text(),
             'locale' => $this->string(32),

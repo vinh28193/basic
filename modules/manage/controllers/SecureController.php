@@ -3,6 +3,7 @@
 namespace app\modules\manage\controllers;
 
 use Yii;
+use app\common\web\AuthHandler;
 use app\models\forms\LoginForm;
 use app\models\forms\SignupForm;
 
@@ -12,6 +13,16 @@ use app\models\forms\SignupForm;
  */
 class SecureController extends ManageController
 {
+    public function actions()
+    {
+        return [
+            'auth' => [
+                'class' => 'yii\authclient\AuthAction',
+                'successCallback' => [$this, 'onAuthSuccess'],
+            ],
+        ];
+    }
+
     /**
      * @return string|\yii\web\Response
      */
@@ -51,5 +62,10 @@ class SecureController extends ManageController
         return $this->render('signup',[
             'model' => $model
         ]);
+    }
+
+    public function onAuthSuccess($client)
+    {
+        (new AuthHandler($client))->handle();
     }
 }

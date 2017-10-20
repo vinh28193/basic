@@ -14,12 +14,16 @@ class m170713_164904_boot_data extends Migration
             $email = $username.'@basic.dev';
             $firstName = 'Administration '.$username;
             $lastName = '000'.$index;
+            $phone = '012321'.$index;
 
             $this->insert('{{%user}}',[
                 'id' => $index,
                 'username' => $username,
                 'email' => $email,
-                'access_token' => Yii::$app->getSecurity()->generateRandomString(40),
+                'phone' => $phone,
+                'oauth_id' => Yii::$app->getSecurity()->generateRandomString(20),
+                'oauth_secret' => Yii::$app->getSecurity()->generateRandomString(40),
+                'access_token' => Yii::$app->getSecurity()->generateRandomString(100),
                 'auth_key' => Yii::$app->getSecurity()->generateRandomString(32),
                 'password_hash' => $passwordHash,
                 'status' => 1,

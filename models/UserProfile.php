@@ -18,7 +18,6 @@ use app\common\db\ActiveRecord;
  * @property string $avatar_base_url
  * @property string $identity_code
  * @property string $birthday
- * @property string $phone
  * @property string $address
  * @property string $bio
  * @property string $locale
@@ -96,7 +95,6 @@ class UserProfile extends ActiveRecord
             [['avatar_path', 'avatar_base_url'], 'string', 'max' => 255],
             [['identity_code'], 'string', 'max' => 15],
             [['birthday'], 'string', 'max' => 12],
-            [['phone'], 'string', 'max' => 20],
             [['locale'], 'string', 'max' => 32],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
             [['avatar'],'safe']
@@ -116,7 +114,6 @@ class UserProfile extends ActiveRecord
             'avatar_base_url' => Yii::t('app', 'Avatar Base Url'),
             'identity_code' => Yii::t('app', 'Identity Code'),
             'birthday' => Yii::t('app', 'Birthday'),
-            'phone' => Yii::t('app', 'Phone'),
             'address' => Yii::t('app', 'Address'),
             'bio' => Yii::t('app', 'Bio'),
             'locale' => Yii::t('app', 'Locale'),

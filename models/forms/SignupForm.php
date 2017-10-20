@@ -90,6 +90,7 @@ class SignupForm extends Model
         $transaction = Yii::$app->db->beginTransaction();
         try {
             $user = new User;
+            $user->setScenario(User::SCENARIO_REGISTER);
             $user->username = $this->username;
             $user->email = $this->email;
             $user->setPassword($this->password);
