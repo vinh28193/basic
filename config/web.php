@@ -114,6 +114,16 @@ $config = [
                     'class' => 'app\models\ArticleCategory'
                 ]
             ]
+        ],
+        'authClientCollection' => [
+            'class' => 'yii\authclient\Collection',
+            'clients' => [
+                'facebook' => [
+                    'class' => 'yii\authclient\clients\Facebook',
+                    'clientId' => '745003465706631',
+                    'clientSecret' => '7c7ac46ea2e6a6a84b39fcbcdd69a9d5',
+                ],
+            ],
         ]
     ],
     'defaultRoute' => 'site/index',
