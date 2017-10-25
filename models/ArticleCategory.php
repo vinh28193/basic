@@ -4,6 +4,7 @@ namespace app\models;
 
 use Yii;
 use yii\helpers\Url;
+use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
 use yii\behaviors\SluggableBehavior;
 use yii\behaviors\TimestampBehavior;
@@ -62,11 +63,21 @@ class ArticleCategory extends ActiveRecord implements MenuInterface
     public function rules()
     {
         return [
-            [['title', 'slug'], 'required'],
+            [['title'], 'required'],
             [['parent_id', 'status', 'created_at', 'updated_at'], 'integer'],
             [['title'], 'string', 'max' => 512],
             [['slug'], 'string', 'max' => 1024],
-            [['parent_id'], 'exist', 'skipOnError' => true, 'targetClass' => ArticleCategory::className(), 'targetAttribute' => ['parent_id' => 'id']],
+            [
+                [
+                    'parent_id'
+                ], 
+                'exist', 
+                'skipOnError' => true, 
+                'targetClass' => ArticleCategory::className(), 
+                'targetAttribute' => [
+                    'parent_id' => 'id'
+                ]
+            ],
         ];
     }
 
@@ -119,13 +130,6 @@ class ArticleCategory extends ActiveRecord implements MenuInterface
         return $this->hasMany(ArticleCategory::className(), ['parent_id' => 'id']);
     }
 
-    /**
-     * @return bool
-     */
-    public function isParent(){
-        return isset($this->articleCategories) && $this->parent_id == null;
-    }
-
     private $_url;
 
     /**
@@ -142,7 +146,7 @@ class ArticleCategory extends ActiveRecord implements MenuInterface
     public function getUrl()
     {
         if (!$this->_url) {
-            $this->_url = $this->isParent() ? '#' : Url::to("/categories/{$this->slug}", false);
+            $this->_url = Url::to("/categories/{$this->slug}", false);
         }
         return $this->_url;
     }
@@ -152,8 +156,8 @@ class ArticleCategory extends ActiveRecord implements MenuInterface
      */
     public function collect()
     {
-        
-        return [];
+        $query = self::find()->isParent()->all();
+        return $this->getItemsRecursive($query);
     }
 
     private function getItemsRecursive($records)

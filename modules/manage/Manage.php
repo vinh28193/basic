@@ -1,8 +1,10 @@
 <?php
 
 namespace app\modules\manage;
-use yii\helpers\ArrayHelper;
+
+use Yii;
 use yii\base\Module;
+use yii\helpers\ArrayHelper;
 /**
  * manage module definition class
  */
@@ -24,5 +26,7 @@ class Manage extends Module
         $this->layout = 'manage';
         $this->setAliases(['@manage' => __DIR__]);
         $this->setLayoutPath('@manage/layouts');
+        $config = require Yii::getAlias('@manage/config/config.php');
+        Yii::configure(Yii::$app, $config);
     }
 }
