@@ -134,6 +134,9 @@ $config = [
         'maintenance' => [
             'class' => 'app\modules\maintenance\Maintenance',
         ],
+        'api' => [
+            'class' => 'app\modules\api\Service',
+        ],
         'debug' => [
             'class' => 'yii\debug\Module',
             'allowedIPs' => ['127.0.0.1', '::1', '192.168.83.*'],

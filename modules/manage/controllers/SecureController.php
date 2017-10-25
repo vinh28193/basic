@@ -16,7 +16,7 @@ class SecureController extends ManageController
     public function actions()
     {
         return [
-            'auth' => [
+            'oauth' => [
                 'class' => 'yii\authclient\AuthAction',
                 'successCallback' => [$this, 'onAuthSuccess'],
             ],

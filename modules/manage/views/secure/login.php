@@ -42,6 +42,7 @@ $this->title = 'Pls Login';
             echo Html::submitButton('Login', ['class' => 'btn btn-primary btn-block btn-flat', 'id' => 'login-button']);
             ActiveForm::end(); ?>
         </div>
+        <?=$this->render('_oauth')?>
         <?=Html::a('I dont have a membership',['secure/signup'],['class' => 'text-center'])?>
     </div><!-- /.login-box-body -->
 </div><!-- /.login-box -->
