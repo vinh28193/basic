@@ -46,7 +46,6 @@ class ArticleCategory extends ActiveRecord implements MenuInterface
                 'class' => TimestampBehavior::className(),
                 'createdAtAttribute' => 'created_at',
                 'updatedAtAttribute' => 'update_at',
-                'value' => time()
             ],
             'slug' => [
                 'class' => SluggableBehavior::className(),
@@ -111,7 +110,7 @@ class ArticleCategory extends ActiveRecord implements MenuInterface
      */
     public function getArticles()
     {
-        //return $this->hasMany(Article::className(), ['category_id' => 'id']);
+        return $this->hasMany(Article::className(), ['category_id' => 'id']);
     }
 
     /**

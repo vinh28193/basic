@@ -79,14 +79,14 @@ class User extends ActiveRecord implements IdentityInterface
             'auth_key' => [
                 'class' => AttributeBehavior::className(),
                 'attributes' => [
-                    ActiveRecord::EVENT_BEFORE_INSERT => 'auth_key'
+                    self::EVENT_BEFORE_INSERT => 'auth_key'
                 ],
                 'value' => Yii::$app->getSecurity()->generateRandomString(32)
             ],
             'access_token' => [
                 'class' => AttributeBehavior::className(),
                 'attributes' => [
-                    ActiveRecord::EVENT_BEFORE_INSERT => 'access_token'
+                    self::EVENT_BEFORE_INSERT => 'access_token'
                 ],
                 'value' => function () {
                     return Yii::$app->getSecurity()->generateRandomString(40);

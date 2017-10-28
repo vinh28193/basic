@@ -37,8 +37,6 @@ class UserProfile extends ActiveRecord
     const GENDER_FEMALE = 0;
     const GENDER_MALE = 1;
 
-    public $avatar;
-
     /**
      * @inheritdoc
      */
@@ -57,13 +55,12 @@ class UserProfile extends ActiveRecord
                 'class' => TimestampBehavior::className(),
                 'createdAtAttribute' => false,
                 'updatedAtAttribute' => 'updated_at',
-                'value' => time()
             ],
             'locale' => [
                 'class' => AttributeBehavior::className(),
                 'attributes' => [
-                    ActiveRecord::EVENT_BEFORE_INSERT => 'locale',
-                    ActiveRecord::EVENT_AFTER_UPDATE => 'locale'
+                    self::EVENT_BEFORE_INSERT => 'locale',
+                    self::EVENT_AFTER_UPDATE => 'locale'
                 ],
                 'value' => Yii::$app->language
             ],
@@ -130,23 +127,39 @@ class UserProfile extends ActiveRecord
         return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
 
+    private $_fullName = null;
+
+    public function setFullName($fullName){
+            $this->_fullName = $fullName;
+            // list($first_name,$last_name) = explode(' ',$this->_fullName);
+            // $this->first_name = $first_name;
+            // $this->last_name = $last_name;
+    }
     /**
      * @return null|string
      */
     public function getFullName()
     {
         if ($this->first_name || $this->last_name) {
-            return implode(' ', [$this->first_name, $this->last_name]);
+            $this->_fullName = implode(' ', [$this->first_name, $this->last_name]);
         }
-        return null;
+        return $this->first_name;
     }
 
+    private $_avatar = null;
+
+    public function setAvatar($avatarPath){
+            $this->_avatar = $avatarPath;
+            // $this->avatar_path = $this->_avatar
+    }
     /**
      * @return null|string
      */
     public function getAvatar()
     {
-        $this->avatar = $this->avatar_path ? Yii::getAlias($this->avatar_base_url . '/' . $this->avatar_path) : null;
-        return $this->avatar;
+        if($this->avatar_path){
+            $this->_avatar = Yii::getAlias($this->avatar_base_url . '/' . $this->avatar_path);
+        }
+        return $this->_avatar;
     }
 }
