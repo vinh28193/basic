@@ -9,7 +9,6 @@ use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 use app\assets\AppAsset;
 AppAsset::register($this);
-var_dump(Yii::$app->menuManager->articleCategory);
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>

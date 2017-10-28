@@ -143,7 +143,7 @@ class UserProfile extends ActiveRecord
         if ($this->first_name || $this->last_name) {
             $this->_fullName = implode(' ', [$this->first_name, $this->last_name]);
         }
-        return $this->first_name;
+        return $this->_fullName;
     }
 
     private $_avatar = null;

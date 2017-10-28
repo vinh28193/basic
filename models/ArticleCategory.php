@@ -163,6 +163,7 @@ class ArticleCategory extends ActiveRecord implements MenuInterface
     {
         $items = [];
         foreach ($records as $record) {
+            $item = [];
             $item['label'] = Html::encode($record->title);
             $item['url'] = $record->url;
             if ($record->articleCategories) {

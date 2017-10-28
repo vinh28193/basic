@@ -25,9 +25,6 @@ $formatter = Yii::$app->formatter;
         <p class="text-muted"><?= $model->address; ?></p>
         <hr>
 
-        <strong><i class="fa fa-pencil margin-r-5"></i> Phone</strong>
-        <p class="text-muted"><?= $model->phone; ?></p>
-        <hr>
         <strong><i class="fa fa-pencil margin-r-5"></i> Bio</strong>
 
         <p class="text-muted"><?= $model->bio; ?></p>
