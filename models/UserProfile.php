@@ -162,4 +162,11 @@ class UserProfile extends ActiveRecord
         }
         return $this->_avatar;
     }
+    
+    /**
+     * @return null|string
+     */
+    public function uploadAvatar(){
+        
+    }
 }
