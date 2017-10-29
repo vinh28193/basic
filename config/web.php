@@ -1,5 +1,7 @@
 <?php
 
+$db = require(__DIR__ . '/db.php');
+$urlManager = require(__DIR__ . '/urlManager.php');
 $params = require(__DIR__ . '/params.php');
 
 $config = [
@@ -71,13 +73,8 @@ $config = [
                 ],
             ],
         ],
-        'db' => require(__DIR__ . '/db.php'),
-        'urlManager' => [
-            'enablePrettyUrl' => true,
-            'showScriptName' => false,
-            'rules' => [
-            ],
-        ],
+        'db' => $db,
+        'urlManager' => $urlManager,
         'assetManager' => [
             'class' => 'yii\web\AssetManager',
             'appendTimestamp' => false,

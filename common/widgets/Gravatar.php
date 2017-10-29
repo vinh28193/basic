@@ -1,13 +1,16 @@
 <?php
+
 namespace app\common\widgets;
-use yii\base\InvalidConfigException;
+
+
 use yii\helpers\Html;
+use yii\base\InvalidConfigException;
 /**
  * Displays a gravatar image tag.
  *
  * To use this widget, you may insert the following code in a view:
  *
- * ```
+ * ```php
  * echo app\common\widgets\Gravatar::widget([
  *     'email' => 'mail@cebe.cc',
  *     'size' => 128,
@@ -19,9 +22,7 @@ use yii\helpers\Html;
  *         'title'=>'Gravatar image',
  *     ]
  * ]);
- * </pre>
- *
- * @author Carsten Brandt <mail@cebe.cc>
+ * ```
  */
 class Gravatar extends Widget
 {
