@@ -35,7 +35,7 @@ class UserIdentity extends Object implements IdentityInterface
 	        'password_hash' => 'webmaster',
         ],
         101 => [
-        	'id' => 100,
+        	'id' => 101,
             'username' => 'manager',
 	        'email' => 'manager@example.org',
 	        'phone' => '0000-000-000',
@@ -43,7 +43,7 @@ class UserIdentity extends Object implements IdentityInterface
 	        'password_hash' => 'manager',
         ],
         102 => [
-        	'id' => 100,
+        	'id' => 102,
             'username' => 'user',
 	        'email' => 'user@example.org',
 	        'phone' => '0987654321',
