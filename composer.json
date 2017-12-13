@@ -15,6 +15,7 @@
     "minimum-stability": "stable",
     "require": {
         "php": ">=5.4.0",
+        "fxp/composer-asset-plugin":"v1.1.4",
         "yiisoft/yii2": ">=2.0.5",
         "yiisoft/yii2-bootstrap": "*",
         "yiisoft/yii2-swiftmailer": "*",
@@ -41,6 +42,7 @@
         "facebook/php-ads-sdk": "2.8.*",
         "league/flysystem": "^1.0",
         "cebe/yii2-gravatar": "*",
+        "rmrevin/yii2-minify-view": "^1.15",
         "kartik-v/yii2-widgets": "*",
         "kartik-v/yii2-checkbox-x": "*",
         "2amigos/yii2-tinymce-widget" : "*",
@@ -58,7 +60,8 @@
         "codeception/codeception": "*",
         "codeception/specify": "*",
         "codeception/verify": "*",
-        "codeception/c3": "*"
+        "codeception/c3": "*",
+        "jakoch/phantomjs-installer": "2.1.1"
     },
     "config": {
         "process-timeout": 1800
@@ -66,6 +69,16 @@
     "scripts": {
         "post-create-project-cmd": [
             "yii\\composer\\Installer::postCreateProject"
+        ],
+        "post-install-cmd": [
+            "PhantomInstaller\\Installer::installPhantomJS",
+            "Codeception\\c3\\Installer::copyC3ToRoot",
+            "find ./web/assets/* ! -name '.gitignore' | xargs rm -rf"
+        ],
+        "post-update-cmd": [
+            "PhantomInstaller\\Installer::installPhantomJS",
+            "Codeception\\c3\\Installer::copyC3ToRoot",
+            "find ./web/assets/* ! -name '.gitignore' | xargs rm -rf"
         ]
     },
     "extra": {
