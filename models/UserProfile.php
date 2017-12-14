@@ -6,7 +6,7 @@ use Yii;
 use yii\helpers\ArrayHelper;
 use yii\behaviors\AttributeBehavior;
 use yii\behaviors\TimestampBehavior;
-use app\common\db\ActiveRecord;
+use yii\db\ActiveRecord;
 
 /**
  * This is the model class for table "{{%user_profile}}".

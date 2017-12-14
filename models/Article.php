@@ -9,7 +9,7 @@ use yii\helpers\ArrayHelper;
 use yii\behaviors\SluggableBehavior;
 use yii\behaviors\TimestampBehavior;
 use yii\behaviors\BlameableBehavior;
-use app\common\db\ActiveRecord;
+use yii\db\ActiveRecord;
 use app\models\queries\ArticleQuery;
 /**
  * This is the model class for table "{{%article}}".

@@ -7,7 +7,7 @@ use yii\helpers\ArrayHelper;
 use yii\web\IdentityInterface;
 use yii\behaviors\AttributeBehavior;
 use yii\behaviors\TimestampBehavior;
-use app\common\db\ActiveRecord;
+use yii\db\ActiveRecord;
 /**
  * This is the model class for table "{{%user}}".
  *
@@ -33,7 +33,7 @@ use app\common\db\ActiveRecord;
  * @property string avatarPath
  * @property string myRole
  */
-class User extends ActiveRecord implements IdentityInterface
+class User extends ActiveRecord
 {
 
     const ACCESS_GRANTED = 1;
@@ -145,89 +145,6 @@ class User extends ActiveRecord implements IdentityInterface
     }
 
     /**
-     * @inheritdoc
-     */
-    public static function findIdentity($id)
-    {
-        return static::findOne([
-            'id' => $id,
-        ]);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public static function findIdentityByAccessToken($token, $type = null)
-    {
-        return null;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getId()
-    {
-        return $this->getPrimaryKey();
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getAuthKey()
-    {
-        return $this->auth_key;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function validateAuthKey($authKey)
-    {
-        return $this->auth_key === $authKey;
-    }
-
-    /**
-     * Validates password
-     *
-     * @param  string $password password to validate
-     * @return boolean if password provided is valid for current user
-     */
-    public function validatePasswordHash($password)
-    {
-        return Yii::$app->security->validatePassword($password, $this->password_hash);
-    }
-
-    /**
-     * Generates password hash from password and sets it to the model
-     *
-     * @param string $password
-     */
-    public function setPassword($password)
-    {
-        $this->password_hash = Yii::$app->security->generatePasswordHash($password);
-    }
-
-    /**
-     * Finds user by username or email
-     *
-     * @param string $value
-     * @return static|null
-     */
-    public static function findAdvanced($value)
-    {
-        return static::find()->where([
-            'and',
-            [
-                'or',
-                ['username' => $value],
-                ['email' => $value],
-                ['phone' => $value],
-            ],
-            ['status' => self::ACCESS_GRANTED]
-        ])->one();
-    }
-
-    /**
      * @return \yii\db\ActiveQuery
      */
     public function getUserProfile()
@@ -249,6 +166,27 @@ class User extends ActiveRecord implements IdentityInterface
     public function getUserLogs()
     {
         //return $this->hasMany(UserLog::className(), ['user_id' => 'id']);
+    }
+
+    /**
+     * Validates password
+     *
+     * @param  string $password password to validate
+     * @return boolean if password provided is valid for current user
+     */
+    public function validatePasswordHash($password)
+    {
+        return Yii::$app->security->validatePassword($password, $this->password_hash);
+    }
+
+    /**
+     * Generates password hash from password and sets it to the model
+     *
+     * @param string $password
+     */
+    public function setPassword($password)
+    {
+        $this->password_hash = Yii::$app->security->generatePasswordHash($password);
     }
 
     /**

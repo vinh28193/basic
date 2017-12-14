@@ -33,7 +33,7 @@ $config = [
         ],
         'user' => [
             'class' => 'app\common\web\User',
-            'identityClass' => 'app\models\User',
+            'identityClass' => 'app\models\UserIdentity',
             'loginUrl' => ['manage/secure/login'],
             'enableAutoLogin' => true,
             'identityCookie' => [

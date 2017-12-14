@@ -8,7 +8,7 @@ use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
 use yii\behaviors\SluggableBehavior;
 use yii\behaviors\TimestampBehavior;
-use app\common\db\ActiveRecord;
+use yii\db\ActiveRecord;
 use app\common\web\MenuInterface;
 use app\models\queries\ArticleCategoryQuery;
 /**

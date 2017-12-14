@@ -2,14 +2,12 @@
 
 namespace app\models\queries;
 
-use app\common\db\ActiveQuery;
-use app\common\db\ActiveRecord;
 /**
  * This is the ActiveQuery class for [[\app\models\ArticleCategory]].
  *
  * @see \app\models\ArticleCategory
  */
-class ArticleCategoryQuery extends ActiveQuery
+class ArticleCategoryQuery extends \yii\db\ActiveQuery
 {
     /*public function active()
     {
@@ -35,12 +33,12 @@ class ArticleCategoryQuery extends ActiveQuery
     }
 
     public function isParent(){
-        /* @var $class ActiveRecord */
+        /* @var $class  \yii\db\ActiveRecord */
         $class = $this->modelClass;
         return $this->where($class::tableName().'.parent_id IS NULL');
     }
     public function notParent(){
-        /* @var $class ActiveRecord */
+        /* @var $class  \yii\db\ActiveRecord */
         $class = $this->modelClass;
         return $this->where($class::tableName().'.parent_id IS NOT NULL');
     }
