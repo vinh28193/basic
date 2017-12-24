@@ -108,7 +108,7 @@ $config = [
                     'class' => 'app\common\web\MainMenu'
                 ],
                 'articleCategory' => [
-                    'class' => 'app\models\ArticleCategory'
+                    'class' => 'app\models\resources\ArticleCategory'
                 ]
             ]
         ],

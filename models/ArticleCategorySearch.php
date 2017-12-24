@@ -5,8 +5,8 @@ namespace app\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\ArticleCategory;
-
+use app\models\resources\ArticleCategory;
+use app\models\queries\ArticleCategoryQuery;
 /**
  * ArticleCategorySearch represents the model behind the search form about `app\models\ArticleCategory`.
  */
@@ -30,6 +30,15 @@ class ArticleCategorySearch extends ArticleCategory
     {
         // bypass scenarios() implementation in the parent class
         return Model::scenarios();
+    }
+    
+    /**
+     * @inheritdoc
+     * @return \app\models\queries\ArticleCategoryQuery the active query used by this AR class.
+     */
+    public static function find()
+    {
+        return Yii::createObject(ArticleCategoryQuery::className(), [get_called_class()]);
     }
 
     /**

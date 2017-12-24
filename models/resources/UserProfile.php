@@ -1,13 +1,12 @@
 <?php
 
-namespace app\models;
+namespace app\models\resources;
 
 use Yii;
+use yii\db\ActiveRecord;
 use yii\helpers\ArrayHelper;
 use yii\behaviors\AttributeBehavior;
 use yii\behaviors\TimestampBehavior;
-use yii\db\ActiveRecord;
-
 /**
  * This is the model class for table "{{%user_profile}}".
  *
@@ -135,15 +134,16 @@ class UserProfile extends ActiveRecord
             // $this->first_name = $first_name;
             // $this->last_name = $last_name;
     }
+
     /**
      * @return null|string
      */
     public function getFullName()
     {
-        if ($this->first_name || $this->last_name) {
+        if (!$this->_fullName) {
             $this->_fullName = implode(' ', [$this->first_name, $this->last_name]);
         }
-        return $this->_fullName;
+        return  $this->_fullName;
     }
 
     private $_avatar = null;

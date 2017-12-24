@@ -2,10 +2,11 @@
 namespace app\models\forms;
 
 use Yii;
-use app\models\User;
-use app\models\UserProfile;
 use yii\base\Model;
 use yii\db\Exception;
+use app\models\resources\User;
+use app\models\resources\UserProfile;
+
 /**
  * Class SignupForm
  * @package app\models\forms

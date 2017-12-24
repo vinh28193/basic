@@ -1,13 +1,14 @@
 <?php
 
-namespace app\models;
+namespace app\models\resources;
 
 use Yii;
+use yii\db\ActiveRecord;
 use yii\helpers\ArrayHelper;
 use yii\web\IdentityInterface;
 use yii\behaviors\AttributeBehavior;
 use yii\behaviors\TimestampBehavior;
-use yii\db\ActiveRecord;
+
 /**
  * This is the model class for table "{{%user}}".
  *

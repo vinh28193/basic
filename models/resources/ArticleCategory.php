@@ -1,16 +1,15 @@
 <?php
 
-namespace app\models;
+namespace app\models\resources;
 
 use Yii;
 use yii\helpers\Url;
 use yii\helpers\Html;
+use yii\db\ActiveRecord;
 use yii\helpers\ArrayHelper;
 use yii\behaviors\SluggableBehavior;
 use yii\behaviors\TimestampBehavior;
-use yii\db\ActiveRecord;
-use app\common\web\MenuInterface;
-use app\models\queries\ArticleCategoryQuery;
+
 /**
  * This is the model class for table "{{%article_category}}".
  *
@@ -26,7 +25,7 @@ use app\models\queries\ArticleCategoryQuery;
  * @property ArticleCategory $parent
  * @property ArticleCategory[] $articleCategories
  */
-class ArticleCategory extends ActiveRecord implements MenuInterface
+class ArticleCategory extends ActiveRecord 
 {
     /**
      * @inheritdoc
@@ -97,15 +96,6 @@ class ArticleCategory extends ActiveRecord implements MenuInterface
     }
 
     /**
-     * @inheritdoc
-     * @return \app\models\queries\ArticleCategoryQuery the active query used by this AR class.
-     */
-    public static function find()
-    {
-        return Yii::createObject(ArticleCategoryQuery::className(), [get_called_class()]);
-    }
-
-    /**
      * @return \yii\db\ActiveQuery
      */
     public function getArticles()
@@ -128,52 +118,4 @@ class ArticleCategory extends ActiveRecord implements MenuInterface
     {
         return $this->hasMany(ArticleCategory::className(), ['parent_id' => 'id']);
     }
-
-    private $_url;
-
-    /**
-     * setter
-     */
-    public function setUrl($url)
-    {
-        $this->_url = $url;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getUrl()
-    {
-        if (!$this->_url) {
-            $this->_url = Url::to("/categories/{$this->slug}", false);
-        }
-        return $this->_url;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function collect()
-    {
-        $query = self::find()->isParent()->all();
-        return $this->getItemsRecursive($query);
-    }
-
-    private function getItemsRecursive($records)
-    {
-        $items = [];
-        foreach ($records as $record) {
-            $item = [];
-            $item['label'] = Html::encode($record->title);
-            $item['url'] = $record->url;
-            if ($record->articleCategories) {
-                $item = ArrayHelper::merge($item, [
-                    'items' => $this->getItemsRecursive($record->articleCategories)
-                ]);
-            }
-            $items[] = $item;
-        }
-        return $items;
-    }
-
 }

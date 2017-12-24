@@ -1,16 +1,15 @@
 <?php
 
-namespace app\models;
+namespace app\models\resources;
 
 use Yii;
 use yii\helpers\Url;
 use yii\helpers\Html;
+use yii\db\ActiveRecord;
 use yii\helpers\ArrayHelper;
 use yii\behaviors\SluggableBehavior;
 use yii\behaviors\TimestampBehavior;
 use yii\behaviors\BlameableBehavior;
-use yii\db\ActiveRecord;
-use app\models\queries\ArticleQuery;
 /**
  * This is the model class for table "{{%article}}".
  *
@@ -142,15 +141,6 @@ class Article extends ActiveRecord
             'published_at' => Yii::t('app', 'Published At'),
             'updated_at' => Yii::t('app', 'Updated At'),
         ];
-    }
-
-    /**
-     * @inheritdoc
-     * @return \app\models\queries\ArticleQuery the active query used by this AR class.
-     */
-    public static function find()
-    {
-        return Yii::createObject(ArticleQuery::className(), [get_called_class()]);
     }
 
     /**
