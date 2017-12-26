@@ -15,10 +15,10 @@
     "minimum-stability": "stable",
     "require": {
         "php": ">=5.4.0",
-        "fxp/composer-asset-plugin":"v1.1.4",
-        "yiisoft/yii2": ">=2.0.5",
-        "yiisoft/yii2-bootstrap": "*",
-        "yiisoft/yii2-swiftmailer": "*",
+        "fxp/composer-asset-plugin":"^1.4.1",
+        "yiisoft/yii2": "~2.0.13",
+        "yiisoft/yii2-bootstrap": "~2.0.0",
+        "yiisoft/yii2-swiftmailer": "~2.0.0",
         "yiisoft/yii2-authclient": "^2.0.0",
         "yiisoft/yii2-jui": "^2.0.0",
         "yiisoft/yii2-imagine": "~2.0.0",
@@ -50,7 +50,9 @@
         "2amigos/yii2-editable-widget": "*",
         "noam148/yii2-image-manager": "*",
         "noam148/yii2-image-resize": "*",
-        "budyaga/yii2-cropper": "*"
+        "budyaga/yii2-cropper": "*",
+        "johnitvn/yii2-ajaxcrud": "*",
+        "lajax/yii2-translate-manager": "^1.7"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "*",
