@@ -85,12 +85,14 @@ $config = [
         ],
         'i18n' => [
             'translations' => [
-                'app*' => [
-                    'class' => 'yii\i18n\PhpMessageSource',
-                    'basePath' => '@messages',
-                    'fileMap' => [
-                        'app' => 'app.php',
-                    ],
+                '*' => [
+                    'class' => 'yii\i18n\DbMessageSource',
+                    'db' => 'db',
+                    'sourceLanguage' => 'xx-XX', // Developer language
+                    'sourceMessageTable' => '{{%language_source}}',
+                    'messageTable' => '{{%language_translate}}',
+                    'cachingDuration' => 86400,
+                    'enableCaching' => true,
                 ],
                 'yii' => [
                     'class' => 'yii\i18n\PhpMessageSource',
@@ -134,6 +136,44 @@ $config = [
         'api' => [
             'class' => 'app\modules\api\Service',
         ],
+        'translatemanager' => [
+            'class' => 'lajax\translatemanager\Module',
+            'root' => '@app/models',               
+            'scanRootParentDirectory' => true,                                       
+            'layout' => 'language',         
+            'allowedIPs' => [
+                '127.0.0.1'
+            ], 
+            'roles' => ['@'],               
+            'tmpDir' => '@runtime',         
+            'phpTranslators' => [
+                'Yii::t'
+            ],   
+            'jsTranslators' => [
+                'lajax.t'
+            ],
+            'patterns' => [
+                '*.js', 
+                '*.php'
+            ],
+            'ignoredCategories' => ['yii'], 
+            'ignoredItems' => ['config'], 
+            'scanTimeLimit' => 300,
+            'searchEmptyCommand' => '!', 
+            'defaultExportStatus' => 1,    
+            'defaultExportFormat' => 'json',
+            'tables' => [               
+                [
+                    'connection' => 'db',  
+                    'table' => '{{%language}}',       
+                    'columns' => ['name', 'name_ascii'],
+                    'category' => 'language-db',
+                ]
+            ],
+            'scanners' => [ 
+                '\lajax\translatemanager\services\scanners\ScannerPhpFunction',
+            ],
+        ],
         'debug' => [
             'class' => 'yii\debug\Module',
             'allowedIPs' => ['127.0.0.1', '::1', '192.168.83.*'],
@@ -145,18 +185,5 @@ $config = [
     ],
     'params' => $params,
 ];
-
-if (YII_ENV_DEV) {
-    // configuration adjustments for 'dev' environment
-    $config['bootstrap'][] = 'debug';
-    $config['modules']['debug'] = [
-        'class' => 'yii\debug\Module',
-    ];
-
-    $config['bootstrap'][] = 'gii';
-    $config['modules']['gii'] = [
-        'class' => 'yii\gii\Module',
-    ];
-}
 
 return $config;
