@@ -14,7 +14,6 @@ $config = [
     'basePath' => dirname(__DIR__),
     'bootstrap' => [
         'log',
-        'menuManager'
     ],
     'components' => [
         'request' => [
@@ -34,7 +33,7 @@ $config = [
         'user' => [
             'class' => 'app\common\web\User',
             'identityClass' => 'app\models\UserIdentity',
-            'loginUrl' => ['manage/secure/login'],
+            'loginUrl' => ['site/login'],
             'enableAutoLogin' => true,
             'identityCookie' => [
                 'name' => '_identity-user', 
@@ -85,10 +84,10 @@ $config = [
         ],
         'i18n' => [
             'translations' => [
-                '*' => [
+                'app*' => [
                     'class' => 'yii\i18n\DbMessageSource',
                     'db' => 'db',
-                    'sourceLanguage' => 'xx-XX', // Developer language
+                    'sourceLanguage' => 'en-US', // Developer language
                     'sourceMessageTable' => '{{%language_source}}',
                     'messageTable' => '{{%language_translate}}',
                     'cachingDuration' => 86400,
@@ -102,17 +101,6 @@ $config = [
                     ],
                 ],
             ],
-        ],
-        'menuManager' => [
-            'class' => 'app\common\web\MenuManager',
-            'collections' => [
-                'frontMenu' => [
-                    'class' => 'app\common\web\MainMenu'
-                ],
-                'articleCategory' => [
-                    'class' => 'app\models\resources\ArticleCategory'
-                ]
-            ]
         ],
         'authClientCollection' => [
             'class' => 'yii\authclient\Collection',
@@ -137,42 +125,10 @@ $config = [
             'class' => 'app\modules\api\Service',
         ],
         'translatemanager' => [
-            'class' => 'lajax\translatemanager\Module',
-            'root' => '@app/models',               
+            'class' => 'lajax\translatemanager\Module',       
             'scanRootParentDirectory' => true,                                       
             'layout' => 'language',         
-            'allowedIPs' => [
-                '127.0.0.1'
-            ], 
-            'roles' => ['@'],               
-            'tmpDir' => '@runtime',         
-            'phpTranslators' => [
-                'Yii::t'
-            ],   
-            'jsTranslators' => [
-                'lajax.t'
-            ],
-            'patterns' => [
-                '*.js', 
-                '*.php'
-            ],
-            'ignoredCategories' => ['yii'], 
-            'ignoredItems' => ['config'], 
-            'scanTimeLimit' => 300,
-            'searchEmptyCommand' => '!', 
-            'defaultExportStatus' => 1,    
-            'defaultExportFormat' => 'json',
-            'tables' => [               
-                [
-                    'connection' => 'db',  
-                    'table' => '{{%language}}',       
-                    'columns' => ['name', 'name_ascii'],
-                    'category' => 'language-db',
-                ]
-            ],
-            'scanners' => [ 
-                '\lajax\translatemanager\services\scanners\ScannerPhpFunction',
-            ],
+            'scanTimeLimit' => 1200,
         ],
         'debug' => [
             'class' => 'yii\debug\Module',

@@ -17,15 +17,7 @@ $this->title = 'My Yii Application';
     <div class="body-content">
 
         <div class="row">
-            <div class="col-lg-3">
-                <?php
-                    echo Nav::widget([
-                        'options' => ['class' => 'nav-pills'],
-                        'items' => Yii::$app->menuManager->articleCategory,
-                    ]);
-                    ?>
-            </div>
-            <div class="col-lg-9">
+            <div class="col-lg-12">
                 <div class="row">
                     <div class="col-lg-3"></div>
                     <div class="col-lg-9"></div>

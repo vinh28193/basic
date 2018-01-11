@@ -40,8 +40,9 @@ use app\common\widgets\Gravatar;
                 'options' => ['class' => 'sidebar-menu'],
                 'items' => [
                     ['label' => 'Menu', 'options' => ['class' => 'header']],
-                    ['label' => 'User', 'icon' => 'fa fa-share', 'url' => ['/manage/user']],
-                    ['label' => 'Category', 'icon' => 'fa fa-share', 'url' => ['/manage/category']],
+                    ['label' => 'User', 'icon' => 'fa fa-share', 'url' => ['/manage/user/info']],
+                    ['label' => 'Article', 'options' => ['class' => 'header']],
+                    ['label' => 'Article Category', 'icon' => 'fa fa-share', 'url' => ['/manage/article-category']],
                     ['label' => 'Article', 'icon' => 'fa fa-share', 'url' => ['/manage/article']],
                     ['label' => 'Developer Tools', 'options' => ['class' => 'header']],
                     ['label' => 'Gii', 'icon' => 'fa fa-file-code-o', 'url' => ['/gii'],],

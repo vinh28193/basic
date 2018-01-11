@@ -5,16 +5,41 @@ namespace app\modules\manage;
 use Yii;
 use yii\base\Module;
 use yii\helpers\ArrayHelper;
+use yii\filters\AccessControl;
+use yii\filters\VerbFilter;
 /**
  * manage module definition class
  */
 class Manage extends Module
 {
+
     /**
      * @inheritdoc
      */
     public $controllerNamespace = 'app\modules\manage\controllers';
-    
+
+    /**
+     * @inheritdoc
+     */
+    public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'except' => ['secure/login'],
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+                'denyCallback' => function () { 
+                    return Yii::$app->response->redirect(['/manage/secure/login']);
+                },
+            ],
+        ];
+    }
+
     /**
      * @inheritdoc
      */
@@ -28,5 +53,6 @@ class Manage extends Module
         $this->setLayoutPath('@manage/layouts');
         $config = require Yii::getAlias('@manage/config/config.php');
         Yii::configure(Yii::$app, $config);
+        Yii::$app->user->setReturnUrl(['/manage/user/info']);
     }
 }
