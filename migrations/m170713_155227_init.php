@@ -2,6 +2,9 @@
 
 use app\common\db\Migration;
 
+/**
+ * Handles the creation of table `{{%application}}`.
+ */
 class m170713_155227_init extends Migration
 {
     /**
@@ -9,7 +12,16 @@ class m170713_155227_init extends Migration
      */
     public function up()
     {
-        echo "m170713_155227_init cannot be applied.\n";
+        $this->createTable('{{%application}}', [
+            'id' => $this->primaryKey(),
+            'name' => $this->string(512)->notNull(),
+            'charset' => $this->string(12)->notNull(),
+            'language' => $this->string(12)->notNull(),
+            'time_zone' => $this->string(12)->notNull(),
+            'run_mode' => $this->string(12)->notNull(),
+            'created_at' => $this->integer(),
+            'updated_at' => $this->integer(),
+        ], $this->tableOptions);
     }
 
     /**
@@ -17,7 +29,7 @@ class m170713_155227_init extends Migration
      */
     public function down()
     {
-         echo "m170713_155227_init cannot be reverted.\n";
+        $this->dropTable('{{%application}}');
 
     }
 }

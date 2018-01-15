@@ -2,7 +2,7 @@
 namespace app\common\db;
 
 /**
- *  Migration is the base class for representing a database migration.
+ *  Migration is the class behind the the \yii\db\Migration representing a database migration.
  */
  class Migration extends \yii\db\Migration
  {
