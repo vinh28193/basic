@@ -115,6 +115,14 @@ $config = [
     ],
     'defaultRoute' => 'site/index',
     'modules' => [
+        'debug' => [
+            'class' => 'yii\debug\Module',
+            'allowedIPs' => ['127.0.0.1', '::1', '192.168.83.*'],
+        ],
+        'gii' => [
+            'class' => 'yii\gii\Module',
+            'allowedIPs' => ['127.0.0.1', '::1', '192.168.83.*'],
+        ],
         'manage' => [
             'class' => 'app\modules\manage\Manage',
         ],
@@ -130,14 +138,9 @@ $config = [
             'layout' => 'language',         
             'scanTimeLimit' => 1200,
         ],
-        'debug' => [
-            'class' => 'yii\debug\Module',
-            'allowedIPs' => ['127.0.0.1', '::1', '192.168.83.*'],
+        'filemanager' => [
+            'class' => 'app\modules\filemanage\Filemanager',
         ],
-        'gii' => [
-            'class' => 'yii\gii\Module',
-            'allowedIPs' => ['127.0.0.1', '::1', '192.168.83.*'],
-        ]
     ],
     'params' => $params,
 ];
