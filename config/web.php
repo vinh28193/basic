@@ -84,7 +84,7 @@ $config = [
         ],
         'i18n' => [
             'translations' => [
-                'app*' => [
+                '*' => [
                     'class' => 'yii\i18n\DbMessageSource',
                     'db' => 'db',
                     'sourceLanguage' => 'en-US', // Developer language
@@ -138,8 +138,8 @@ $config = [
             'layout' => 'language',         
             'scanTimeLimit' => 1200,
         ],
-        'filemanager' => [
-            'class' => 'app\modules\filemanage\Filemanager',
+        'imagemanager' => [
+            'class' => 'app\modules\imagemanage\ImageManage',
         ],
     ],
     'params' => $params,
