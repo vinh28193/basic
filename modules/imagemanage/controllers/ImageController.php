@@ -10,12 +10,12 @@ use yii\base\ErrorException;
 use yii\filters\VerbFilter;
 use yii\helpers\Url;
 use yii\helpers\Json;
-use yii\helpers\BaseImageHelper;
+use yii\helpers\BaseFileHelper;
 use yii\imagine\Image;
 use Imagine\Image\Box;
 use Imagine\Image\Palette\RGB;
 use Imagine\Image\Point;
-use app\models\ImageManage;
+use app\models\ImageManager;
 use app\modules\imagemanage\models\ImageSearch;
 /**
  * ImageController implements the CRUD actions for Image model.
@@ -65,7 +65,7 @@ class ImageController extends Controller
 			$this->layout = "blank";
 		}
 		//set baseUrl from image manager
-		$baseUrl = Url::to(['/Imagemanage/manager']);
+		$baseUrl = Url::to(['/imagemanage/image']);
 		//set base url
 		$this->view->registerJs("imageManagerModule.baseUrl = '" . $baseUrl . "';", 3);
 		$this->view->registerJs("imageManagerModule.defaultImageId = '" . $defaultImageId . "';", 3);
@@ -79,7 +79,6 @@ class ImageController extends Controller
 
         $searchModel = new ImageSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
@@ -98,7 +97,7 @@ class ImageController extends Controller
         Yii::$app->getResponse()->format = Response::FORMAT_JSON;
         // Create the transaction and set the success variable
         $transaction = Yii::$app->db->beginTransaction();
-        $bSuccess = false;
+        $success = false;
 
         //disable Csrf
         Yii::$app->controller->enableCsrfValidation = false;
@@ -107,38 +106,41 @@ class ImageController extends Controller
         //set media path
         $baseUrl = 'uploads';
         //create the folder
-        BaseFileHelper::createDirectory($sMediaPath);
+        BaseFileHelper::createDirectory($baseUrl);
 
         //check file isset
-        if (isset($_FILES['image-manager']['tmp_name'])) {
+        if (isset($_FILES[ImageManager::INPUT_PARAM]['tmp_name'])) {
             //loop through each uploaded file
-            foreach ($_FILES['image-manager']['tmp_name'] AS $key => $sTempFile) {
+            foreach ($_FILES[ImageManager::INPUT_PARAM]['tmp_name'] AS $key => $tempFile) {
                 //collect variables
-                $sFileName = $_FILES['image-manager']['name'][$key];
-                $sFileExtension = pathinfo($sFileName, PATHINFO_EXTENSION);
-                $iErrorCode = $_FILES['image-manager']['error'][$key];
+                $fileName = $_FILES[ImageManager::INPUT_PARAM]['name'][$key];
+                $fileExtension = pathinfo($fileName, PATHINFO_EXTENSION);
+                $errorCode = $_FILES[ImageManager::INPUT_PARAM]['error'][$key];
                 //if uploaded file has no error code  than continue;
-                if ($iErrorCode == 0) { 
+                if ($errorCode == 0) { 
                     //create a file record
-                    $model = new ImageManage();
-                    $model->name = str_replace("_", "-", $sFileName);
+                    $model = new ImageManager();
+                    $model->name = str_replace("_", "-", $fileName);
                     $model->base_url = $baseUrl;
                     $model->path = 'temp';
-                    $models->type = $sFileExtension;
+                    $model->type = $fileExtension;
+                    //var_dump($model->validate());
                     //if file is saved add record
-                    if ($model->save()) {
+
+                    if ($model->validate() && $model->save()) {
                         //move file to dir
-                        $sSaveFileName = $model->path ."/". $model->name . "." . $models->type;
+                        $saveFileName = $model->getFullPath();
                         //move_uploaded_file($sTempFile, $sMediaPath."/".$sFileName);
                         //save with Imagine class
-                        Image::getImagine()->open($sTempFile)->save($model->base_url . "/" . $sSaveFileName);
-                        $bSuccess = true;
+                    
+                        Image::getImagine()->open($tempFile)->save($saveFileName);
+                        $success = true;
                     }
                 }
             }
         }
 
-        if ($bSuccess) {
+        if ($success) {
             // The upload action went successful, save the transaction
             $transaction->commit();
         } else {
@@ -340,9 +342,9 @@ class ImageController extends Controller
         //set response header
         Yii::$app->getResponse()->format = Response::FORMAT_JSON;
         //get post
-        $ImageManager_id = Yii::$app->request->post("ImageManager_id");
+        $id = Yii::$app->request->post("id");
         //get details
-        $model = $this->findModel($ImageManager_id);
+        $model = $this->findModel($id);
         //set return
         $return =$model->getImagePath($model->id, $model->imageDetails['width'], $model->imageDetails['height'], "inset");
         //return json encoded
@@ -361,9 +363,9 @@ class ImageController extends Controller
         Yii::$app->getResponse()->format = Response::FORMAT_JSON;
 
         //get post
-        $ImageManager_id = Yii::$app->request->post("id");
+        $id = Yii::$app->request->post("id");
         //get details
-        $model = $this->findModel($ImageManager_id);
+        $model = $this->findModel($id);
 
         //delete record
         if ($model->delete()) {
@@ -374,15 +376,15 @@ class ImageController extends Controller
 
 
     /**
-     * Finds the ImageManage model based on its primary key value.
+     * Finds the ImageManager model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return ImageManage the loaded model
+     * @return ImageManager the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = ImageManage::findOne($id)) !== null) {
+        if (($model = ImageManager::findOne($id)) !== null) {
             return $model;
         }
 

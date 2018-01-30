@@ -17,7 +17,7 @@ class m170713_173022_create_image_table extends Migration
     {
         $this->createTable('{{%image}}', [
             'id' => $this->primaryKey(),
-            'name' => $this->string(255),
+            'name' => $this->string(255)->notNull(),
             'base_url' => $this->string(1024)->notNull(),
             'path' => $this->string(1024)->notNull(),
             'type' => $this->string(),
@@ -25,7 +25,7 @@ class m170713_173022_create_image_table extends Migration
             'upload_by' => $this->integer(),
             'upload_ip' => $this->string(15),
             'status' => $this->integer()->defaultValue(1)->notNull(),
-            'created_at' => $this->integer()->notNull()
+            'created_at' => $this->integer()
         ], $this->tableOptions);
 
          // creates index for column `base_url`

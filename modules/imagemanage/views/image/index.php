@@ -8,11 +8,10 @@ use kartik\file\FileInput;
 /* @var $this yii\web\View */
 /* @var $searchModel app\modules\imagemanage\models\ImageSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
-
 $this->title = Yii::t('app', 'images');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div id="imagemanage" class="container-fluid <?=$selectType?>">
+<div id="module-imagemanager" class="container-fluid <?=$selectType?>">
     <div class="row">
         <div class="col-xs-6 col-sm-10 col-image-editor">
             <div class="image-cropper">
@@ -39,7 +38,7 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
         <div class="col-xs-6 col-sm-10 col-overview">
             <?php Pjax::begin([
-                'id'=>'pjax-imagemanage',
+                'id'=>'pjax-mediamanager',
                 'timeout'=>'5000'
             ]); ?>    
             <?= ListView::widget([
@@ -54,17 +53,17 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
         <div class="col-xs-6 col-sm-2 col-options">
             <div class="form-group">
-                <?=Html::textInput('input-imagemanage-search', null, ['id'=>'input-imagemanage-search', 'class'=>'form-control', 'placeholder'=>'Search...'])?>
+                <?=Html::textInput('input-imagemanager-search', null, ['id'=>'input-imagemanager-search', 'class'=>'form-control', 'placeholder'=>'Search...'])?>
             </div>
             <?=FileInput::widget([
-                'name' => 'image-manager[]',
+                'name' => \app\models\ImageManager::INPUT_PARAM.'[]',
                 'id' => 'image-manager',
                 'options' => [
                     'multiple' => true,
                     'accept' => 'image/*'
                 ],
                 'pluginOptions' => [
-                    'uploadUrl' => Url::to(['imagemanager/image/upload']),
+                    'uploadUrl' => Url::to(['image/upload']),
                     'allowedimageExtensions' => ['jpg', 'jpeg', 'gif', 'png'], 
                     'uploadAsync' => false,
                     'showPreview' => false,
@@ -75,12 +74,12 @@ $this->params['breadcrumbs'][] = $this->title;
                     'browseIcon' => '<i class="fa fa-upload"></i> ',
                     'browseLabel' =>'Upload'
                 ],
-                'pluginEvents' => [
-                    "imagebatchselected" => "function(event, images){  $('.msg-invalid-image-extension').addClass('hide'); $(this).imageinput('upload'); }",
-                    "imagebatchuploadsuccess" => "function(event, data, previewId, index) {
-                        imageManagerModule.uploadSuccess(data.jqXHR.responseJSON.imagemanagerimages);
+               'pluginEvents' => [
+                    "filebatchselected" => "function(event, files){  $('.msg-invalid-file-extension').addClass('hide'); $(this).fileinput('upload'); }",
+                    "filebatchuploadsuccess" => "function(event, data, previewId, index) {
+                        imageManagerModule.uploadSuccess(data.jqXHR.responseJSON.imagemanagerFiles);
                     }",
-                    "imageuploaderror" => "function(event, data) { $('.msg-invalid-image-extension').removeClass('hide'); }",
+                    "fileuploaderror" => "function(event, data) { $('.msg-invalid-file-extension').removeClass('hide'); }"
                 ],
             ]) ?>
             <div class="image-info hide">

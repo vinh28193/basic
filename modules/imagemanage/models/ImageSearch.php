@@ -5,12 +5,12 @@ namespace app\modules\imagemanage\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\ImageManage;
+use app\models\ImageManager;
 
 /**
- * ImageSearch represents the model behind the search form of `app\models\ImageManage`.
+ * ImageSearch represents the model behind the search form of `app\models\ImageManager`.
  */
-class ImageSearch extends ImageManage
+class ImageSearch extends ImageManager
 {
 
     public $globalSearch;
@@ -42,7 +42,7 @@ class ImageSearch extends ImageManage
      */
     public function search($params)
     {
-        $query = ImageManage::find();
+        $query = ImageManager::find();
 
         // add conditions that should always apply here
 

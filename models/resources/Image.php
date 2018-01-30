@@ -36,7 +36,7 @@ class Image extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['base_url', 'path', 'created_at'], 'required'],
+            [['path','name'], 'required'],
             [['size', 'upload_by', 'status', 'created_at'], 'integer'],
             [['name', 'type'], 'string', 'max' => 255],
             [['base_url', 'path'], 'string', 'max' => 1024],
@@ -53,7 +53,7 @@ class Image extends \yii\db\ActiveRecord
         return [
             'id' => Yii::t('db', 'ID'),
             'name' => Yii::t('db', 'Name'),
-            'base_url' => Yii::t('db', 'Base Url'),
+            'base_path' => Yii::t('db', 'Base Path'),
             'path' => Yii::t('db', 'Path'),
             'type' => Yii::t('db', 'Type'),
             'size' => Yii::t('db', 'Size'),
@@ -71,4 +71,29 @@ class Image extends \yii\db\ActiveRecord
     {
         return $this->hasOne(User::className(), ['id' => 'upload_by']);
     }
+
+    private $_mimeType;
+    public function setMimeType($mimeType)
+    {
+        $this->_mimeType = $mimeType;
+    }
+    public function getMimeType(){
+        if(!$this->_mimeType){
+            $this->_mimeType = 'jpg';
+        }
+        return $this->_mimeType;
+    }
+
+    private $_fullPath;
+    public function setFullPath($fullPath)
+    {
+        $this->_fullPath = $fullPath;
+    }
+    public function getFullPath(){
+        if(!$this->_fullPath){
+            $this->_fullPath = implode('/', [$this->base_url,$this->path,$this->name]).'.'.$this->mimeType;
+        }
+        return $this->_fullPath;
+    }
+
 }

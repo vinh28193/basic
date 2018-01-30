@@ -14,6 +14,7 @@ $config = [
     'basePath' => dirname(__DIR__),
     'bootstrap' => [
         'log',
+        'debug'
     ],
     'components' => [
         'request' => [
@@ -115,14 +116,6 @@ $config = [
     ],
     'defaultRoute' => 'site/index',
     'modules' => [
-        'debug' => [
-            'class' => 'yii\debug\Module',
-            'allowedIPs' => ['127.0.0.1', '::1', '192.168.83.*'],
-        ],
-        'gii' => [
-            'class' => 'yii\gii\Module',
-            'allowedIPs' => ['127.0.0.1', '::1', '192.168.83.*'],
-        ],
         'manage' => [
             'class' => 'app\modules\manage\Manage',
         ],
@@ -140,6 +133,14 @@ $config = [
         ],
         'imagemanager' => [
             'class' => 'app\modules\imagemanage\ImageManage',
+        ],
+        'debug' => [
+            'class' => 'yii\debug\Module',
+            'allowedIPs' => ['*'],
+        ],
+        'gii' => [
+            'class' => 'yii\gii\Module',
+            'allowedIPs' => ['127.0.0.1', '::1', '192.168.83.*'],
         ],
     ],
     'params' => $params,
