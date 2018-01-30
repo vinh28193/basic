@@ -63,6 +63,7 @@
         "codeception/specify": "*",
         "codeception/verify": "*",
         "codeception/c3": "*",
+        "imagine/imagine": "~0.6.0",
         "jakoch/phantomjs-installer": "2.1.1"
     },
     "config": {

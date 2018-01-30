@@ -1,6 +1,6 @@
 <?php
 
-namespace app\modules\imagemanage\controllers;
+namespace app\modules\imagemanager\controllers;
 
 use Yii;
 use yii\web\Controller;
@@ -16,7 +16,7 @@ use Imagine\Image\Box;
 use Imagine\Image\Palette\RGB;
 use Imagine\Image\Point;
 use app\models\ImageManager;
-use app\modules\imagemanage\models\ImageSearch;
+use app\modules\imagemanager\models\ImageSearch;
 /**
  * ImageController implements the CRUD actions for Image model.
  */
@@ -65,7 +65,7 @@ class ImageController extends Controller
 			$this->layout = "blank";
 		}
 		//set baseUrl from image manager
-		$baseUrl = Url::to(['/imagemanage/image']);
+		$baseUrl = Url::to(['/imagemanager/image']);
 		//set base url
 		$this->view->registerJs("imageManagerModule.baseUrl = '" . $baseUrl . "';", 3);
 		$this->view->registerJs("imageManagerModule.defaultImageId = '" . $defaultImageId . "';", 3);
@@ -164,9 +164,9 @@ class ImageController extends Controller
         //set response header
         Yii::$app->getResponse()->format = Response::FORMAT_JSON;
         //set media path
-        $sMediaPath = \Yii::$app->imagemanager->mediaPath;
+        $baseUrl = 'uploads';
         //get post
-        $id = Yii::$app->request->post("id");
+        $id = Yii::$app->request->post("ImageManager_id");
         $aCropData = Yii::$app->request->post("CropData");
         //get details
         $modelOriginal = $this->findModel($id);
@@ -176,28 +176,27 @@ class ImageController extends Controller
             $iDimensionWidth = round($aCropData['width']);
             $iDimensionHeight = round($aCropData['height']);
             //collect variables
-            $sFileNameReplace = preg_replace("/_crop_\d+x\d+/", "", $modelOriginal->fileName);
+            $sFileNameReplace = preg_replace("/_crop_\d+x\d+/", "", $modelOriginal->name);
             $sFileName = pathinfo($sFileNameReplace, PATHINFO_FILENAME);
             $sFileExtension = pathinfo($sFileNameReplace, PATHINFO_EXTENSION);
             $sDisplayFileName = $sFileName . "_crop_" . $iDimensionWidth . "x" . $iDimensionHeight . "." . $sFileExtension;
-
             //start transaction
             $transaction  = Yii::$app->db->beginTransaction();
             $bCropSuccess = false;
             
             //create a file record
-            $model = new ImageManage();
-            $model->name = str_replace("_", "-", $sFileName);
+            $model = new ImageManager();
+            $model->name = $sDisplayFileName;
             $model->base_url = $baseUrl;
             $model->path = 'temp';
-            $models->type = $sFileExtension;
+            $model->type = $sFileExtension;
             //if file is saved add record
-            if ($model->save()) {
+            if ($model->validate() && $model->save()) {
                 
                 //do crop in try catch
                 try {
                     // create file name
-                    $sSaveFileName = $model->id . "_" . $model->fileHash . "." . $sFileExtension;
+                    $saveFileName = $model->getFullPath();
                     
                     // get current/original image data
                     $imageOriginal = Image::getImagine()->open($modelOriginal->imagePathPrivate);
@@ -281,7 +280,7 @@ class ImageController extends Controller
                     Image::getImagine()->create(new Box($imageCanvasWidthRounded, $imageCanvasHeightRounded), $imagineColor)
                                 ->paste($imageOriginal, new Point($imageOriginalPositionXRounded, $imageOriginalPositionYRounded))
                                 ->crop(new Point($imageCropPositionXRounded, $imageCropPositionYRounded), new Box($imageCropWidthRounded, $imageCropHeightRounded))
-                                ->save($sMediaPath . "/" . $sSaveFileName);
+                                ->save($saveFileName);
                     
                     //set boolean crop success to true
                     $bCropSuccess = true;
@@ -316,17 +315,17 @@ class ImageController extends Controller
         //set response header
         Yii::$app->getResponse()->format = Response::FORMAT_JSON;
         //get post
-        $ImageManager_id = Yii::$app->request->post("ImageManager_id");
+        $id = Yii::$app->request->post("ImageManager_id");
         //get details
-        $model = $this->findModel($ImageManager_id);
+        $model = $this->findModel($id);
         //set return details
         $return['id'] = $model->id;
-        $return['fileName'] = $model->fileName;
-        $return['created'] = Yii::$app->formatter->asDate($model->created);
+        $return['fileName'] = $model->name;
+        $return['created'] = Yii::$app->formatter->asDate($model->created_at);
         $return['fileSize'] = $model->imageDetails['size'];
         $return['dimensionWidth'] = $model->imageDetails['width'];
         $return['dimensionHeight'] = $model->imageDetails['height'];
-        $return['image'] = \Yii::$app->imagemanager->getImagePath($model->id, 400, 400, "inset") . "?t=" . time();
+        $return['image'] = $model->getImageSrc($model->id, 400, 400, "inset") . "?t=" . time();
 
         //return json encoded
         return $return;
@@ -342,11 +341,11 @@ class ImageController extends Controller
         //set response header
         Yii::$app->getResponse()->format = Response::FORMAT_JSON;
         //get post
-        $id = Yii::$app->request->post("id");
+        $id = Yii::$app->request->post("ImageManager_id");
         //get details
         $model = $this->findModel($id);
         //set return
-        $return =$model->getImagePath($model->id, $model->imageDetails['width'], $model->imageDetails['height'], "inset");
+        $return =$model->getImageSrc($model->id, $model->imageDetails['width'], $model->imageDetails['height'], "inset");
         //return json encoded
         return $return;
     }
@@ -363,7 +362,7 @@ class ImageController extends Controller
         Yii::$app->getResponse()->format = Response::FORMAT_JSON;
 
         //get post
-        $id = Yii::$app->request->post("id");
+        $id = Yii::$app->request->post("ImageManager_id");
         //get details
         $model = $this->findModel($id);
 

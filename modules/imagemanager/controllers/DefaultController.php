@@ -1,11 +1,11 @@
 <?php
 
-namespace app\modules\imagemanage\controllers;
+namespace app\modules\imagemanager\controllers;
 
 use yii\web\Controller;
 
 /**
- * Default controller for the `imagemanage` module
+ * Default controller for the `imagemanager` module
  */
 class DefaultController extends Controller
 {

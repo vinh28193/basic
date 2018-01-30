@@ -220,7 +220,7 @@ class ImageManager extends \app\models\resources\Image
 			$options['height'] = isset($imageDimension[1]) ? $imageDimension[1] : 0;
 			$options['size'] = Yii::$app->formatter->asShortSize(filesize($imagePath), 2);
 		}
-		return $return;
+		return $options;
 	}
 
 }

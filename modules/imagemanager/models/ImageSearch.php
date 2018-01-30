@@ -1,6 +1,6 @@
 <?php
 
-namespace app\modules\imagemanage\models;
+namespace app\modules\imagemanager\models;
 
 use Yii;
 use yii\base\Model;
