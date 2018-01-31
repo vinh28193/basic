@@ -132,7 +132,7 @@ $config = [
             'scanTimeLimit' => 1200,
         ],
         'imagemanager' => [
-            'class' => 'app\modules\imagemanage\ImageManage',
+            'class' => 'app\modules\imagemanager\ImageManager',
         ],
         'debug' => [
             'class' => 'yii\debug\Module',

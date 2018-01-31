@@ -17,9 +17,7 @@ AppAsset::register($this);
 </head>
 <body>
 <?php $this->beginBody() ?>
-<div class="container-fluid">
-    <?= $content ?>
-</div>
+<?php echo $content ?>
 <?php $this->endBody() ?>
 </body>
 </html>

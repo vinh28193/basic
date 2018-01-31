@@ -3,9 +3,9 @@
 namespace app\modules\imagemanager;
 
 /**
- * imagemanage module definition class
+ * imagemanager module definition class
  */
-class ImageManage  extends \yii\base\Module
+class ImageManager  extends \yii\base\Module
 {
     /**
      * @inheritdoc

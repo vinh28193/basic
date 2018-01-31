@@ -21,7 +21,7 @@
         "yiisoft/yii2-swiftmailer": "~2.0.0",
         "yiisoft/yii2-authclient": "^2.0.0",
         "yiisoft/yii2-jui": "^2.0.0",
-        "yiisoft/yii2-imagine": "~2.0.0",
+        "yiisoft/yii2-imagine": "^2.0.0",
         "bower-asset/admin-lte": "^2.0",
         "bower-asset/icheck": "*",
         "bower-asset/cropper": "*",
@@ -63,7 +63,6 @@
         "codeception/specify": "*",
         "codeception/verify": "*",
         "codeception/c3": "*",
-        "imagine/imagine": "~0.6.0",
         "jakoch/phantomjs-installer": "2.1.1"
     },
     "config": {
