@@ -19,7 +19,7 @@ class ImageManager  extends \yii\base\Module
     {
         parent::init();
         $this->defaultRoute = 'default/index';
-        $this->layout = 'main';
+        //$this->layout = 'main';
         $this->setAliases(['@imagemanager' => __DIR__]);
         $this->setLayoutPath('@imagemanager/layouts');
         // custom initialization code goes here
