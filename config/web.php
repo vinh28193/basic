@@ -77,7 +77,7 @@ $config = [
         'urlManager' => $urlManager,
         'assetManager' => [
             'class' => 'yii\web\AssetManager',
-            'appendTimestamp' => false,
+            'appendTimestamp' => true,
             'hashCallback' => function ($path) {
                 //return implode('/',[Yii::$app->id,hash('md4', $path)]);
                 return hash('md4', $path);

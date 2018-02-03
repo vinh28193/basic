@@ -18,15 +18,7 @@
 
     var defaults = {
     	baseUrl: ''
-       	fieldId: null,
-		cropRatio: null,
-		cropViewMode: 1,
-		defaultImageId: null,
-		selectType: null, 
-		//current selected image
-		selectedImage: null,
-		//language
-		message: null,
+       	
     };
 
     var methods = {
@@ -37,11 +29,7 @@
                 $e.data('yiiImageManager', {
                     settings: settings
                 });
-
-                //init cropper
-				$e.find('.row .col-image-editor .image-cropper .image-wrapper img#image-cropper').cropper({
-					viewMode: settings.cropViewMode
-				});
+                console.log(settings);
 				
             });
         },

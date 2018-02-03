@@ -9,7 +9,7 @@ class ImageManagerAsset extends AssetBundle
 {
     public $sourcePath = '@imagemanager/assets/dist';
     public $css = [
-		//'imagemanager.css',
+		'imagemanager.css',
     ];
     public $js = [
 		'yii.imageManager.js',

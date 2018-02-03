@@ -4,9 +4,12 @@ namespace app\modules\imagemanager\widgets;
 
 use Yii;
 use Closure;
+use yii\helpers\Json;
 use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
 use yii\base\Widget;
+use yii\widgets\ListView;
+use yii\widgets\Pjax;
 use yii\base\InvalidConfigException;
 
 class ImageManagerWidget extends Widget
@@ -42,7 +45,7 @@ class ImageManagerWidget extends Widget
     		],
     		'active' => true
     	],
-    	'apply-crop' => [
+    	'cancel-crop' => [
 			'tag' => 'a',
 			'label' => 'Cancel',
 			'icon' => 'fa fa-undo',
@@ -56,6 +59,14 @@ class ImageManagerWidget extends Widget
     public $editorOptions = ['class' => 'col-xs-6 col-sm-10 col-image-editor'];
     public $overviewOptions = ['class' => 'col-xs-6 col-sm-10 col-overview'];
     public $toolbarOptions = ['class' => 'col-xs-6 col-sm-2 col-options'];
+
+    public $pajaxOption = [
+        'timeout'=>'5000',
+        'options' => [
+            'id' => 'pjax-mediamanager',
+        ]
+    ];
+
     public $layout =<<<HTML
     	<div class="row">
         	{editor}
@@ -73,7 +84,7 @@ HTML;
             </div>
         </div> 
 HTML;
-	public $overviewLayout = '{items}';
+	public $overviewLayout = '{listView}';
 	public $toolbarsLayout = <<<HTML
 		{search}
         {uploadFile}
@@ -117,8 +128,14 @@ HTML;
             $content = $this->renderSection($matches[0]);
             return $content === false ? $matches[0] : $content;
         }, $this->layout);
-        
+    
         $options = $this->options;
+
+        $id = $options['id'];
+        $clientOptions = Json::htmlEncode($this->getClientOptions());
+        $view = $this->getView();
+        \app\modules\imagemanager\assets\ImageManagerAsset::register($view);
+        $view->registerJs("jQuery('#$id').yiiImageManager($clientOptions);",$view::POS_END);
         $tag = ArrayHelper::remove($options, 'tag', 'div');
         echo Html::tag($tag, $content, $options);
     }
@@ -141,8 +158,8 @@ HTML;
                 return $this->renderImageCrop();
             case '{cropActions}':
                 return $this->renderActionCrop();
-            case 'items':
-            	return $this->renderEmpty();
+            case '{listView}':
+            	return $this->renderListView();
             case '{search}':
             	return $this->renderEmpty();
             case '{uploadFile}':
@@ -158,11 +175,16 @@ HTML;
         }
     }
 
-    /**
-     * Renders the HTML content indicating that the list view has no data.
-     * @return string the rendering result
-     * @see emptyText
-     */
+    public function getClientOptions()
+    {
+        
+        return [
+            'baseUrl' => 'imagemanager',
+        ];
+    }
+
+
+
     public function renderEmpty()
     {
         if ($this->emptyText === false) {
@@ -191,10 +213,45 @@ HTML;
     public function renderActionCrop()
     {
     	$buttons = $this->cropActionsButtons;
-    	if(count($buttons) = 0){
-    		$this->renderEmpty();
-    	}
-    	return $this->renderEmpty();
+        $content = '';
+        if(count($buttons) > 0){
+            foreach ($buttons as $name => $button) {
+                $tag = ArrayHelper::remove($button, 'tag', 'div');
+                $href = ArrayHelper::remove($button, 'href', '#');
+                $label = ArrayHelper::remove($button, 'label', 'Button');
+                $icon = ArrayHelper::remove($button, 'icon', 'Button');
+                $active = ArrayHelper::remove($button, 'active', true);
+                $buttonOptions = ArrayHelper::remove($button, 'options', []);
+                $clientOptions = ArrayHelper::remove($button, 'clientOptions', []);
+                Html::addCssClass($buttonOptions, ['widget' => $name]);
+                $text = '<i class="'.$icon.'"></i>';
+                $text .= '<span class="hidden-xs">'.$label.'</span>';
+                if($tag === 'a'){
+                    $content .=  Html::a($text,$href,$buttonOptions);
+                }else{
+                    if($href !== '#'){
+                        $buttonOptions = ArrayHelper::merge($buttonOptions,['data-href' => $href]);
+                    }
+                    $content .=  Html::tag($tag,$text,$buttonOptions);
+                }
+            }
+        }
+    	return  $content;
+    }
+
+    public function renderListView()
+    {
+        Pjax::begin($this->pajaxOption);
+        return ListView::widget([
+            'dataProvider' => $this->dataProvider,
+            'itemOptions' => ['class' => 'item img-thumbnail'],
+            'layout' => "<div class='item-overview'>{items}</div> {pager}",
+            'itemView' => function ($model, $key, $index, $widget) {
+                return $this->render("_image", ['model' => $model]);
+            },
+        ]);
+        Pjax::end();
+
     }
 }
  ?>
