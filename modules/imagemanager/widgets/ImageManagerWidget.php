@@ -101,6 +101,7 @@ HTML;
         </div>
 HTML;
 
+    private $_view;
 	/**
      * Initializes the view.
      */
@@ -116,6 +117,7 @@ HTML;
         if (!isset($this->options['id'])) {
             $this->options['id'] = $this->getId();
         }
+        $this->_view = $this->getView();
     }
 
     /**
@@ -241,8 +243,9 @@ HTML;
 
     public function renderListView()
     {
+        
         Pjax::begin($this->pajaxOption);
-        return ListView::widget([
+        $content =  ListView::widget([
             'dataProvider' => $this->dataProvider,
             'itemOptions' => ['class' => 'item img-thumbnail'],
             'layout' => "<div class='item-overview'>{items}</div> {pager}",
@@ -251,7 +254,7 @@ HTML;
             },
         ]);
         Pjax::end();
-
+        return $content;
     }
 }
  ?>
