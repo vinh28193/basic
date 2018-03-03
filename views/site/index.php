@@ -3,6 +3,7 @@ use yii\bootstrap\Nav;
 /* @var $this yii\web\View */
 
 $this->title = 'My Yii Application';
+
 ?>
 <div class="site-index">
 
@@ -15,7 +16,9 @@ $this->title = 'My Yii Application';
     </div>
 
     <div class="body-content">
-
+            <?php 
+                var_dump(Yii::$app->clientAuth->getClient()->createAuthUrl());
+            ?>
         <div class="row">
             <div class="col-lg-12">
                 <div class="row">

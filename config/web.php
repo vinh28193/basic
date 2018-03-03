@@ -32,7 +32,7 @@ $config = [
             'class' => 'yii\caching\FileCache',
         ],
         'user' => [
-            'class' => 'app\common\web\User',
+            'class' => 'yii\web\User',
             'identityClass' => 'app\models\UserIdentity',
             'loginUrl' => ['site/login'],
             'enableAutoLogin' => true,
@@ -112,6 +112,14 @@ $config = [
                     'clientSecret' => '7c7ac46ea2e6a6a84b39fcbcdd69a9d5',
                 ],
             ],
+        ],
+        'clientAuth' => [
+            'class' => 'app\common\web\GoogleClient',
+            'clientId' => '66763920102-1kvka3jb6999fm55dgv4p9m63jfuvbp6.apps.googleusercontent.com',
+            'clientSecret' => 'K7QU5UrYhbZFe2qGYI2duzBs',
+            'redirectUri' => ['manager/secure/oauth'],
+            'developerKey' => 'AIzaSyDDDl-edLmDOM_Zqeoncj2xW5vMzMk3tNY',
+            'scope' => ['email']
         ]
     ],
     'defaultRoute' => 'site/index',

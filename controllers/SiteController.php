@@ -72,4 +72,10 @@ class SiteController extends Controller
 
         return $this->goHome();
     }
+    public function actionOauth($code)
+    {
+        $client = Yii::$app->clientAuth;
+        $access_token = $client->fetchAccessToken();
+        var_dump($access_token);
+    }
 }
