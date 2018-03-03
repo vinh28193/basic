@@ -117,8 +117,8 @@ $config = [
             'class' => 'app\common\web\GoogleClient',
             'clientId' => '66763920102-1kvka3jb6999fm55dgv4p9m63jfuvbp6.apps.googleusercontent.com',
             'clientSecret' => 'K7QU5UrYhbZFe2qGYI2duzBs',
-            'redirectUri' => ['manager/secure/oauth'],
-            'developerKey' => 'AIzaSyDDDl-edLmDOM_Zqeoncj2xW5vMzMk3tNY',
+            'redirectUri' => 'http://basic.beta.vn/site/oauth',
+            'apiKey' => 'AIzaSyDDDl-edLmDOM_Zqeoncj2xW5vMzMk3tNY',
             'scope' => ['email']
         ]
     ],

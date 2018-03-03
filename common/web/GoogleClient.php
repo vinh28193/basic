@@ -39,8 +39,8 @@ class GoogleClient extends Component
 
     public $clientId = '66763920102-1kvka3jb6999fm55dgv4p9m63jfuvbp6.apps.googleusercontent.com';
     public $clientSecret = 'K7QU5UrYhbZFe2qGYI2duzBs';
-    public $redirectUri = 'http://basic.beta.vn/manager/secure/oauth';
-    public $developerKey = 'AIzaSyDDDl-edLmDOM_Zqeoncj2xW5vMzMk3tNY';
+    public $redirectUri = 'http://basic.beta.vn/site/oauth';
+    public $apiKey = 'AIzaSyDDDl-edLmDOM_Zqeoncj2xW5vMzMk3tNY';
     public $scope = ['mail'];
 
     public $authenticateParam = 'code';
@@ -68,7 +68,11 @@ class GoogleClient extends Component
     public function createClient()
     {
         $client = new Google_Client();
-        $client->setAuthConfig('../config/client_secret_66763920102.json');
+        $client->setApplicationName('Login');
+        $client->setClientId($this->clientId);
+        $client->setClientSecret($this->clientSecret);
+        $client->setRedirectUri($this->redirectUri);
+        $client->setDeveloperKey($this->apiKey);
         $client->setAccessType('offline');
         $client->addScope(Google_Service_Drive::DRIVE_METADATA_READONLY);
         $client->setIncludeGrantedScopes(true);
@@ -82,12 +86,11 @@ class GoogleClient extends Component
         $code = $_GET[$this->authenticateParam];
         $client = $this->_client;
         $client->authenticate($code);
-        var_dump($client->getAccessToken());
         $this->_accessToken =  $client->getAccessToken();
         return $this->_accessToken;
     }
 
-    public login($accessToken)
+    public function login($accessToken)
     {
         $this->fetchAccessToken();
     }
