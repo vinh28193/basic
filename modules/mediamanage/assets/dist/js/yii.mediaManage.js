@@ -1,0 +1,5 @@
+
+yii.mediaManage =  (function ($) {
+
+   
+})(jQuery);

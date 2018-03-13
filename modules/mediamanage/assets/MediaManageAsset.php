@@ -1,19 +1,19 @@
 <?php
-namespace app\modules\mediamanager\assets;
+namespace app\modules\mediamanage\assets;
 
 use yii\web\AssetBundle;
 
 /**
  * MediaManagerAsset.
  */
-class MediaManagerAsset extends AssetBundle
+class MediaManageAsset extends AssetBundle
 {
-    public $sourcePath = '@mediamanager/assets/dist';
+    public $sourcePath = '@mediamanage/assets/dist';
     public $css = [
-		'css/mediamanager.css',
+		'css/mediamanage.css',
     ];
     public $js = [
-		'js/yii.mediaManager.js',
+		'js/yii.mediaManage.js',
     ];
     public $depends = [
 		'yii\web\JqueryAsset',

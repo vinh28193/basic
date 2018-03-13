@@ -133,14 +133,8 @@ $config = [
         'api' => [
             'class' => 'app\modules\api\Service',
         ],
-        'translatemanager' => [
-            'class' => 'lajax\translatemanager\Module',       
-            'scanRootParentDirectory' => true,                                       
-            'layout' => 'language',         
-            'scanTimeLimit' => 1200,
-        ],
-        'mediamanager' => [
-            'class' => 'app\modules\mediamanager\MediaManager',
+        'mediamanage' => [
+            'class' => 'app\modules\mediamanage\MediaManage',
         ],
         'debug' => [
             'class' => 'yii\debug\Module',
@@ -148,7 +142,13 @@ $config = [
         ],
         'gii' => [
             'class' => 'yii\gii\Module',
-            'allowedIPs' => ['127.0.0.1', '::1', '192.168.83.*'],
+            'allowedIPs' => ['*'],
+        ],
+        'translatemanager' => [
+            'class' => 'lajax\translatemanager\Module',       
+            'scanRootParentDirectory' => true,                                       
+            'layout' => 'language',         
+            'scanTimeLimit' => 1200,
         ],
     ],
     'params' => $params,

@@ -1,5 +1,0 @@
-
-mediaManager =  (function ($) {
-
-   
-})(jQuery);
