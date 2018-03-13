@@ -139,8 +139,8 @@ $config = [
             'layout' => 'language',         
             'scanTimeLimit' => 1200,
         ],
-        'imagemanager' => [
-            'class' => 'app\modules\imagemanager\ImageManager',
+        'mediamanager' => [
+            'class' => 'app\modules\mediamanager\MediaManager',
         ],
         'debug' => [
             'class' => 'yii\debug\Module',

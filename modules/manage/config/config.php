@@ -8,7 +8,7 @@ return [
             'class' => 'yii\caching\FileCache',
         ],
         'user' => [
-            'class' => 'app\common\web\User',
+            'class' => 'yii\web\User',
             'identityClass' => 'app\models\UserIdentity',
             'loginUrl' => 'manage/secure/login',
             'returnUrl' => 'manage/user/info',
