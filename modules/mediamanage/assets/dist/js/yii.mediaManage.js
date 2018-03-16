@@ -22,9 +22,9 @@ yii.mediaManage =  (function ($) {
 
     var mediaData = {};
 
-    var mediaEvents = {
+    var gridEvents = {
         /**
-         * beforeFilter event is triggered before filtering the media.
+         * beforeFilter event is triggered before filtering the grid.
          * The signature of the event handler should be:
          *     function (event)
          * where
@@ -35,7 +35,7 @@ yii.mediaManage =  (function ($) {
          */
         beforeFilter: 'beforeFilter',
         /**
-         * afterFilter event is triggered after filtering the media and filtered results are fetched.
+         * afterFilter event is triggered after filtering the grid and filtered results are fetched.
          * The signature of the event handler should be:
          *     function (event)
          * where
@@ -49,7 +49,7 @@ yii.mediaManage =  (function ($) {
      * The structure of single event handler is:
      *
      * {
-     *     mediaViewId: {
+     *     gridViewId: {
      *         type: {
      *             event: '...',
      *             selector: '...'
@@ -59,16 +59,16 @@ yii.mediaManage =  (function ($) {
      *
      * Used types:
      *
-     * - filter, used for filtering media with elements found by filterSelector
+     * - filter, used for filtering grid with elements found by filterSelector
      * - checkRow, used for checking single row
      * - checkAllRows, used for checking all rows with according "Check all" checkbox
      *
-     * event is the name of event, for example: 'change.yiimediaView'
+     * event is the name of event, for example: 'change.yiiGridView'
      * selector is a jQuery selector for finding elements
      *
      * @type {{}}
      */
-    var mediaEventHandlers = {};
+    var gridEventHandlers = {};
 
     var methods = {
         init: function (options) {
@@ -157,7 +157,7 @@ yii.mediaManage =  (function ($) {
                 });
             });
 
-            var event = $.Event(mediaEvents.beforeFilter);
+            var event = $.Event(gridEvents.beforeFilter);
             $media.trigger(event);
             if (event.result === false) {
                 return;
@@ -165,10 +165,10 @@ yii.mediaManage =  (function ($) {
 
             $form.submit();
 
-            $media.trigger(mediaEvents.afterFilter);
+            $media.trigger(gridEvents.afterFilter);
         },
 
-        setSelectionColumn: function (options) {
+        setSelection: function (options) {
             var $media = $(this);
             var id = $(this).attr('id');
             if (mediaData[id] === undefined) {
@@ -190,13 +190,13 @@ yii.mediaManage =  (function ($) {
             });
         },
 
-        getSelectedRows: function () {
+        getSelection: function () {
             var $media = $(this);
             var data = mediaData[$media.attr('id')];
             var keys = [];
             if (data.selectionColumn) {
                 $media.find("input[name='" + data.selectionColumn + "']:checked").each(function () {
-                    keys.push($(this).parent().closest('tr').data('key'));
+                    keys.push($(this).parent().closest('div').data('key'));
                 });
             }
 
@@ -204,11 +204,11 @@ yii.mediaManage =  (function ($) {
         },
 
         destroy: function () {
-            var events = ['.yiiMediaManage', mediaEvents.beforeFilter, mediaEvents.afterFilter].join(' ');
+            var events = ['.yiiMediaManage', gridEvents.beforeFilter, gridEvents.afterFilter].join(' ');
             this.off(events);
 
             var id = $(this).attr('id');
-            $.each(mediaEventHandlers[id], function (type, data) {
+            $.each(gridEventHandlers[id], function (type, data) {
                 $(document).off(data.event, data.selector);
             });
 
@@ -226,23 +226,23 @@ yii.mediaManage =  (function ($) {
     /**
      * Used for attaching event handler and prevent of duplicating them. With each call previously attached handler of
      * the same type is removed even selector was changed.
-     * @param {jQuery} $mediaManager According jQuery media view element
+     * @param {jQuery} $mediaManage According jQuery grid view element
      * @param {string} type Type of the event which acts like a key
-     * @param {string} event Event name, for example 'change.yiimediaView'
+     * @param {string} event Event name, for example 'change.yiiGridView'
      * @param {string} selector jQuery selector
      * @param {function} callback The actual function to be executed with this event
      */
-    function initEventHandler($mediaManager, type, event, selector, callback) {
-        var id = $mediaManager.attr('id');
-        var prevHandler = mediaEventHandlers[id];
+    function initEventHandler($mediaManage, type, event, selector, callback) {
+        var id = $mediaManage.attr('id');
+        var prevHandler = gridEventHandlers[id];
         if (prevHandler !== undefined && prevHandler[type] !== undefined) {
             var data = prevHandler[type];
             $(document).off(data.event, data.selector);
         }
         if (prevHandler === undefined) {
-            mediaEventHandlers[id] = {};
+            gridEventHandlers[id] = {};
         }
         $(document).on(event, selector, callback);
-        mediaEventHandlers[id][type] = {event: event, selector: selector};
+        gridEventHandlers[id][type] = {event: event, selector: selector};
     }
 })(window.jQuery);
