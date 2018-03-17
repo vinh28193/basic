@@ -1,5 +1,6 @@
 <?php 
 use yii\helpers\Html;
+use yii\web\JsExpression;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ArrayDataProvider */
 

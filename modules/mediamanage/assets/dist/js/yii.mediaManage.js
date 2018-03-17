@@ -39,6 +39,14 @@
          *  - event: an Event object.
          */
         afterFilter: 'afterFilter',
+        /**
+         * selectedMedia event is triggered after selected the single media.
+         * The signature of the event handler should be:
+         *     function (event)
+         * where
+         *  - event: an Event object.
+         */
+        selectedMedia: 'selectedMedia'
     };
 
     /**
@@ -75,6 +83,7 @@
                 if (mediaData[id] === undefined) {
                     mediaData[id] = {};
                 }
+
                 mediaData[id] = $.extend(mediaData[id], {settings: settings});
 
                 var filterEvents = 'change.yiiMediaManage keydown.yiiMediaManage';
@@ -104,13 +113,11 @@
                 	var selected = undefined;
                 	var that = $(this);
                 	selected = that.data('key');
-                	methods.setSelection(selected);
-                	
+                	methods.setSelection.apply($e,[selected]);
                     return false;
                 });
             });
         },
-
         applyFilter: function () {
             var $media = $(this);
             var settings = mediaData[$media.attr('id')].settings;
@@ -195,6 +202,7 @@
             // if (!options.multiple || !options.selectAll) {
             //     return;
             // }
+            $media.trigger(gridEvents.selectedMedia);
         },
 
         getSelection: function () {
@@ -202,9 +210,9 @@
             var data = mediaData[$media.attr('id')];
             var keys = [];
             if (data.selected) {
-                $media.find("a[data-key='" + data.selected + "']").each(function ($element) {
-                	keys.push($(this));
-                    //keys.push($($element).find('img').attr('src'));
+                $media.find("a[data-key='" + data.selected + "']").each(function () {
+                	//keys.push($(this));
+                    keys.push($(this).find('img').attr('src'));
 
                 });
             }
@@ -213,7 +221,7 @@
         },
 
         destroy: function () {
-            var events = ['.yiiMediaManage', gridEvents.beforeFilter, gridEvents.afterFilter].join(' ');
+            var events = ['.yiiMediaManage', gridEvents.beforeFilter, gridEvents.afterFilter, gridEvents.selectedMedia].join(' ');
             this.off(events);
 
             var id = $(this).attr('id');

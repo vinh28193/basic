@@ -19,6 +19,9 @@ class DefaultController extends Controller
     {
     	$provider = new ArrayDataProvider([
  			'allModels' => (new Media)->findAll(Yii::$app->request->queryParams),
+            'key' => function($model){
+                return $model->id;
+            }
  		]);
         return $this->render('index',[
         	'dataProvider' => $provider

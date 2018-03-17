@@ -21,21 +21,22 @@ class MediaManageWidget extends BaseListView
 {
 
     /**
-     * @var array the HTML attributes for the container tag of the grid view.
+     * @var array the HTML attributes for the container tag.
      * The "tag" element specifies the tag name of the container element and defaults to "div".
      * @see \yii\helpers\Html::renderTagAttributes() for details on how attributes are being rendered.
      */
     public $options = ['class' => 'container-fluid'];
 
+    /**
+     * @var array the HTML attributes for the container tag.
+     * The "tag" element specifies the tag name of the container element and defaults to "div".
+     * @see \yii\helpers\Html::renderTagAttributes() for details on how attributes are being rendered.
+     */
     public $itemsOptions = ['class' => 'row items'];
     /**
      * @var \yii\base\Model the model that keeps the user-entered filter data. When this property is set,
      * the grid view will enable column-based filtering. Each data column by default will display a text field
      * at the top that users can fill in to filter the data.
-     *
-     * Note that in order to show an input field for filtering, a column must have its [[DataColumn::attribute]]
-     * property set and the attribute should be active in the current scenario of $filterModel or have
-     * [[DataColumn::filter]] set as the HTML code for the input field.
      *
      * When this property is not set (null) the filtering feature is disabled.
      */
@@ -56,6 +57,11 @@ class MediaManageWidget extends BaseListView
      * @see \yii\helpers\Html::renderTagAttributes() for details on how attributes are being rendered.
      */
     public $filterOptions = ['class' => 'row filters'];
+
+    public $mediaToggle = 'MEDIA';
+    public $mediaOptions = ['class' => 'thumbnail col-xs-3 col-md-2'];
+
+
 
     /**
      * @var string the layout that determines how different sections of the grid view should be organized.
@@ -80,7 +86,10 @@ class MediaManageWidget extends BaseListView
         if (!isset($this->filterOptions['id'])) {
             $this->filterOptions['id'] = $this->options['id'] . '-filters';
         }
-
+        if (!isset($this->itemsOptions['id'])) {
+            $this->itemsOptions['id'] = $this->options['id'] . '-items';
+        }
+        $this->mediaToggle = $this->mediaToggle .'_'.hash('crc32', $this->options['id']);
     }
 
     /**
@@ -93,6 +102,10 @@ class MediaManageWidget extends BaseListView
         $view = $this->getView();
         MediaManageAsset::register($view);
         $view->registerJs("jQuery('#$id').yiiMediaManage($options);");
+        $view->registerJs("jQuery('#$id').on('selectedMedia',function(event){ 
+            var src = jQuery('#$id').yiiMediaManage('getSelection')
+            console.log(src) ; 
+        });");
         parent::run();
     }
 
@@ -135,7 +148,7 @@ class MediaManageWidget extends BaseListView
         return [
             'filterUrl' => Url::to($filterUrl),
             'filterSelector' => $filterSelector,
-            'mediaSelector' => 'a[data-toggle=mediaSelector]'
+            'mediaSelector' => 'a[data-toggle='.$this->mediaToggle.']'
         ];
     }
 
@@ -150,15 +163,24 @@ class MediaManageWidget extends BaseListView
         foreach ($models as $index => $model) {
             $key = $keys[$index];
 
-            $rows[] = $this->render('item',[
-                'model' => $model,
-                'key' => $key,
-                'index' => $index
-            ]);
+            $rows[] = $this->renderMedia($model, $key, $index);
 
         }
 
         return Html::tag('div',implode("\n", $rows),$this->itemsOptions);
+    }
+
+    public function renderMedia($model, $key, $index)
+    {
+        $media = $this->render('item',['model' => $model]);
+        if ($this->mediaOptions instanceof Closure) {
+            $options = call_user_func($this->mediaOptions, $model, $key, $index, $this);
+        } else {
+            $options = $this->mediaOptions;
+        }
+        $options['data-toggle'] = $this->mediaToggle;
+        $options['data-key'] = is_array($key) ? json_encode($key) : (string) $key;
+        return Html::a($media,'#',$options);
     }
 
 }
