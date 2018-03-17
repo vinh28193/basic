@@ -16,6 +16,7 @@ class MediaManageAsset extends AssetBundle
 		'js/yii.mediaManage.js',
     ];
     public $depends = [
+        'yii\web\YiiAsset',
 		'yii\web\JqueryAsset',
         'yii\bootstrap\BootstrapPluginAsset',
     ];

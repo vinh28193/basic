@@ -1,8 +1,4 @@
 
-yii.mediaManage =  (function ($) {
-
-   
-})(jQuery);
 (function ($) {
     $.fn.yiiMediaManage = function (method) {
         if (methods[method]) {
@@ -17,7 +13,8 @@ yii.mediaManage =  (function ($) {
 
     var defaults = {
         filterUrl: undefined,
-        filterSelector: undefined
+        filterSelector: undefined,
+        mediaSelector: undefined
     };
 
     var mediaData = {};
@@ -41,7 +38,7 @@ yii.mediaManage =  (function ($) {
          * where
          *  - event: an Event object.
          */
-        afterFilter: 'afterFilter'
+        afterFilter: 'afterFilter',
     };
 
     /**
@@ -57,11 +54,10 @@ yii.mediaManage =  (function ($) {
      *     }
      * }
      *
-     * Used types:
+     * Used types eg:
      *
      * - filter, used for filtering grid with elements found by filterSelector
-     * - checkRow, used for checking single row
-     * - checkAllRows, used for checking all rows with according "Check all" checkbox
+     * - click, used for click single media
      *
      * event is the name of event, for example: 'change.yiiGridView'
      * selector is a jQuery selector for finding elements
@@ -79,9 +75,8 @@ yii.mediaManage =  (function ($) {
                 if (mediaData[id] === undefined) {
                     mediaData[id] = {};
                 }
-
                 mediaData[id] = $.extend(mediaData[id], {settings: settings});
-                console.log(mediaData);
+
                 var filterEvents = 'change.yiiMediaManage keydown.yiiMediaManage';
                 var enterPressed = false;
                 initEventHandler($e, 'filter', filterEvents, settings.filterSelector, function (event) {
@@ -101,6 +96,16 @@ yii.mediaManage =  (function ($) {
 
                     methods.applyFilter.apply($e);
 
+                    return false;
+                });
+
+                var mediaEvents = 'click.yiiMediaManage';
+                initEventHandler($e, 'clickMedia', mediaEvents, settings.mediaSelector, function (event) {
+                	var selected = undefined;
+                	var that = $(this);
+                	selected = that.data('key');
+                	methods.setSelection(selected);
+                	
                     return false;
                 });
             });
@@ -174,29 +179,33 @@ yii.mediaManage =  (function ($) {
             if (mediaData[id] === undefined) {
                 mediaData[id] = {};
             }
-            mediaData[id].selectionColumn = options.name;
-            if (!options.multiple || !options.checkAll) {
-                return;
-            }
-            var checkAll = "#" + id + " input[name='" + options.checkAll + "']";
-            var inputs = options['class'] ? "input." + options['class'] : "input[name='" + options.name + "']";
-            var inputsEnabled = "#" + id + " " + inputs + ":enabled";
-            initEventHandler($media, 'checkAllRows', 'click.yiiMediaManage', checkAll, function () {
-                $media.find(inputs + ":enabled").prop('checked', this.checked);
-            });
-            initEventHandler($media, 'checkRow', 'click.yiiMediaManage', inputsEnabled, function () {
-                var all = $media.find(inputs).length == $media.find(inputs + ":checked").length;
-                $media.find("input[name='" + options.checkAll + "']").prop('checked', all);
-            });
+            /**
+		     *
+		     * {
+		     *     selected: {
+		     *         data-key: {
+		   	 *			   id:'...',
+		     *             src: '...',
+		     *             name: '...',
+		     *         }
+		     *     }
+		     * }
+		     */
+            mediaData[id].selected = options;
+            // if (!options.multiple || !options.selectAll) {
+            //     return;
+            // }
         },
 
         getSelection: function () {
             var $media = $(this);
             var data = mediaData[$media.attr('id')];
             var keys = [];
-            if (data.selectionColumn) {
-                $media.find("input[name='" + data.selectionColumn + "']:checked").each(function () {
-                    keys.push($(this).parent().closest('div').data('key'));
+            if (data.selected) {
+                $media.find("a[data-key='" + data.selected + "']").each(function ($element) {
+                	keys.push($(this));
+                    //keys.push($($element).find('img').attr('src'));
+
                 });
             }
 
