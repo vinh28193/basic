@@ -2,8 +2,10 @@
 
 namespace app\common\widgets;
 
+use Yii;
 use yii\helpers\Html;
 use yii\helpers\Json;
+use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
 use yii\web\JsExpression;
 use dosamigos\tinymce\TinyMce as BaseTinyMCE;
@@ -35,45 +37,14 @@ class TinyMCE extends BaseTinyMCE
 			'plugins' => 'print preview fullpage searchreplace autolink directionality visualblocks visualchars fullscreen image link media template codesample table charmap hr pagebreak nonbreaking anchor toc insertdatetime advlist lists textcolor wordcount imagetools help',
 			'toolbar1' => 'formatselect | bold italic strikethrough forecolor backcolor | link | alignleft aligncenter alignright alignjustify  | numlist bullist outdent indent  | removeformat',
 			'image_title' => true,
-			'automatic_uploads' => true,
-			'images_upload_url' => 'manage/upload-image',
-			'images_upload_handler' => new JsExpression('function (blobInfo, success, failure) {
-			    setTimeout(function() {
-			      	success("http://moxiecode.cachefly.net/tinymce/v9/images/logo.png");
-			    }, 2000);
-			  }'),
-			// 'init_instance_callback' => new JsExpression('function (ed) {
-			//     ed.execCommand("mceImage");
-			//   }'),
-			'file_picker_types' => 'image',
-			'file_picker_callback' => new JsExpression('function(cb, value, meta) {
-			    var input = document.createElement("input");
-			    input.setAttribute("type", "file");
-			    input.setAttribute("accept", "image/*");
-			    input.onchange = function() {
-			      var file = this.files[0];
-			      
-			      var reader = new FileReader();
-			      reader.onload = function () {
-			 
-			        var id = "blobid" + (new Date()).getTime();
-			        var blobCache =  tinymce.activeEditor.editorUpload.blobCache;
-			        var base64 = reader.result.split(",")[1];
-			        var blobInfo = blobCache.create(id, file, base64);
-			        blobCache.add(blobInfo);
-
-			        // call the callback and populate the Title field with the file name
-			        cb(blobInfo.blobUri(), { title: file.name });
-			      };
-			      reader.readAsDataURL(file);
-			    };
-			    
-			    input.click();
-			  }'),
 			'content_css' => [
 				'//fonts.googleapis.com/css?family=Lato:300,300i,400,400i',
 		    	'//www.tinymce.com/css/codepen.min.css'
 			],
+			// 'external_filemanager_path' => Url::to(['/mediamanage/default/index'],true),
+			// 'external_plugins' => [
+			// 	'filemanager' => Yii::getAlias('@web/js/yii.mediaPluginToMce.js')
+			// ]
 		],$this->clientOptions);
 	}
 	/**

@@ -4,8 +4,7 @@ namespace app\modules\mediamanage\controllers;
 
 use Yii;
 use yii\web\Controller;
-use yii\data\ArrayDataProvider;
-use app\modules\mediamanage\models\Media;
+use yii\helpers\Url;
 /**
  * Default controller for the `mediamanage` module
  */
@@ -17,14 +16,9 @@ class DefaultController extends Controller
      */
     public function actionIndex()
     {
-    	$provider = new ArrayDataProvider([
- 			'allModels' => (new Media)->findAll(Yii::$app->request->queryParams),
-            'key' => function($model){
-                return $model->id;
-            }
- 		]);
-        return $this->render('index',[
-        	'dataProvider' => $provider
+        $requestUri = Url::to(['/mediamanage/media/index'],true);
+        return $this->render('index',[  
+            'requestUri' => $requestUri
         ]);
     }
 }

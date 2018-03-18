@@ -1,16 +1,16 @@
 <?php
 
-namespace app\models;
+namespace app\modules\manage\models;
 
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\resources\Article;
-use app\models\queries\ArticleQuery;
+use app\models\resources\ArticleCategory;
+use app\models\queries\ArticleCategoryQuery;
 /**
- * ArticleSearch represents the model behind the search form about `app\models\Article`.
+ * ArticleCategorySearch represents the model behind the search form about `app\models\ArticleCategory`.
  */
-class ArticleSearch extends Article
+class ArticleCategorySearch extends ArticleCategory
 {
     /**
      * @inheritdoc
@@ -18,8 +18,8 @@ class ArticleSearch extends Article
     public function rules()
     {
         return [
-            [['id', 'view', 'category_id', 'author_id', 'updater_id', 'status', 'published_at', 'updated_at'], 'integer'],
-            [['title', 'slug', 'short_description', 'description', 'body'], 'safe'],
+            [['id', 'parent_id', 'status', 'created_at', 'updated_at'], 'integer'],
+            [['title', 'slug'], 'safe'],
         ];
     }
 
@@ -31,14 +31,14 @@ class ArticleSearch extends Article
         // bypass scenarios() implementation in the parent class
         return Model::scenarios();
     }
-
+    
     /**
      * @inheritdoc
-     * @return \app\models\queries\ArticleQuery the active query used by this AR class.
+     * @return \app\models\queries\ArticleCategoryQuery the active query used by this AR class.
      */
     public static function find()
     {
-        return Yii::createObject(ArticleQuery::className(), [get_called_class()]);
+        return Yii::createObject(ArticleCategoryQuery::className(), [get_called_class()]);
     }
 
     /**
@@ -50,7 +50,7 @@ class ArticleSearch extends Article
      */
     public function search($params)
     {
-        $query = Article::find();
+        $query = ArticleCategory::find();
 
         // add conditions that should always apply here
 
@@ -69,20 +69,14 @@ class ArticleSearch extends Article
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'view' => $this->view,
-            'category_id' => $this->category_id,
-            'author_id' => $this->author_id,
-            'updater_id' => $this->updater_id,
+            'parent_id' => $this->parent_id,
             'status' => $this->status,
-            'published_at' => $this->published_at,
+            'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ]);
 
         $query->andFilterWhere(['like', 'title', $this->title])
-            ->andFilterWhere(['like', 'slug', $this->slug])
-            ->andFilterWhere(['like', 'short_description', $this->short_description])
-            ->andFilterWhere(['like', 'description', $this->description])
-            ->andFilterWhere(['like', 'body', $this->body]);
+            ->andFilterWhere(['like', 'slug', $this->slug]);
 
         return $dataProvider;
     }
