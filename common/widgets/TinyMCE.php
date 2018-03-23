@@ -34,17 +34,24 @@ class TinyMCE extends BaseTinyMCE
 	public function init(){
 		parent::init();
 		$this->clientOptions = ArrayHelper::merge([
-			'plugins' => 'print preview fullpage searchreplace autolink directionality visualblocks visualchars fullscreen image link media template codesample table charmap hr pagebreak nonbreaking anchor toc insertdatetime advlist lists textcolor wordcount imagetools help',
-			'toolbar1' => 'formatselect | bold italic strikethrough forecolor backcolor | link | alignleft aligncenter alignright alignjustify  | numlist bullist outdent indent  | removeformat',
-			'image_title' => true,
-			'content_css' => [
-				'//fonts.googleapis.com/css?family=Lato:300,300i,400,400i',
-		    	'//www.tinymce.com/css/codepen.min.css'
-			],
-			// 'external_filemanager_path' => Url::to(['/mediamanage/default/index'],true),
-			// 'external_plugins' => [
-			// 	'filemanager' => Yii::getAlias('@web/js/yii.mediaPluginToMce.js')
-			// ]
+			'plugins' => [
+                'advlist autolink link image lists charmap print preview hr anchor pagebreak',
+                'searchreplace wordcount visualblocks visualchars insertdatetime media nonbreaking',
+                'table contextmenu directionality emoticons paste textcolor code'
+            ],
+            'toolbar1' => 'undo redo | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | styleselect',
+            'toolbar2' => '| link unlink anchor | image media | forecolor backcolor  | print preview code ',
+            'image_advtab' => true,
+            'content_css' => [
+                '//fonts.googleapis.com/css?family=Lato:300,300i,400,400i',
+                '//www.tinymce.com/css/codepen.min.css'
+            ],
+            'filemanager_crossdomain' => true,
+            'filemanager_title' => 'Media Manage',
+            'external_filemanager_path' => Url::to('http://responsive-filemanager.beta.vn/'),
+            'external_plugins' => [
+                'filemanager' =>  Yii::getAlias('http://responsive-filemanager.beta.vn/plugin.min.js')
+            ]
 		],$this->clientOptions);
 	}
 	/**

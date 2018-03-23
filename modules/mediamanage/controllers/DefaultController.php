@@ -16,7 +16,7 @@ class DefaultController extends Controller
      */
     public function actionIndex()
     {
-        $requestUri = Url::to(['/mediamanage/media/index'],true);
+        $requestUri = Url::to('http://responsive-filemanager.beta.vn/dialog.php');
         return $this->render('index',[  
             'requestUri' => $requestUri
         ]);
