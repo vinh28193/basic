@@ -1,6 +1,7 @@
 <?php
 namespace app\common\db\mysql;
 
+use Yii;
 use yii\db\Query;
 use yii\db\ActiveQuery;
 use yii\helpers\ArrayHelper;

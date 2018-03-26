@@ -6,6 +6,7 @@ use app\common\db\Migration;
  * Handles the creation of table `%product`.
  * Has foreign keys to the tables:
  *
+ * - `{{%application}}`
  * - `{{%category}}`
  * - `{{%user}}`
  */
@@ -18,6 +19,7 @@ class m180326_131426_create_product_table extends Migration
     {
         $this->createTable('{{%product}}', [
             'id' => $this->primaryKey(),
+            'app_id' => $this->integer()->notNull(),
             'title' => $this->string(512)->notNull(),
             'slug' => $this->string(1024)->notNull(),
             'description' => $this->text(),
@@ -30,6 +32,23 @@ class m180326_131426_create_product_table extends Migration
             'created_at' => $this->integer(),
             'updated_at' => $this->integer(),
         ], $this->tableOptions);
+
+        // creates index for column `app_id`
+        $this->createIndex(
+            'idx-product-app_id',
+            '{{%product}}',
+            'app_id'
+        );
+
+        // add foreign key for table `{{%application}}`
+        $this->addForeignKey(
+            'fk-product-app_id',
+            '{{%product}}',
+            'app_id',
+            '{{%application}}',
+            'id',
+            'CASCADE'
+        );
 
         // creates index for column `category_id`
         $this->createIndex(
@@ -121,6 +140,18 @@ class m180326_131426_create_product_table extends Migration
         // drops index for column `category_id`
         $this->dropIndex(
             'idx-product-category_id',
+            '{{%product}}'
+        );
+        
+        // drops foreign key for table `{{%application}}`
+        $this->dropForeignKey(
+            'fk-product-app_id',
+            '{{%product}}'
+        );
+
+        // drops index for column `app_id`
+        $this->dropIndex(
+            'idx-product-app_id',
             '{{%product}}'
         );
 

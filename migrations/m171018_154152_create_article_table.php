@@ -6,6 +6,7 @@ use app\common\db\Migration;
  * Handles the creation of table `{{%article}}`.
  * Has foreign keys to the tables:
  *
+ * - `{{%application}}`
  * - `{{%article_category}}`
  * - `{{%user}}`
  */
@@ -18,6 +19,7 @@ class m171018_154152_create_article_table extends Migration
     {
         $this->createTable('{{%article}}', [
             'id' => $this->primaryKey(),
+            'app_id' => $this->integer()->notNull(),
             'title' => $this->string(512)->notNull(),
             'slug' => $this->string(1024)->notNull(),
             'short_description' => $this->string(1024),
@@ -31,6 +33,23 @@ class m171018_154152_create_article_table extends Migration
             'published_at' => $this->integer(),
             'updated_at' => $this->integer(),
         ], $this->tableOptions);
+
+        // creates index for column `app_id`
+        $this->createIndex(
+            'idx-article-app_id',
+            '{{%article}}',
+            'app_id'
+        );
+
+        // add foreign key for table `{{%application}}`
+        $this->addForeignKey(
+            'fk-article-app_id',
+            '{{%article}}',
+            'app_id',
+            '{{%application}}',
+            'id',
+            'CASCADE'
+        );
 
         // creates index for column `author_id`
         $this->createIndex(
@@ -122,6 +141,18 @@ class m171018_154152_create_article_table extends Migration
         // drops index for column `category_id`
         $this->dropIndex(
             'idx-article-category_id',
+            '{{%article}}'
+        );
+
+        // drops foreign key for table `{{%application}}`
+        $this->dropForeignKey(
+            'fk-article-app_id',
+            '{{%article}}'
+        );
+
+        // drops index for column `app_id`
+        $this->dropIndex(
+            'idx-article-app_id',
             '{{%article}}'
         );
 

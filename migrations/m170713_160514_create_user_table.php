@@ -4,6 +4,9 @@ use app\common\db\Migration;
 
 /**
  * Handles the creation of table `{{%user}}`.
+ * Has foreign keys to the tables:
+ *
+ * - `{{%application}}`
  */
 class m170713_160514_create_user_table extends Migration
 {
@@ -15,6 +18,7 @@ class m170713_160514_create_user_table extends Migration
     {
         $this->createTable('{{%user}}', [
             'id' => $this->primaryKey(),
+            'app_id' => $this->integer()->notNull(),
             'username' => $this->string(32),
             'email' => $this->string(255),
             'phone' => $this->string(15),
@@ -28,6 +32,23 @@ class m170713_160514_create_user_table extends Migration
             'created_at' => $this->integer(),
             'verified_at' => $this->integer(),
         ], $this->tableOptions);
+
+        // creates index for column `app_id`
+        $this->createIndex(
+            'idx-user-app_id',
+            '{{%user}}',
+            'app_id'
+        );
+
+        // add foreign key for table `{{%application}}`
+        $this->addForeignKey(
+            'fk-user-app_id',
+            '{{%user}}',
+            'app_id',
+            '{{%application}}',
+            'id',
+            'CASCADE'
+        );
 
         // creates index for column `status`
         $this->createIndex(
@@ -49,6 +70,18 @@ class m170713_160514_create_user_table extends Migration
             '{{%user}}'
         );
 
+        // drops foreign key for table `{{%application}}`
+        $this->dropForeignKey(
+            'fk-user-app_id',
+            '{{%user}}'
+        );
+
+        // drops index for column `app_id`
+        $this->dropIndex(
+            'idx-user-app_id',
+            '{{%user}}'
+        );
+        
         $this->dropTable('{{%user}}');
     }
 }

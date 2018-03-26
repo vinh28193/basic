@@ -6,6 +6,7 @@ use app\common\db\Migration;
  * Handles the creation of table `{{%media}}`.
  * Has foreign keys to the tables:
  *
+ * - `{{%application}}`
  * - `{{%user}}`
  */
 class m170713_173022_create_media_table extends Migration
@@ -17,6 +18,7 @@ class m170713_173022_create_media_table extends Migration
     {
         $this->createTable('{{%media}}', [
             'id' => $this->primaryKey(),
+            'app_id' => $this->integer()->notNull(),
             'name' => $this->string(255)->notNull(),
             'base_url' => $this->string(1024)->notNull(),
             'path' => $this->string(1024)->notNull(),
@@ -28,6 +30,22 @@ class m170713_173022_create_media_table extends Migration
             'created_at' => $this->integer()
         ], $this->tableOptions);
 
+         // creates index for column `app_id`
+        $this->createIndex(
+            'idx-media-app_id',
+            '{{%media}}',
+            'app_id'
+        );
+
+        // add foreign key for table `{{%application}}`
+        $this->addForeignKey(
+            'fk-media-app_id',
+            '{{%media}}',
+            'app_id',
+            '{{%application}}',
+            'id',
+            'CASCADE'
+        );
 
         // creates index for column `type`
         $this->createIndex(
@@ -74,6 +92,18 @@ class m170713_173022_create_media_table extends Migration
         // drops index for column `type`
         $this->dropIndex(
             'idx-media-type',
+            '{{%media}}'
+        );
+
+        // drops foreign key for table `{{%application}}`
+        $this->dropForeignKey(
+            'fk-media-app_id',
+            '{{%media}}'
+        );
+
+        // drops index for column `app_id`
+        $this->dropIndex(
+            'idx-media-app_id',
             '{{%media}}'
         );
 

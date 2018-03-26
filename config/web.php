@@ -5,7 +5,7 @@ $urlManager = require(__DIR__ . '/urlManager.php');
 $params = require(__DIR__ . '/params.php');
 
 $config = [
-    'id' => 'basic',
+    'id' => 1,
     'name' => 'Dev App',
     'version' => '0.1-dev',
     'charset' => 'UTF-8',
