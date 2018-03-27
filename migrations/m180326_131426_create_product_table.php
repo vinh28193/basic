@@ -6,7 +6,7 @@ use app\common\db\Migration;
  * Handles the creation of table `%product`.
  * Has foreign keys to the tables:
  *
- * - `{{%application}}`
+ * - `{{%tenant}}`
  * - `{{%category}}`
  * - `{{%user}}`
  */
@@ -19,7 +19,8 @@ class m180326_131426_create_product_table extends Migration
     {
         $this->createTable('{{%product}}', [
             'id' => $this->primaryKey(),
-            'app_id' => $this->integer()->notNull(),
+            'tenant_id' => $this->integer()->notNull(),
+            'sku' => $this->string(10),
             'title' => $this->string(512)->notNull(),
             'slug' => $this->string(1024)->notNull(),
             'description' => $this->text(),
@@ -33,20 +34,20 @@ class m180326_131426_create_product_table extends Migration
             'updated_at' => $this->integer(),
         ], $this->tableOptions);
 
-        // creates index for column `app_id`
+        // creates index for column `tenant_id`
         $this->createIndex(
-            'idx-product-app_id',
+            'idx-product-tenant_id',
             '{{%product}}',
-            'app_id'
+            'tenant_id'
         );
 
-        // add foreign key for table `{{%application}}`
+        // add foreign key for table `{{%tenant}}`
         $this->addForeignKey(
-            'fk-product-app_id',
+            'fk-product-tenant_id',
             '{{%product}}',
-            'app_id',
-            '{{%application}}',
-            'id',
+            'tenant_id',
+            '{{%tenant}}',
+            'tenant_id',
             'CASCADE'
         );
 
@@ -143,15 +144,15 @@ class m180326_131426_create_product_table extends Migration
             '{{%product}}'
         );
         
-        // drops foreign key for table `{{%application}}`
+        // drops foreign key for table `{{%tenant}}`
         $this->dropForeignKey(
-            'fk-product-app_id',
+            'fk-product-tenant_id',
             '{{%product}}'
         );
 
-        // drops index for column `app_id`
+        // drops index for column `tenant_id`
         $this->dropIndex(
-            'idx-product-app_id',
+            'idx-product-tenant_id',
             '{{%product}}'
         );
 

@@ -6,7 +6,6 @@ use app\common\db\Migration;
  * Handles the creation of table `{{$user_profile}}`.
  * Has foreign keys to the tables:
  *
- * - `{{%application}}`
  * - `{{%user}}`
  */
 class m170713_161743_create_user_profile_table extends Migration
@@ -18,7 +17,7 @@ class m170713_161743_create_user_profile_table extends Migration
     {
         $this->createTable('{{%user_profile}}', [
             'user_id' => $this->integer()->notNull()->append('PRIMARY KEY'),
-            'app_id' => $this->integer()->notNull(),
+            'tenant_id' => $this->integer()->notNull(),
             'first_name' => $this->string(100)->notNull(),
             'last_name' => $this->string(100)->notNull(),
             'avatar_path' => $this->string(),
@@ -32,20 +31,20 @@ class m170713_161743_create_user_profile_table extends Migration
             'updated_at' => $this->integer(),
         ], $this->tableOptions);
 
-        // creates index for column `app_id`
+        // creates index for column `tenant_id`
         $this->createIndex(
-            'idx-user_profile-app_id',
+            'idx-user_profile-tenant_id',
             '{{%user_profile}}',
-            'app_id'
+            'tenant_id'
         );
 
-        // add foreign key for table `{{%application}}`
+        // add foreign key for table `{{%tenant}}`
         $this->addForeignKey(
-            'fk-user_profile-app_id',
+            'fk-user_profile-tenant_id',
             '{{%user_profile}}',
-            'app_id',
-            '{{%application}}',
-            'id',
+            'tenant_id',
+            '{{%tenant}}',
+            'tenant_id',
             'CASCADE'
         );
          // creates index for column `locale`
@@ -95,19 +94,19 @@ class m170713_161743_create_user_profile_table extends Migration
             'idx-user_profile-locale',
             '{{%user_profile}}'
         );
-
-        // drops foreign key for table `{{%application}}`
-        $this->dropForeignKey(
-            'fk-user_profile-app_id',
-            '{{%user_profile}}'
-        );
-
-        // drops index for column `app_id`
-        $this->dropIndex(
-            'idx-user_profile-app_id',
-            '{{%user_profile}}'
-        );
         
+        // drops foreign key for table `{{%tenant}}`
+        $this->dropForeignKey(
+            'fk-user_profile-tenant_id',
+            '{{%user_profile}}'
+        );
+
+        // drops index for column `tenant_id`
+        $this->dropIndex(
+            'idx-user_profile-tenant_id',
+            '{{%user_profile}}'
+        );
+
         $this->dropTable('{{%user_profile}}');
     }
 }

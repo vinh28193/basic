@@ -6,7 +6,7 @@ use yii\db\Migration;
  * Handles the creation of table `{{%user_auth}}`.
  * Has foreign keys to the tables:
  *
- * - `{{%application}}`
+ * - `{{%tenant}}`
  * - `{{%user}}`
  */
 class m170713_163517_create_user_auth_table extends Migration
@@ -18,26 +18,26 @@ class m170713_163517_create_user_auth_table extends Migration
     {
         $this->createTable('{{%user_auth}}', [
             'id' => $this->primaryKey(),
-            'app_id' => $this->integer()->notNull(),
+            'tenant_id' => $this->integer()->notNull(),
             'user_id' => $this->integer()->notNull(),
             'source_id' => $this->string(32)->notNull(),
             'source' => $this->string(100)->notNull(),
         ]);
 
-        // creates index for column `app_id`
+        // creates index for column `tenant_id`
         $this->createIndex(
-            'idx-user_auth-app_id',
+            'idx-user_auth-tenant_id',
             '{{%user_auth}}',
-            'app_id'
+            'tenant_id'
         );
 
-        // add foreign key for table `{{%application}}`
+        // add foreign key for table `{{%tenant}}`
         $this->addForeignKey(
-            'fk-user_auth-app_id',
+            'fk-user_auth-tenant_id',
             '{{%user_auth}}',
-            'app_id',
-            '{{%application}}',
-            'id',
+            'tenant_id',
+            '{{%tenant}}',
+            'tenant_id',
             'CASCADE'
         );
 
@@ -76,15 +76,15 @@ class m170713_163517_create_user_auth_table extends Migration
             '{{%user_auth}}'
         );
 
-        // drops foreign key for table `{{%application}}`
+        // drops foreign key for table `{{%tenant}}`
         $this->dropForeignKey(
-            'fk-user_auth-app_id',
+            'fk-user_auth-tenant_id',
             '{{%user_auth}}'
         );
 
-        // drops index for column `app_id`
+        // drops index for column `tenant_id`
         $this->dropIndex(
-            'idx-user_auth-app_id',
+            'idx-user_auth-tenant_id',
             '{{%user_auth}}'
         );
 

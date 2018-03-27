@@ -17,7 +17,7 @@ $this->title = 'My Yii Application';
 
     <div class="body-content">
             <?php 
-                var_dump(Yii::$app->clientAuth->getClient()->createAuthUrl());
+                var_dump(Yii::$app->tenant);
             ?>
         <div class="row">
             <div class="col-lg-12">

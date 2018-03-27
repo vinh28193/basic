@@ -6,7 +6,7 @@ use app\common\db\Migration;
  * Handles the creation of table `{{%category}}`.
  * Has foreign keys to the tables:
  *
- * - `{{%application}}`
+ * - `{{%tenant}}`
  * - `{{%category}}`
  * - `{{%user}}`
  */
@@ -19,7 +19,7 @@ class m180111_134104_create_category_table extends Migration
     {
         $this->createTable('{{%category}}', [
             'id' => $this->primaryKey(),
-            'app_id' => $this->integer()->notNull(),
+            'tenant_id' => $this->integer()->notNull(),
             'title' => $this->string(512)->notNull(),
             'slug' => $this->string(1024)->notNull(),
             'parent_id' => $this->integer(),
@@ -28,20 +28,20 @@ class m180111_134104_create_category_table extends Migration
             'updated_at' => $this->integer(),
         ], $this->tableOptions);
 
-        // creates index for column `app_id`
+        // creates index for column `tenant_id`
         $this->createIndex(
-            'idx-category-app_id',
+            'idx-category-tenant_id',
             '{{%category}}',
-            'app_id'
+            'tenant_id'
         );
 
-        // add foreign key for table `{{%application}}`
+        // add foreign key for table `{{%tenant}}`
         $this->addForeignKey(
-            'fk-category-app_id',
+            'fk-category-tenant_id',
             '{{%category}}',
-            'app_id',
-            '{{%application}}',
-            'id',
+            'tenant_id',
+            '{{%tenant}}',
+            'tenant_id',
             'CASCADE'
         );
 
@@ -80,15 +80,15 @@ class m180111_134104_create_category_table extends Migration
             '{{%category}}'
         );
         
-        // drops foreign key for table `{{%application}}`
+        // drops foreign key for table `{{%tenant}}`
         $this->dropForeignKey(
-            'fk-category-app_id',
+            'fk-category-tenant_id',
             '{{%category}}'
         );
 
-        // drops index for column `app_id`
+        // drops index for column `tenant_id`
         $this->dropIndex(
-            'idx-category-app_id',
+            'idx-category-tenant_id',
             '{{%category}}'
         );
 

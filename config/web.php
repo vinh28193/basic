@@ -5,7 +5,7 @@ $urlManager = require(__DIR__ . '/urlManager.php');
 $params = require(__DIR__ . '/params.php');
 
 $config = [
-    'id' => 1,
+    'id' => 'basic',
     'name' => 'Dev App',
     'version' => '0.1-dev',
     'charset' => 'UTF-8',
@@ -14,6 +14,7 @@ $config = [
     'basePath' => dirname(__DIR__),
     'bootstrap' => [
         'log',
+        'tenant',
         'debug'
     ],
     'components' => [
@@ -100,6 +101,23 @@ $config = [
                     'fileMap' => [
                         'yii' => 'yii.php',
                     ],
+                ],
+            ],
+        ],
+        'tenant' => [
+            'class' => 'app\common\components\Tenant',
+            'exclude' => [
+                'tables' => [
+                    'tenant',
+                    'migration',
+                    'session',
+                    'auth_assignment',
+                    'auth_item',
+                    'auth_item_child',
+                    'auth_rule',
+                    'language',
+                    'language_source',
+                    'language_translate'
                 ],
             ],
         ],

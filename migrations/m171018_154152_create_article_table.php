@@ -6,7 +6,7 @@ use app\common\db\Migration;
  * Handles the creation of table `{{%article}}`.
  * Has foreign keys to the tables:
  *
- * - `{{%application}}`
+ * - `{{%tenant}}`
  * - `{{%article_category}}`
  * - `{{%user}}`
  */
@@ -19,7 +19,7 @@ class m171018_154152_create_article_table extends Migration
     {
         $this->createTable('{{%article}}', [
             'id' => $this->primaryKey(),
-            'app_id' => $this->integer()->notNull(),
+            'tenant_id' => $this->integer()->notNull(),
             'title' => $this->string(512)->notNull(),
             'slug' => $this->string(1024)->notNull(),
             'short_description' => $this->string(1024),
@@ -34,20 +34,20 @@ class m171018_154152_create_article_table extends Migration
             'updated_at' => $this->integer(),
         ], $this->tableOptions);
 
-        // creates index for column `app_id`
+        // creates index for column `tenant_id`
         $this->createIndex(
-            'idx-article-app_id',
+            'idx-article-tenant_id',
             '{{%article}}',
-            'app_id'
+            'tenant_id'
         );
 
-        // add foreign key for table `{{%application}}`
+        // add foreign key for table `{{%tenant}}`
         $this->addForeignKey(
-            'fk-article-app_id',
+            'fk-article-tenant_id',
             '{{%article}}',
-            'app_id',
-            '{{%application}}',
-            'id',
+            'tenant_id',
+            '{{%tenant}}',
+            'tenant_id',
             'CASCADE'
         );
 
@@ -144,15 +144,15 @@ class m171018_154152_create_article_table extends Migration
             '{{%article}}'
         );
 
-        // drops foreign key for table `{{%application}}`
+        // drops foreign key for table `{{%tenant}}`
         $this->dropForeignKey(
-            'fk-article-app_id',
+            'fk-article-tenant_id',
             '{{%article}}'
         );
 
-        // drops index for column `app_id`
+        // drops index for column `tenant_id`
         $this->dropIndex(
-            'idx-article-app_id',
+            'idx-article-tenant_id',
             '{{%article}}'
         );
 

@@ -6,7 +6,7 @@ use app\common\db\Migration;
  * Handles the creation of table `{{%user_log}}`.
  * Has foreign keys to the tables:
  *
- * - `{{%application}}`
+ * - `{{%tenant}}`
  * - `{{%user}}`
  */
 class m170713_162012_create_user_log_table extends Migration
@@ -18,24 +18,24 @@ class m170713_162012_create_user_log_table extends Migration
     {
         $this->createTable('{{%user_log}}', [
             'id' => $this->primaryKey(),
-            'app_id' => $this->integer()->notNull(),
+            'tenant_id' => $this->integer()->notNull(),
             'user_id' => $this->integer()->notNull(),
         ], $this->tableOptions);
 
-        // creates index for column `app_id`
+        // creates index for column `tenant_id`
         $this->createIndex(
-            'idx-user_log-app_id',
+            'idx-user_log-tenant_id',
             '{{%user_log}}',
-            'app_id'
+            'tenant_id'
         );
 
-        // add foreign key for table `{{%application}}`
+        // add foreign key for table `{{%tenant}}`
         $this->addForeignKey(
-            'fk-user_log-app_id',
+            'fk-user_log-tenant_id',
             '{{%user_log}}',
-            'app_id',
-            '{{%application}}',
-            'id',
+            'tenant_id',
+            '{{%tenant}}',
+            'tenant_id',
             'CASCADE'
         );
 
@@ -74,15 +74,15 @@ class m170713_162012_create_user_log_table extends Migration
             '{{%user_log}}'
         );
         
-        // drops foreign key for table `{{%application}}`
+        // drops foreign key for table `{{%tenant}}`
         $this->dropForeignKey(
-            'fk-user_log-app_id',
+            'fk-user_log-tenant_id',
             '{{%user_log}}'
         );
 
-        // drops index for column `app_id`
+        // drops index for column `tenant_id`
         $this->dropIndex(
-            'idx-user_log-app_id',
+            'idx-user_log-tenant_id',
             '{{%user_log}}'
         );
 

@@ -5,6 +5,10 @@ Yii::setAlias('@tests', dirname(__DIR__) . '/tests');
 $params = require(__DIR__ . '/params.php');
 $db = require(__DIR__ . '/db.php');
 
+$db = array_merge([
+    'class' => 'yii\db\Connection',
+], $db);
+
 $config = [
     'id' => 'basic-console',
     'basePath' => dirname(__DIR__),
@@ -23,6 +27,23 @@ $config = [
             ],
         ],
         'db' => $db,
+        'tenant' => [
+            'class' => 'app\common\components\Tenant',
+            'exclude' => [
+                'tables' => [
+                    'tenant',
+                    'migration',
+                    'session',
+                    'auth_assignment',
+                    'auth_item',
+                    'auth_item_child',
+                    'auth_rule',
+                    'language',
+                    'language_source',
+                    'language_translate'
+                ],
+            ],
+        ],
     ],
     'params' => $params,
     

@@ -7,6 +7,7 @@ $security = Yii::$app->getSecurity();
 
 return [
 	'id' => $index + 1,
+    'tenant_id' => $faker->numberBetween(1,10),
     'username' => $faker->userName,
     'email' => $faker->email,
     'phone' => $faker->phoneNumber,

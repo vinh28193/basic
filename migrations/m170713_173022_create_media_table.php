@@ -6,7 +6,7 @@ use app\common\db\Migration;
  * Handles the creation of table `{{%media}}`.
  * Has foreign keys to the tables:
  *
- * - `{{%application}}`
+ * - `{{%tenant}}`
  * - `{{%user}}`
  */
 class m170713_173022_create_media_table extends Migration
@@ -18,7 +18,7 @@ class m170713_173022_create_media_table extends Migration
     {
         $this->createTable('{{%media}}', [
             'id' => $this->primaryKey(),
-            'app_id' => $this->integer()->notNull(),
+            'tenant_id' => $this->integer()->notNull(),
             'name' => $this->string(255)->notNull(),
             'base_url' => $this->string(1024)->notNull(),
             'path' => $this->string(1024)->notNull(),
@@ -30,20 +30,20 @@ class m170713_173022_create_media_table extends Migration
             'created_at' => $this->integer()
         ], $this->tableOptions);
 
-         // creates index for column `app_id`
+         // creates index for column `tenant_id`
         $this->createIndex(
-            'idx-media-app_id',
+            'idx-media-tenant_id',
             '{{%media}}',
-            'app_id'
+            'tenant_id'
         );
 
-        // add foreign key for table `{{%application}}`
+        // add foreign key for table `{{%tenant}}`
         $this->addForeignKey(
-            'fk-media-app_id',
+            'fk-media-tenant_id',
             '{{%media}}',
-            'app_id',
-            '{{%application}}',
-            'id',
+            'tenant_id',
+            '{{%tenant}}',
+            'tenant_id',
             'CASCADE'
         );
 
@@ -95,15 +95,15 @@ class m170713_173022_create_media_table extends Migration
             '{{%media}}'
         );
 
-        // drops foreign key for table `{{%application}}`
+        // drops foreign key for table `{{%tenant}}`
         $this->dropForeignKey(
-            'fk-media-app_id',
+            'fk-media-tenant_id',
             '{{%media}}'
         );
 
-        // drops index for column `app_id`
+        // drops index for column `tenant_id`
         $this->dropIndex(
-            'idx-media-app_id',
+            'idx-media-tenant_id',
             '{{%media}}'
         );
 

@@ -6,7 +6,7 @@ use app\common\db\Migration;
  * Handles the creation of table `{{%article_category}}`.
  * Has foreign keys to the tables:
  *
- * - `{{%application}}`
+ * - `{{%tenant}}`
  * - `{{%article_category}}`
  */
 class m171018_152801_create_article_category_table extends Migration
@@ -18,7 +18,7 @@ class m171018_152801_create_article_category_table extends Migration
     {
         $this->createTable('{{%article_category}}', [
             'id' => $this->primaryKey(),
-            'app_id' => $this->integer()->notNull(),
+            'tenant_id' => $this->integer()->notNull(),
             'title' => $this->string(512)->notNull(),
             'slug' => $this->string(1024)->notNull(),
             'parent_id' => $this->integer(),
@@ -27,20 +27,20 @@ class m171018_152801_create_article_category_table extends Migration
             'updated_at' => $this->integer(),
         ], $this->tableOptions);
         
-         // creates index for column `app_id`
+         // creates index for column `tenant_id`
         $this->createIndex(
-            'idx-article_category-app_id',
+            'idx-article_category-tenant_id',
             '{{%article_category}}',
-            'app_id'
+            'tenant_id'
         );
 
-        // add foreign key for table `{{%application}}`
+        // add foreign key for table `{{%tenant}}`
         $this->addForeignKey(
-            'fk-article_category-app_id',
+            'fk-article_category-tenant_id',
             '{{%article_category}}',
-            'app_id',
-            '{{%application}}',
-            'id',
+            'tenant_id',
+            '{{%tenant}}',
+            'tenant_id',
             'CASCADE'
         );
 
@@ -77,15 +77,15 @@ class m171018_152801_create_article_category_table extends Migration
             '{{%article_category}}'
         );
 
-        // drops foreign key for table `{{%application}}`
+        // drops foreign key for table `{{%tenant}}`
         $this->dropForeignKey(
-            'fk-article_category-app_id',
+            'fk-article_category-tenant_id',
             '{{%article_category}}'
         );
 
-        // drops index for column `app_id`
+        // drops index for column `tenant_id`
         $this->dropIndex(
-            'idx-article_category-app_id',
+            'idx-article_category-tenant_id',
             '{{%article_category}}'
         );
         $this->dropTable('{{%article_category}}');

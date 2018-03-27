@@ -11,28 +11,36 @@ use yii\helpers\ArrayHelper;
  */
 class QueryBuilder extends \yii\db\mysql\QueryBuilder
 {
+
+
     /**
      * @inheritdoc
      */
     public function build($query, $params = [])
     {
         $from = [];
-        if($query instanceof ActiveQuery){
-			$modelClass = $query->modelClass;
-            $from[] = $modelClass::tableName();
-        }else{
-			if(ArrayHelper::keyExists('c', $query->from)){
+        if(!empty($query->from)) {
+            if(ArrayHelper::keyExists('c', $query->from)){
                 $from[] = 'c';
             } else {
                 $from = $query->from;
             }
+        } elseif ($query instanceof ActiveQuery) {
+            $modelClass = $query->modelClass;
+            $from[] = $modelClass::tableName();
         }
-        foreach ($from as $key => $f) {
+        $filteredFrom = [];
+        foreach($from as $key => $f) {
+            if (!$f instanceof Query && !$this->isExcludeTable($f)) {
+                $filteredFrom[$key] = $f;
+            }
+        }
+        foreach ($filteredFrom as $key => $tableName) {
             if (is_string($key)) {
-                $f = $key;
+                $tableName = $key;
             }
             $query->andWhere([
-                $f . '.app_id'  => \Yii::$app->id,
+                $tableName . '.' . Yii::$app->tenant->primaryKey  => Yii::$app->tenant->id,
             ]);
         }
         return parent::build($query, $params);
@@ -45,14 +53,17 @@ class QueryBuilder extends \yii\db\mysql\QueryBuilder
      */
     public function buildJoin($joins, &$params)
     {
-       foreach((array)$joins as $i => $join) {
-            if (is_string($join[1])) {
-                if (isset($join[2])) {
-                    $join[2] = ['AND', $join[1] . '.app_id = ' . Yii::$app->id, $join[2]];
-                } else {
-                    $join[2] = $join[1] . '.app_id = ' . Yii::$app->id;
+       if (isset(Yii::$app->tenant)) {
+            foreach((array)$joins as $i => $join) {
+                if (is_string($join[1])) {
+                    if (in_array($join[1], Yii::$app->tenant->excludeTables)) break;
+                    if (isset($join[2])) {
+                        $join[2] = ['and', $join[1] . '.tenant_id = ' . Yii::$app->tenant->id, $join[2]];
+                    } else {
+                        $join[2] = $join[1] . '.tenant_id = ' . Yii::$app->tenant->id;
+                    }
+                    $joins[$i] = $join;
                 }
-                $joins[$i] = $join;
             }
         }
         return parent::buildJoin($joins, $params);
@@ -63,7 +74,9 @@ class QueryBuilder extends \yii\db\mysql\QueryBuilder
      */
     public function insert($table, $columns, &$params)
     {
-        $columns['app_id'] = Yii::$app->id;
+        if(!$this->isExcludeTable($table)) {
+            $columns[Yii::$app->tenant->primaryKey] = Yii::$app->tenant->id;
+        }
         return parent::insert($table, $columns, $params);
     }
 
@@ -76,8 +89,10 @@ class QueryBuilder extends \yii\db\mysql\QueryBuilder
      */
     public function update($table, $columns, $condition, &$params)
     {
-    	$condition = ['AND', $condition, ['app_id' => Yii::$app->id]];
-    	$columns['app_id'] = Yii::$app->id;
+    	if (!$this->isExcludeTable($table)) {
+            $condition = ['and', $condition, [Yii::$app->tenant->primaryKey => Yii::$app->tenant->id]];
+            $columns[Yii::$app->tenant->primaryKey] = Yii::$app->tenant->id;
+        }
         return parent::update($table, $columns, $condition, $params);
     }
     /**
@@ -88,7 +103,28 @@ class QueryBuilder extends \yii\db\mysql\QueryBuilder
      */
     public function delete($table, $condition, &$params)
     {
-    	$condition = ['AND', $condition, ['app_id' => Yii::$app->id]];
+    	if (!$this->isExcludeTable($table)) {
+            $condition = ['and', $condition, [Yii::$app->tenant->primaryKey => Yii::$app->tenant->id]];
+        }
         return parent::delete($table, $condition, $params);
+    }
+
+    /**
+     * @param $table
+     * @return bool
+     */
+    private function isExcludeTable($table)
+    {
+        if (in_array($table, \Yii::$app->tenant->excludeTables)) {
+            return true;
+        }
+        $tableName = preg_replace_callback(
+            '/\\{\\{(%?[\w\-\. ]+%?)\\}\\}/',
+            function ($matches) {
+                return str_replace('%', $this->db->tablePrefix, $matches[1]);
+            },
+            $table
+        );
+        return in_array($tableName, Yii::$app->tenant->excludeTables);
     }
 }
