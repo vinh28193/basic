@@ -6,7 +6,6 @@ use app\common\db\Migration;
  * Handles the creation of table `{{%media}}`.
  * Has foreign keys to the tables:
  *
- * - `{{%tenant}}`
  * - `{{%user}}`
  */
 class m170713_173022_create_media_table extends Migration
@@ -29,23 +28,6 @@ class m170713_173022_create_media_table extends Migration
             'status' => $this->integer()->defaultValue(1)->notNull(),
             'created_at' => $this->integer()
         ], $this->tableOptions);
-
-         // creates index for column `tenant_id`
-        $this->createIndex(
-            'idx-media-tenant_id',
-            '{{%media}}',
-            'tenant_id'
-        );
-
-        // add foreign key for table `{{%tenant}}`
-        $this->addForeignKey(
-            'fk-media-tenant_id',
-            '{{%media}}',
-            'tenant_id',
-            '{{%tenant}}',
-            'tenant_id',
-            'CASCADE'
-        );
 
         // creates index for column `type`
         $this->createIndex(
@@ -92,18 +74,6 @@ class m170713_173022_create_media_table extends Migration
         // drops index for column `type`
         $this->dropIndex(
             'idx-media-type',
-            '{{%media}}'
-        );
-
-        // drops foreign key for table `{{%tenant}}`
-        $this->dropForeignKey(
-            'fk-media-tenant_id',
-            '{{%media}}'
-        );
-
-        // drops index for column `tenant_id`
-        $this->dropIndex(
-            'idx-media-tenant_id',
             '{{%media}}'
         );
 

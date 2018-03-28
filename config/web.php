@@ -15,7 +15,7 @@ $config = [
     'bootstrap' => [
         'log',
         'tenant',
-        'debug'
+        'debug',
     ],
     'components' => [
         'request' => [

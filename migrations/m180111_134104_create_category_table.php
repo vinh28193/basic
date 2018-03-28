@@ -6,7 +6,6 @@ use app\common\db\Migration;
  * Handles the creation of table `{{%category}}`.
  * Has foreign keys to the tables:
  *
- * - `{{%tenant}}`
  * - `{{%category}}`
  * - `{{%user}}`
  */
@@ -27,23 +26,6 @@ class m180111_134104_create_category_table extends Migration
             'created_at' => $this->integer(),
             'updated_at' => $this->integer(),
         ], $this->tableOptions);
-
-        // creates index for column `tenant_id`
-        $this->createIndex(
-            'idx-category-tenant_id',
-            '{{%category}}',
-            'tenant_id'
-        );
-
-        // add foreign key for table `{{%tenant}}`
-        $this->addForeignKey(
-            'fk-category-tenant_id',
-            '{{%category}}',
-            'tenant_id',
-            '{{%tenant}}',
-            'tenant_id',
-            'CASCADE'
-        );
 
         // creates index for column `parent_id`
         $this->createIndex(
@@ -77,18 +59,6 @@ class m180111_134104_create_category_table extends Migration
         // drops index for column `parent_id`
         $this->dropIndex(
             'idx-category-parent_id',
-            '{{%category}}'
-        );
-        
-        // drops foreign key for table `{{%tenant}}`
-        $this->dropForeignKey(
-            'fk-category-tenant_id',
-            '{{%category}}'
-        );
-
-        // drops index for column `tenant_id`
-        $this->dropIndex(
-            'idx-category-tenant_id',
             '{{%category}}'
         );
 

@@ -6,7 +6,6 @@ use yii\db\Migration;
  * Handles the creation of table `{{%user_auth}}`.
  * Has foreign keys to the tables:
  *
- * - `{{%tenant}}`
  * - `{{%user}}`
  */
 class m170713_163517_create_user_auth_table extends Migration
@@ -23,23 +22,6 @@ class m170713_163517_create_user_auth_table extends Migration
             'source_id' => $this->string(32)->notNull(),
             'source' => $this->string(100)->notNull(),
         ]);
-
-        // creates index for column `tenant_id`
-        $this->createIndex(
-            'idx-user_auth-tenant_id',
-            '{{%user_auth}}',
-            'tenant_id'
-        );
-
-        // add foreign key for table `{{%tenant}}`
-        $this->addForeignKey(
-            'fk-user_auth-tenant_id',
-            '{{%user_auth}}',
-            'tenant_id',
-            '{{%tenant}}',
-            'tenant_id',
-            'CASCADE'
-        );
 
         // creates index for column `user_id`
         $this->createIndex(
@@ -73,18 +55,6 @@ class m170713_163517_create_user_auth_table extends Migration
         // drops index for column `user_id`
         $this->dropIndex(
             'idx-user_auth-user_id',
-            '{{%user_auth}}'
-        );
-
-        // drops foreign key for table `{{%tenant}}`
-        $this->dropForeignKey(
-            'fk-user_auth-tenant_id',
-            '{{%user_auth}}'
-        );
-
-        // drops index for column `tenant_id`
-        $this->dropIndex(
-            'idx-user_auth-tenant_id',
             '{{%user_auth}}'
         );
 

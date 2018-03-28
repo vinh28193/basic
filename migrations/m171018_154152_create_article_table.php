@@ -6,7 +6,6 @@ use app\common\db\Migration;
  * Handles the creation of table `{{%article}}`.
  * Has foreign keys to the tables:
  *
- * - `{{%tenant}}`
  * - `{{%article_category}}`
  * - `{{%user}}`
  */
@@ -33,23 +32,6 @@ class m171018_154152_create_article_table extends Migration
             'published_at' => $this->integer(),
             'updated_at' => $this->integer(),
         ], $this->tableOptions);
-
-        // creates index for column `tenant_id`
-        $this->createIndex(
-            'idx-article-tenant_id',
-            '{{%article}}',
-            'tenant_id'
-        );
-
-        // add foreign key for table `{{%tenant}}`
-        $this->addForeignKey(
-            'fk-article-tenant_id',
-            '{{%article}}',
-            'tenant_id',
-            '{{%tenant}}',
-            'tenant_id',
-            'CASCADE'
-        );
 
         // creates index for column `author_id`
         $this->createIndex(
@@ -141,18 +123,6 @@ class m171018_154152_create_article_table extends Migration
         // drops index for column `category_id`
         $this->dropIndex(
             'idx-article-category_id',
-            '{{%article}}'
-        );
-
-        // drops foreign key for table `{{%tenant}}`
-        $this->dropForeignKey(
-            'fk-article-tenant_id',
-            '{{%article}}'
-        );
-
-        // drops index for column `tenant_id`
-        $this->dropIndex(
-            'idx-article-tenant_id',
             '{{%article}}'
         );
 

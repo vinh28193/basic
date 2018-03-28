@@ -31,22 +31,6 @@ class m170713_161743_create_user_profile_table extends Migration
             'updated_at' => $this->integer(),
         ], $this->tableOptions);
 
-        // creates index for column `tenant_id`
-        $this->createIndex(
-            'idx-user_profile-tenant_id',
-            '{{%user_profile}}',
-            'tenant_id'
-        );
-
-        // add foreign key for table `{{%tenant}}`
-        $this->addForeignKey(
-            'fk-user_profile-tenant_id',
-            '{{%user_profile}}',
-            'tenant_id',
-            '{{%tenant}}',
-            'tenant_id',
-            'CASCADE'
-        );
          // creates index for column `locale`
         $this->createIndex(
             'idx-user_profile-locale',
@@ -92,18 +76,6 @@ class m170713_161743_create_user_profile_table extends Migration
         // drops index for column `locale`
         $this->dropIndex(
             'idx-user_profile-locale',
-            '{{%user_profile}}'
-        );
-        
-        // drops foreign key for table `{{%tenant}}`
-        $this->dropForeignKey(
-            'fk-user_profile-tenant_id',
-            '{{%user_profile}}'
-        );
-
-        // drops index for column `tenant_id`
-        $this->dropIndex(
-            'idx-user_profile-tenant_id',
             '{{%user_profile}}'
         );
 

@@ -4,9 +4,6 @@ use app\common\db\Migration;
 
 /**
  * Handles the creation of table `{{%user}}`.
- * Has foreign keys to the tables:
- *
- * - `{{%tenant}}`
  */
 class m170713_160514_create_user_table extends Migration
 {
@@ -33,23 +30,6 @@ class m170713_160514_create_user_table extends Migration
             'verified_at' => $this->integer(),
         ], $this->tableOptions);
 
-        // creates index for column `tenant_id`
-        $this->createIndex(
-            'idx-user-tenant_id',
-            '{{%user}}',
-            'tenant_id'
-        );
-
-        // add foreign key for table `{{%tenant}}`
-        $this->addForeignKey(
-            'fk-user-tenant_id',
-            '{{%user}}',
-            'tenant_id',
-            '{{%tenant}}',
-            'tenant_id',
-            'CASCADE'
-        );
-
         // creates index for column `status`
         $this->createIndex(
             'idx-user-status',
@@ -67,18 +47,6 @@ class m170713_160514_create_user_table extends Migration
          // drops index for column `status`
         $this->dropIndex(
             'idx-user-status',
-            '{{%user}}'
-        );
-
-        // drops foreign key for table `{{%tenant}}`
-        $this->dropForeignKey(
-            'fk-user-tenant_id',
-            '{{%user}}'
-        );
-
-        // drops index for column `tenant_id`
-        $this->dropIndex(
-            'idx-user-tenant_id',
             '{{%user}}'
         );
         

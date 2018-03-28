@@ -3,13 +3,14 @@
 namespace app\common\components;
 
 use yii\web\NotFoundHttpException;
+use yii\base\BootstrapInterface;
 use yii\base\Component;
 use yii\base\Exception;
 /**
  * Class Tenant
  * @package proseeds\base
  */
-class Tenant extends Component
+class Tenant extends Component implements BootstrapInterface
 {
 
     public $tenantModel = '';
@@ -21,19 +22,38 @@ class Tenant extends Component
      * @var
      */
     public $exclude = [];
+    
+    public function bootstrap($app)
+    {
+        if ($app instanceof \yii\web\Application) {
+            
+        } elseif ($app instanceof \yii\console\Application) {
+        
+        }
+    }
+
     /**
      * initialize member
      */
     public function getTenant()
     {
         if(isset($this->_tenant)) return $this->_tenant;
-        //$this->_tenant = \app\models\resources\Tenant::findOne(['tenant_code' => $this->tenantCode]);
-        $this->_tenant = \app\models\resources\Tenant::findOne(['tenant_code' => 'basic.beta.vn']);
+        $this->_tenant = \app\models\resources\Tenant::findOne(['tenant_code' => $this->tenantCode]);
+
         if(!$this->_tenant){
             throw new NotFoundHttpException('tenant "'. self::getTenantCode().'" can not be found.');
         }
         return $this->_tenant;
     }
+
+    public function setTenant($tenantId)
+    {
+        $this->_tenant =\app\models\resources\Tenant::findOne(['tenant_id' => $tenantId]);
+        if(!$this->_tenant){
+            throw new NotFoundHttpException('tenantId "'. $tenantId.'" can not be found.');
+        }
+    }
+
     /**
      * @return mixed
      * @throws Exception

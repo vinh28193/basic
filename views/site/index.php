@@ -16,9 +16,6 @@ $this->title = 'My Yii Application';
     </div>
 
     <div class="body-content">
-            <?php 
-                var_dump(Yii::$app->tenant);
-            ?>
         <div class="row">
             <div class="col-lg-12">
                 <div class="row">

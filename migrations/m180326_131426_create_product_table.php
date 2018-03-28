@@ -34,23 +34,6 @@ class m180326_131426_create_product_table extends Migration
             'updated_at' => $this->integer(),
         ], $this->tableOptions);
 
-        // creates index for column `tenant_id`
-        $this->createIndex(
-            'idx-product-tenant_id',
-            '{{%product}}',
-            'tenant_id'
-        );
-
-        // add foreign key for table `{{%tenant}}`
-        $this->addForeignKey(
-            'fk-product-tenant_id',
-            '{{%product}}',
-            'tenant_id',
-            '{{%tenant}}',
-            'tenant_id',
-            'CASCADE'
-        );
-
         // creates index for column `category_id`
         $this->createIndex(
             'idx-product-category_id',
@@ -141,18 +124,6 @@ class m180326_131426_create_product_table extends Migration
         // drops index for column `category_id`
         $this->dropIndex(
             'idx-product-category_id',
-            '{{%product}}'
-        );
-        
-        // drops foreign key for table `{{%tenant}}`
-        $this->dropForeignKey(
-            'fk-product-tenant_id',
-            '{{%product}}'
-        );
-
-        // drops index for column `tenant_id`
-        $this->dropIndex(
-            'idx-product-tenant_id',
             '{{%product}}'
         );
 
