@@ -44,7 +44,7 @@ class m170713_160514_create_user_table extends Migration
     public function down()
     {
         
-         // drops index for column `status`
+        // drops index for column `status`
         $this->dropIndex(
             'idx-user-status',
             '{{%user}}'

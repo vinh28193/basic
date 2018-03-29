@@ -91,6 +91,13 @@ class m180326_131426_create_product_table extends Migration
             'id',
             'CASCADE'
         );
+
+        // creates index for column `status`
+        $this->createIndex(
+            'idx-product-status',
+            '{{%product}}',
+            'status'
+        );
     }
 
     /**
@@ -98,6 +105,13 @@ class m180326_131426_create_product_table extends Migration
      */
     public function down()
     {
+
+        // drops index for column `status`
+        $this->dropIndex(
+            'idx-product-status',
+            '{{%product}}'
+        );
+        
          // drops foreign key for table `{{%user}}`
         $this->dropForeignKey(
             'fk-product-updater_id',
