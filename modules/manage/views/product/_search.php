@@ -13,28 +13,43 @@ use yii\widgets\ActiveForm;
     <?php $form = ActiveForm::begin([
         'action' => ['index'],
         'method' => 'get',
-        'options' => [
-            'data-pjax' => 1
-        ],
     ]); ?>
 
     <?= $form->field($model, 'id') ?>
+
+    <?= $form->field($model, 'tenant_id') ?>
+
+    <?= $form->field($model, 'sku') ?>
 
     <?= $form->field($model, 'title') ?>
 
     <?= $form->field($model, 'slug') ?>
 
-    <?= $form->field($model, 'description') ?>
+    <?php // echo $form->field($model, 'description') ?>
 
-    <?= $form->field($model, 'category_id') ?>
+    <?php // echo $form->field($model, 'category_id') ?>
 
-    <?php // echo $form->field($model, 'creator_id') ?>
+    <?php // echo $form->field($model, 'seller_id') ?>
 
     <?php // echo $form->field($model, 'updater_id') ?>
 
-    <?php // echo $form->field($model, 'price') ?>
+    <?php // echo $form->field($model, 'thumbnail_base_path') ?>
 
-    <?php // echo $form->field($model, 'quantity') ?>
+    <?php // echo $form->field($model, 'thumbnail_path') ?>
+
+    <?php // echo $form->field($model, 'start_price') ?>
+
+    <?php // echo $form->field($model, 'sell_price') ?>
+
+    <?php // echo $form->field($model, 'quantity_available') ?>
+
+    <?php // echo $form->field($model, 'quantity_sold') ?>
+
+    <?php // echo $form->field($model, 'deal_time') ?>
+
+    <?php // echo $form->field($model, 'condition_id') ?>
+
+    <?php // echo $form->field($model, 'is_free_shipping') ?>
 
     <?php // echo $form->field($model, 'status') ?>
 

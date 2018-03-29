@@ -25,10 +25,17 @@ class m180326_131426_create_product_table extends Migration
             'slug' => $this->string(1024)->notNull(),
             'description' => $this->text(),
             'category_id' => $this->integer()->notNull(),
-            'creator_id' => $this->integer(),
+            'seller_id' => $this->integer(),
             'updater_id' => $this->integer(),
-            'price' => $this->integer()->notNull(),
-            'quantity' => $this->integer()->notNull()->defaultValue(0),
+            'thumbnail_base_path' => $this->string(512),
+            'thumbnail_path' => $this->string(1024),
+            'start_price' => $this->integer(),
+            'sell_price' => $this->integer()->notNull(),
+            'quantity_available' => $this->integer()->notNull()->defaultValue(0),
+            'quantity_sold' => $this->integer()->notNull()->defaultValue(0),
+            'deal_time' => $this->integer(),
+            'condition_id' => $this->integer(),
+            'is_free_shipping' => $this->smallInteger()->notNull()->defaultValue(0),
             'status' => $this->smallInteger()->notNull()->defaultValue(1),
             'created_at' => $this->integer(),
             'updated_at' => $this->integer(),
@@ -51,18 +58,18 @@ class m180326_131426_create_product_table extends Migration
             'CASCADE'
         );
 
-        // creates index for column `creator_id`
+        // creates index for column `seller_id`
         $this->createIndex(
-            'idx-product-creator_id',
+            'idx-product-seller_id',
             '{{%product}}',
-            'creator_id'
+            'seller_id'
         );
 
         // add foreign key for table `{{%user}}`
         $this->addForeignKey(
-            'fk-product-creator_id',
+            'fk-product-seller_id',
             '{{%product}}',
-            'creator_id',
+            'seller_id',
             '{{%user}}',
             'id',
             'CASCADE'
@@ -105,13 +112,13 @@ class m180326_131426_create_product_table extends Migration
 
         // drops foreign key for table `{{%user}}`
         $this->dropForeignKey(
-            'fk-product-creator_id',
+            'fk-product-seller_id',
             '{{%product}}'
         );
 
-        // drops index for column `creator_id`
+        // drops index for column `seller_id`
         $this->dropIndex(
-            'idx-product-creator_id',
+            'idx-product-seller_id',
             '{{%product}}'
         );
 

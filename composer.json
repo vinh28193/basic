@@ -52,7 +52,8 @@
         "noam148/yii2-image-resize": "*",
         "budyaga/yii2-cropper": "*",
         "johnitvn/yii2-ajaxcrud": "*",
-        "lajax/yii2-translate-manager": "^1.7"
+        "lajax/yii2-translate-manager": "^1.7",
+        "wbraganca/yii2-dynamicform": "*"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "*",
