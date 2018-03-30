@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use wbraganca\dynamicform\DynamicFormWidget;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\resources\Product */
@@ -17,16 +18,12 @@ use yii\widgets\ActiveForm;
     ]); ?>
     <div class="row">
         <div class="col-md-9">
-            <?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
+             <?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
             <div class="row">
-                <div class="col-md-4">
-                    <?= $form->field($model, 'thumbnail_path')->textInput(['maxlength' => true]) ?>
-                </div>
-                <div class="col-md-8">
-                    <?= $form->field($model, 'start_price')->textInput() ?>
-                    <?= $form->field($model, 'sell_price')->textInput() ?>
-                    <?= $form->field($model, 'quantity_available')->textInput() ?>
-                </div>
+                <?= $this->render('variant',[
+                    'form' => $form,
+                    'model' => $model
+                ]);?>
             </div>
         </div>
         <div class="col-md-3">
@@ -34,9 +31,9 @@ use yii\widgets\ActiveForm;
             <?= $form->field($model, 'deal_time')->textInput() ?>
             <?= $form->field($model, 'is_free_shipping')->textInput() ?>
             <div class="form-group">
-                <?= Html::button(Yii::t('app', 'Back To List'), ['class' => 'btn btn-primary']) ?>
-                <?= Html::button(Yii::t('app', 'Draft'), ['class' => 'btn btn-default']) ?>
-                <?= Html::submitButton(Yii::t('app', 'Save'), ['class' => 'btn btn-success']) ?>
+                <?= Html::button(Yii::t('form', 'Back To List'), ['class' => 'btn btn-primary']) ?>
+                <?= Html::button(Yii::t('form', 'Draft'), ['class' => 'btn btn-default']) ?>
+                <?= Html::submitButton(Yii::t('form', 'Save'), ['class' => 'btn btn-success']) ?>
             </div>
         </div>
         <div class="col-md-12">

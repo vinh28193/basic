@@ -6,13 +6,13 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\resources\Product */
 
-$this->title = Yii::t('app', 'Create Product');
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Products'), 'url' => ['index']];
+$this->title = Yii::t('title', 'Create Product');
+$this->params['breadcrumbs'][] = ['label' => Yii::t('title', 'Products'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="product-create">
 
-    <?= $this->render('_form', [
+    <?= $this->render('_form/form', [
         'model' => $model,
     ]) ?>
 
