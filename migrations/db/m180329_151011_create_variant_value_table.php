@@ -16,8 +16,8 @@ class m180329_151011_create_variant_value_table extends Migration
             'id' => $this->primaryKey(),
             'tenant_id' => $this->integer()->notNull(),
             'value' => $this->string(64)->notNull(),
-            'visible' => $this->integer(),
-            'created_at' => $this->smallInteger()->notNull()->defaultValue(1),
+            'visible' => $this->smallInteger()->notNull()->defaultValue(1),
+            'created_at' => $this->integer(),
             'updated_at' => $this->integer(),
         ],  $this->tableOptions);
 

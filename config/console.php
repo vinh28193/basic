@@ -31,6 +31,10 @@ $config = [
     'params' => $params,
     
     'controllerMap' => [
+        'migrate' => [
+            'class' => 'yii\console\controllers\MigrateController',
+            'migrationPath' => '@app/migrations/db',
+        ],
         'fixture' => [ // Fixture generation command line.
             'class' => 'yii\faker\FixtureController',
             'fixtureDataPath' => '@tests/codeception/fixtures/data',

@@ -3,7 +3,7 @@
 use app\common\db\Migration;
 
 /**
- * Handles the creation of table `variant_variant_value`.
+ * Handles the creation of table `variant_value_item`.
  * Has foreign keys to the tables:
  *
  * - `{{%variant}}`
