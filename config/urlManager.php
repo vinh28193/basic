@@ -1,6 +1,6 @@
 <?php
 return [
-    'enablePrettyUrl' => true,
+    'enablePrettyUrl' => false,
     'showScriptName' => false,
     'rules' => [
     

@@ -1,6 +1,6 @@
 <?php
 
-use yii\db\Migration;
+use app\common\db\Migration;
 
 /**
  * Handles the creation of table `{{%product_media}}`.
@@ -14,7 +14,7 @@ class m180403_144104_create_junction_table_for_product_and_media_tables extends 
     /**
      * {@inheritdoc}
      */
-    public function upS()
+    public function up()
     {
         $this->createTable('{{%product_media}}', [
             'id' => $this->primaryKey(),
@@ -25,7 +25,7 @@ class m180403_144104_create_junction_table_for_product_and_media_tables extends 
             'status' => $this->smallInteger()->notNull()->defaultValue(1),
             'created_at' => $this->integer(),
             'updated_at' => $this->integer(),
-        ]);
+        ],$this->tableOptions);
 
         // creates index for column `status`
         $this->createIndex(
@@ -46,7 +46,7 @@ class m180403_144104_create_junction_table_for_product_and_media_tables extends 
             'fk-product_media-product_id',
             '{{%product_media}}',
             'product_id',
-            '{{product}}',
+            '{{%product}}',
             'id',
             'CASCADE'
         );
@@ -98,6 +98,11 @@ class m180403_144104_create_junction_table_for_product_and_media_tables extends 
             '{{%product_media}}'
         );
 
+        // drops index for column `status`
+        $this->dropIndex(
+            'idx-product_media-status',
+            '{{%product_media}}'
+        );
         $this->dropTable('{{%product_media}}');
     }
 }

@@ -6,8 +6,8 @@ $params = require(__DIR__ . '/params.php');
 
 $config = [
     'id' => 'basic',
-    'name' => 'Dev App',
-    'version' => '0.1-dev',
+    'name' => 'Basic Appication',
+    'version' => '1.0',
     'charset' => 'UTF-8',
     'language' => 'en-US',
     'sourceLanguage' => 'en-US',

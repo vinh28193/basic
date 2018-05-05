@@ -1,6 +1,6 @@
 <?php
 
-use yii\db\Migration;
+use app\common\db\Migration;
 
 /**
  * Handles the creation of table `{{%product_variant}}`.
@@ -34,7 +34,7 @@ class m180403_142635_create_junction_table_for_product_and_variant_value_item_ta
             'visible' => $this->smallInteger()->notNull()->defaultValue(1),
             'created_at' => $this->integer(),
             'updated_at' => $this->integer(),
-        ]);
+        ],$this->tableOptions);
 
         // creates index for column `visible`
         $this->createIndex(
