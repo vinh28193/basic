@@ -11,10 +11,16 @@ use app\common\data\DataProvider;
  */
 class GlobalSearch extends Model
 {
+    const SEARCH_KEY_ALL = 'all';
     const SCENARIO_SEARCH_GLOBAL = 'global';
 
     public $keyword;
 
+    public $searchModels = [
+        [
+            'class' => '\app\models\resources\Product.php'
+        ]
+    ];
     /**
      * @inheritdoc
      */
@@ -60,7 +66,11 @@ class GlobalSearch extends Model
         ]);
     }
 
+    public function getModels(){
+
+    }
     public function search($params){
+        $query = $this->getModels();
 
     }
 }

@@ -55,7 +55,8 @@
         "budyaga/yii2-cropper": "*",
         "johnitvn/yii2-ajaxcrud": "*",
         "lajax/yii2-translate-manager": "^1.7",
-        "wbraganca/yii2-dynamicform": "*"
+        "wbraganca/yii2-dynamicform": "*",
+        "yiisoft/yii2-elasticsearch": "~2.0.0"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "*",
