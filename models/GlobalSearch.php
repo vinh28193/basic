@@ -14,11 +14,11 @@ class GlobalSearch extends Model
     const SEARCH_KEY_ALL = 'all';
     const SCENARIO_SEARCH_GLOBAL = 'global';
 
-    public $keyword;
+    public $q;
 
     public $searchModels = [
         [
-            'class' => '\app\models\resources\Product.php'
+            'class' => '\app\models\resources\Product'
         ]
     ];
     /**
@@ -70,7 +70,22 @@ class GlobalSearch extends Model
 
     }
     public function search($params){
-        $query = $this->getModels();
+        $query = \app\models\resources\Product::find();
+
+        // add conditions that should always apply here
+
+        $dataProvider = new DataProvider([
+            'query' => $query,
+        ]);
+
+        $this->load($params);
+
+        if (!$this->validate()) {
+            // uncomment the following line if you do not want to return any records when validation fails
+            // $query->where('0=1');
+            return $dataProvider;
+        }
+        return $dataProvider;
 
     }
 }

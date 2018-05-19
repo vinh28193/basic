@@ -6,7 +6,7 @@ use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
-use app\models\forms\LoginForm;
+use app\models\GlobalSearch;
 
 class TopController extends Controller
 {
@@ -51,31 +51,23 @@ class TopController extends Controller
         return $this->render('index');
     }
 
-    public function actionLogin()
+    public function actionSearch()
     {
-        if (!\Yii::$app->user->isGuest) {
-            return $this->goHome();
-        }
+        $searchModel = new GlobalSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-        $model = new LoginForm();
-        if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return $this->goBack();
-        }
-        return $this->render('login', [
-            'model' => $model,
+        return $this->render('search', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
         ]);
     }
 
-    public function actionLogout()
-    {
-        Yii::$app->user->logout();
-
-        return $this->goHome();
-    }
-    public function actionOauth($code)
-    {
-        $client = Yii::$app->clientAuth;
-        $access_token = $client->fetchAccessToken();
-        var_dump($access_token);
+    public function actionView(){
+        $model = \app\models\resources\Product::findOne(1);
+        $variant = \app\models\resources\Variant::findOne(2);
+        return $this->render('view',[
+            'model' => $model,
+            'variant' => $variant
+        ]);
     }
 }
