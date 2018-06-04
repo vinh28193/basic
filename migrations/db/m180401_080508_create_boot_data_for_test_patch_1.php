@@ -233,7 +233,7 @@ class m180401_080508_create_boot_data_for_test_patch_1 extends Migration
                 'updated_at' => 155572664,
             ],
         ];
-        $variant = [
+        $options = [
             [
                 'id' => 1,
                 'tenant_id' => 1,
@@ -254,7 +254,7 @@ class m180401_080508_create_boot_data_for_test_patch_1 extends Migration
             ]   
         
         ];
-        $variantValue = [
+        $optionsValue = [
             [
                 'id' => 1,
                 'tenant_id' => 1,
@@ -377,7 +377,7 @@ class m180401_080508_create_boot_data_for_test_patch_1 extends Migration
             'updated_at',
         ], $product);
 
-        $this->batchInsert('{{%variant}}',[
+        $this->batchInsert('{{%option}}',[
             'id',
             'tenant_id',
             'name',
@@ -385,16 +385,16 @@ class m180401_080508_create_boot_data_for_test_patch_1 extends Migration
             'visible',
             'created_at',
             'updated_at'
-        ], $variant);
+        ], $options);
 
-        $this->batchInsert('{{%variant_value}}',[
+        $this->batchInsert('{{%option_value}}',[
             'id',
             'tenant_id',
             'value',
             'visible',
             'created_at',
             'updated_at'
-        ], $variantValue);
+        ], $optionsValue);
     }
 
     /**

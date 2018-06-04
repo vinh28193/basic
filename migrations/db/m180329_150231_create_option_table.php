@@ -3,16 +3,16 @@
 use app\common\db\Migration;
 
 /**
- * Handles the creation of table `{{%variant}}`.
+ * Handles the creation of table `{{%option}}`.
  */
-class m180329_150231_create_variant_table extends Migration
+class m180329_150231_create_option_table extends Migration
 {
     /**
      * @inheritdoc
      */
     public function up()
     {
-        $this->createTable('{{%variant}}', [
+        $this->createTable('{{%option}}', [
             'id' => $this->primaryKey(),
             'tenant_id' => $this->integer()->notNull(),
             'name' => $this->string(32)->notNull(),
@@ -24,8 +24,8 @@ class m180329_150231_create_variant_table extends Migration
 
         // creates index for column `visible`
         $this->createIndex(
-            'idx-variant-visible',
-            '{{%variant}}',
+            'idx-option-visible',
+            '{{%option}}',
             'visible'
         );
     }
@@ -38,9 +38,9 @@ class m180329_150231_create_variant_table extends Migration
         // drops index for column `visible`
         $this->dropIndex(
             'idx-variant-visible',
-            '{{%variant}}'
+            '{{%option}}'
         );
 
-        $this->dropTable('{{%variant}}');
+        $this->dropTable('{{%option}}');
     }
 }
