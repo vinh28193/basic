@@ -28,3 +28,6 @@ phpunit.phar
 
 # Codeception Code Coverage
 c3.php
+
+# Env
+.env
