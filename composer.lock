@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ba402614b23a396e80c69d68270931de",
+    "content-hash": "d72544e2d77618bdd8637259811ac39e",
     "packages": [
         {
             "name": "2amigos/yii2-editable-widget",
@@ -422,6 +422,22 @@
                 "web"
             ],
             "time": "2016-07-25T15:51:55+00:00"
+        },
+        {
+            "name": "bower-asset/bootstrap-material-design",
+            "version": "v4.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/FezVrasta/bootstrap-material-design.git",
+                "reference": "c330a4deb407c65031e7395d4268bbe0b570f7ce"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/FezVrasta/bootstrap-material-design/zipball/c330a4deb407c65031e7395d4268bbe0b570f7ce",
+                "reference": "c330a4deb407c65031e7395d4268bbe0b570f7ce",
+                "shasum": ""
+            },
+            "type": "bower-asset-library"
         },
         {
             "name": "bower-asset/bootstrap3-dialog",
