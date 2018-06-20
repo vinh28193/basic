@@ -36,6 +36,7 @@
         "bower-asset/flot": "^0.8",
         "bower-asset/animate.css":"*",
         "bower-asset/remarkable-bootstrap-notify": "*",
+        "bower-asset/bootstrap-material-design": "4.1.1",
         "bower-asset/blueimp-file-upload": "^9.7.0",
         "google/auth": "^1.0",
         "google/apiclient": "^2.0",
