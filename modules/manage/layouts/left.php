@@ -39,8 +39,10 @@ use app\common\widgets\Gravatar;
             [
                 'options' => ['class' => 'sidebar-menu'],
                 'items' => [
-                    ['label' => 'Menu', 'options' => ['class' => 'header']],
-                    ['label' => 'User', 'icon' => 'fa fa-share', 'url' => ['/manage/user/info']],
+                    ['label' => 'User', 'options' => ['class' => 'header']],
+                    ['label' => 'Profile', 'icon' => 'fa fa-share', 'url' => ['/manage/user/info']],
+                    ['label' => 'Message', 'icon' => 'fa fa-share', 'url' => ['/manage/user/message']],
+                    ['label' => 'Activity', 'icon' => 'fa fa-share', 'url' => ['/manage/user/activity']],
                     ['label' => 'Article', 'options' => ['class' => 'header']],
                     ['label' => 'Article Category', 'icon' => 'fa fa-share', 'url' => ['/manage/article-category']],
                     ['label' => 'Article', 'icon' => 'fa fa-share', 'url' => ['/manage/article']],

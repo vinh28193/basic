@@ -53,6 +53,6 @@ class Manage extends Module
         $this->setLayoutPath('@manage/layouts');
         $config = require Yii::getAlias('@manage/config/config.php');
         Yii::configure(Yii::$app, $config);
-        Yii::$app->user->setReturnUrl(['/manage/user/info']);
+        //Yii::$app->user->setReturnUrl(['/manage/user/info']);
     }
 }

@@ -23,5 +23,19 @@ return [
             'errorAction' => 'manage/error',
         ],
     ],
+    'modules' => [
+        'gridview' =>  [
+            'class' => '\kartik\grid\Module',
+            'i18n' => [
+                'class' => 'yii\i18n\PhpMessageSource',
+                'basePath' => '@kvgrid/messages',
+                'forceTranslation' => true
+            ]
+        ],
+        'gridviewKrajee' =>  [
+            'class' => '\kartik\grid\Module',
+            // your other grid module settings
+        ]
+    ]
 ];
  ?>
