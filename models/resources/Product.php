@@ -41,6 +41,9 @@ use yii\behaviors\BlameableBehavior;
  */
 class Product extends ActiveRecord
 {
+    public $thumbnail;
+    public $images;
+
     /**
      * @inheritdoc
      */

@@ -11,9 +11,9 @@ $this->params['breadcrumbs'][] = ['label' => Yii::t('title', 'Products'), 'url' 
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="box box-default">
-    <div class="box-body">
+    <div class="box-body pad">
         <div class="product-create">
-            <?= $this->render('_form/form', [
+            <?= $this->render('_form', [
                 'model' => $model,
             ]) ?>
         </div>
