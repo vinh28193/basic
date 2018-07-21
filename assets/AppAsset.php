@@ -23,7 +23,8 @@ class AppAsset extends AssetBundle
     public $js = [
     ];
     public $depends = [
-        'yii\web\YiiAsset',
-        'yii\bootstrap\BootstrapAsset',
+        'app\common\web\CoreAsset',
+        'app\common\web\FontAwesomeAsset',
+        'app\common\web\Html5ShivAsset'
     ];
 }
