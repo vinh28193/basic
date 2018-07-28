@@ -19,6 +19,7 @@ application.module('modal', function (module, require, $) {
 
     var util = require('util');
     var object = util.object;
+    var string = util.string;
     var additions = require('additions');
     var client = require('client', true);
     var Widget = require('widget').Widget;
@@ -45,7 +46,7 @@ application.module('modal', function (module, require, $) {
 
     object.inherits(Modal, Widget);
 
-    Modal.component = 'application-ui-modal';
+    Modal.component = 'application-modal';
 
     Modal.prototype.init = function () {
         this.initModal(this.options);
@@ -85,7 +86,7 @@ application.module('modal', function (module, require, $) {
         var that = this;
 
         //Set default modal manipulation event handlers
-        this.$.off('click.modal').on('click.modal', '[data-modal-close]', function () {
+        this.$.off('click.modal').on('click.modal', string.buildSelector('modal-close'), function () {
             that.close();
         }).on('click', '[data-modal-clear-error]', function () {
             that.clearErrorMessage();
@@ -475,16 +476,16 @@ application.module('modal', function (module, require, $) {
     };
 
     ConfirmModal.prototype.clear = function (cfg) {
-        this.$.find('[data-modal-confirm]').off('click');
-        this.$.find('[data-modal-cancel]').off('click');
+        this.$.find(string.buildSelector('modal-confirm')).off('click');
+        this.$.find(string.buildSelector('modal-cancel')).off('click');
     };
 
     ConfirmModal.prototype.initButtons = function (cfg) {
         //Set button text
-        var $cancelButton = this.$.find('[data-modal-cancel]');
+        var $cancelButton = this.$.find(string.buildSelector('modal-cancel');
         $cancelButton.text(cfg['cancelText']);
 
-        var $confirmButton = this.$.find('[data-modal-confirm]');
+        var $confirmButton = this.$.find(string.buildSelector('modal-confirm'));
         $confirmButton.text(cfg['confirmText']);
 
         //Init handler

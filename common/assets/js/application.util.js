@@ -173,6 +173,10 @@ application.module('util', function(module, require, $) {
                 var value = object.resolve(config, contents);
                 return object.isDefined(value) ? value : match;
             });
+        },
+        buildSelector: function ($selector) {
+            // eg: [data-selector']
+            return '[data-' + $selector + ']';
         }
     };
 

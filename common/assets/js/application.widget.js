@@ -11,8 +11,9 @@ application.module('widget', function(module, require, $) {
     var action = require('action');
     var event = require('event');
 
+    const DATA_SELECTOR = 'application-widget'
     // Add selector for component detection so we can use data-ui-widget instead of data-action-component
-    Component.addSelector('ui-widget');
+    Component.addSelector(DATA_SELECTOR);
 
     var Widget = function(node, options) {
         Component.call(this, (node instanceof $) ? node : $(node), options);
@@ -24,7 +25,7 @@ application.module('widget', function(module, require, $) {
         if(!this.validate()) {
             module.log.warn('Could not initialize widget.', this.errors);
         } else {
-            var initData = this.$.data('ui-init');
+            var initData = this.$.data('application-widget-init');
             this.fire('beforeInit', [this, initData]);
             this.init(initData);
 
@@ -85,7 +86,7 @@ application.module('widget', function(module, require, $) {
      * Defines the data attribute used for identification of the widget and widget class.
      * This can be overwritten in case some widgets are using a more descriptive mark.
      */
-    Widget.widget = 'ui-widget';
+    Widget.widget = 'widget';
 
     /**
      * This value should be overwritten by widget to allow different widgets on the same node.
@@ -193,12 +194,12 @@ application.module('widget', function(module, require, $) {
     };
 
     Widget.exists = function(ns) {
-        return $('[data-ui-widget="' + ns + '"]').length > 0;
+        return $('[data-application-widget="' + ns + '"]').length > 0;
     };
 
 
     var init = function() {
-        additions.register('ui.widget', '[data-ui-init]', function($match) {
+        additions.register('ui.widget', '[data-application-init]', function($match) {
             $match.each(function(i, node) {
                 Widget.instance(node);
             });

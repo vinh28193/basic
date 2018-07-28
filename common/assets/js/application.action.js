@@ -43,7 +43,9 @@ application.module('action', function(module, require, $) {
 
     Component._buildSelector = function() {
         Component._selector = Component._selectors.map(function(selector) {
-            return '[data-' + selector + ']';
+            // return '[data-' + selector + ']';
+            return string.buildSelector(selector);
+
         }).join(',');
     };
 
