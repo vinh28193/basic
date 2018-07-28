@@ -23,7 +23,14 @@ class CoreAsset extends AssetBundle
     public $js = [
         'js/application.core.js',
         'js/application.util.js',
+        'js/application.additions.js',
         'js/application.log.js',
+        'js/application.action.js',
+        'js/application.widget.js',
+        'js/application.client.js',
+        'js/application.view.js',
+        'js/application.modal.js',
+
     ];
 
     /**

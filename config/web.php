@@ -42,6 +42,9 @@ $config = [
                 'httpOnly' => true
             ],
         ],
+        'view' => [
+            'class' => 'app\common\web\View',
+        ],
         'errorHandler' => [
             'class' => 'yii\web\ErrorHandler',
             'errorAction' => 'manage/error',
@@ -79,10 +82,10 @@ $config = [
         'assetManager' => [
             'class' => 'yii\web\AssetManager',
             'appendTimestamp' => false,
-            'hashCallback' => function ($path) {
-                //return implode('/',[Yii::$app->id,hash('md4', $path)]);
-                return hash('md4', $path);
-            }
+//            'hashCallback' => function ($path) {
+//                //return implode('/',[Yii::$app->id,hash('md4', $path)]);
+//                return hash('md4', $path);
+//            }
         ],
         'i18n' => [
             'translations' => [
