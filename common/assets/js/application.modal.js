@@ -482,7 +482,7 @@ application.module('modal', function (module, require, $) {
 
     ConfirmModal.prototype.initButtons = function (cfg) {
         //Set button text
-        var $cancelButton = this.$.find(string.buildSelector('modal-cancel');
+        var $cancelButton = this.$.find(string.buildSelector('modal-cancel'));
         $cancelButton.text(cfg['cancelText']);
 
         var $confirmButton = this.$.find(string.buildSelector('modal-confirm'));
