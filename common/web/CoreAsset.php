@@ -28,6 +28,7 @@ class CoreAsset extends AssetBundle
         'js/application.action.js',
         'js/application.widget.js',
         'js/application.client.js',
+        'js/application.client.pjax.js',
         'js/application.view.js',
         'js/application.modal.js',
 
@@ -46,5 +47,7 @@ class CoreAsset extends AssetBundle
         'yii\web\JqueryAsset',
         'yii\bootstrap\BootstrapAsset',
         'yii\bootstrap\BootstrapPluginAsset',
+        'yii\widgets\PjaxAsset',
+        'yii\widgets\MaskedInputAsset',
     ];
 }
