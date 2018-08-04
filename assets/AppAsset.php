@@ -27,10 +27,12 @@ class AppAsset extends AssetBundle
         'app\common\web\FontAwesomeAsset',
         'app\common\web\Html5ShivAsset'
     ];
+
     /**
      * Registers this asset bundle with a view.
      * @param \app\common\web\View $view the view to be registered with
      * @return static the registered asset bundle instance
+     * @throws \yii\base\InvalidConfigException
      */
     public static function register($view)
     {
